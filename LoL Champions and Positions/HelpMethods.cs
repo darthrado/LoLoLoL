@@ -62,14 +62,15 @@ namespace LoL_Champions_and_Positions
                     separator[0] = Constants.AT_SEPARATOR;
                     string[] listOfChampions = lineComponents[3].Split(separator,StringSplitOptions.None);
 
-                    List<Champion> allChampions = AllChampionsCollection.ContainedChampions();
+                    List<ChampionContainer> allChampions = AllChampionsCollection.ContainedChampions();
                     foreach (string champion in listOfChampions)
                     {
-                        foreach (Champion existingChampion in allChampions)
+                        foreach (ChampionContainer existingChampion in allChampions)
                         {
                             if (existingChampion.Name == champion)
                             {
-                                newListEntry.Add(existingChampion);
+                                newListEntry.Add(new Champion(existingChampion.Name,existingChampion.Image,existingChampion.SearchTag,existingChampion.Tooltip));
+
                             }
                         }
                     }
@@ -104,7 +105,7 @@ namespace LoL_Champions_and_Positions
                 if (allChampions.Name == Constants.ALL_CHAMPIONS)
                 {
                     string separator = Constants.SLASH_SEPARATOR;
-                    foreach (Champion champion in allChampions.ContainedChampions())
+                    foreach (ChampionContainer champion in allChampions.ContainedChampions())
                     {
                         string lineToParse = LineType.Champion.ToString() + separator + 
                                              champion.Name + separator + 
@@ -127,7 +128,7 @@ namespace LoL_Champions_and_Positions
                                          list.Role + separator;
                     bool firstPass = true;
                     separator = Constants.AT_SEPARATOR;
-                    foreach (Champion containedChamp in list.ContainedChampions())
+                    foreach (ChampionContainer containedChamp in list.ContainedChampions())
                     {
                         if (firstPass)
                         {

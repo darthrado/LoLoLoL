@@ -67,7 +67,7 @@ namespace LoL_Champions_and_Positions
         {
             for(int i=0; i<_listOfChampions.Count; i++)
             {
-                if (_listOfChampions[i].ChampionPr.Name == championName)
+                if (_listOfChampions[i].Name == championName)
                 {
                     _listOfChampions[i].Visible = false;
                     _listOfChampions.RemoveAt(i);
@@ -96,7 +96,7 @@ namespace LoL_Champions_and_Positions
                     value = "";
                 }
 
-                if (_listOfChampions[i].ChampionPr.Name.Contains(value) || _listOfChampions[i].ChampionPr.SearchTag.Contains(value)||value == "")
+                if (_listOfChampions[i].Name.Contains(value) || _listOfChampions[i].SearchTag.Contains(value)||value == "")
                 {
                     _listOfChampions[i].SetLocation(X, Y);
                     _listOfChampions[i].Visible = true;
@@ -144,13 +144,13 @@ namespace LoL_Champions_and_Positions
 
         }
 
-        public List<Champion> ContainedChampions() 
+        public List<ChampionContainer> ContainedChampions() 
         { 
-            List<Champion> result = new List<Champion>();
+            List<ChampionContainer> result = new List<ChampionContainer>();
 
             foreach (ChampionContainer champion in _listOfChampions)
             {
-                result.Add(champion.ChampionPr);
+                result.Add(champion);
             }
 
             return result;

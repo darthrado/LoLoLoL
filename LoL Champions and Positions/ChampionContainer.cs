@@ -52,7 +52,12 @@ namespace LoL_Champions_and_Positions
         private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.ToolTip toolTip;
 
-        public Champion ChampionPr { get { return _champion; } }
+        //public Champion ChampionPr { get { return _champion; } }
+        public string Name { get { return _champion.Name; } set { _champion.Name = value; } }
+        public string Image { get { return _champion.Image; } set { _champion.Image = value; pictureBox.Image = HelpMethods.getImageFromLocalDirectory(value); } }
+        public string SearchTag { get { return _champion.SearchTag; } set { _champion.SearchTag = value; } }
+        public string Tooltip { get { return _champion.Tooltip; } set { _champion.Tooltip = value; } }
+
         public int X { get { return pictureBox.Location.X; } }
         public int Y { get { return pictureBox.Location.Y; } }
         public bool Visible { get { return pictureBox.Visible; } set { pictureBox.Visible = value; } }
@@ -69,7 +74,7 @@ namespace LoL_Champions_and_Positions
         {
             if (_mainForm != null)
             {
-                _mainForm.SetSelectedChampion(this.ChampionPr);
+                _mainForm.SetSelectedChampion(this);
             }
         }
 

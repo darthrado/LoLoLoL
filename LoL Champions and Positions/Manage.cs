@@ -84,8 +84,8 @@ namespace LoL_Champions_and_Positions
                 {
                     if (InputListEntry.Name == Constants.ALL_CHAMPIONS && InputListEntry.Role == ListPositions.All.ToString())
                     {
-                        List<Champion> tempChampList = InputListEntry.ContainedChampions();
-                        foreach (Champion champion in tempChampList)
+                        List<ChampionContainer> tempChampList = InputListEntry.ContainedChampions();
+                        foreach (ChampionContainer champion in tempChampList)
                         {
                             _intputList.Add(new ListEntry(champion.Name, champion.Image, true));
                         }

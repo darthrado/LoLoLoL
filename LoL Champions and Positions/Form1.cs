@@ -32,9 +32,9 @@ namespace LoL_Champions_and_Positions
             selectedCollection.Add(newCHamp);
             newCHamp = new Champion("Fiora", "Fiora.png", "", "I loooooong for a wortzy opponenet");
             selectedCollection.Add(newCHamp);
-            newCHamp = new Champion("Draven", "Elise.png", "", "Spider Woman");
+            newCHamp = new Champion("Elise", "Elise.png", "", "Spider Woman");
             selectedCollection.Add(newCHamp);
-            newCHamp = new Champion("Elise", "Draven.png", "", "League of DRAVEEEEEN");
+            newCHamp = new Champion("Draven", "Draven.png", "", "League of DRAVEEEEEN");
             selectedCollection.Add(newCHamp);
             selectedCollection.Print(textSeaarchBox.Text);
 
@@ -94,7 +94,7 @@ namespace LoL_Champions_and_Positions
         }
         List<ChampionCollection> collectionList;
         ChampionCollection selectedCollection;
-        Champion selectedChampion;
+        ChampionContainer selectedChampion;
         
 
         private void manageChamp_Click(object sender, EventArgs e)
@@ -123,7 +123,7 @@ namespace LoL_Champions_and_Positions
                     {
                         foreach (ChampionCollection collectionItem in collectionList)
                         {
-                            foreach (Champion containedChampion in collectionItem.ContainedChampions())
+                            foreach (ChampionContainer containedChampion in collectionItem.ContainedChampions())
                             {
                                 if (containedChampion.Name == response.Name)
                                 {
@@ -242,7 +242,7 @@ namespace LoL_Champions_and_Positions
                 }
             }
         }
-        public void SetSelectedChampion(Champion selChamp)
+        public void SetSelectedChampion(ChampionContainer selChamp)
         {
             selectedChampion = selChamp;
             if (selChamp != null)
