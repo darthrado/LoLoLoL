@@ -14,3 +14,5 @@ C:\Users\DarthRado\Documents\visual studio 2010\Projects\LoL Champions and Posit
 C:\Users\DarthRado\Documents\visual studio 2010\Projects\LoL Champions and Positions\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.csproj.GenerateResource.Cache
 C:\Users\DarthRado\Documents\visual studio 2010\Projects\LoL Champions and Positions\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.Manage.resources
 C:\Users\ryanev\documents\visual studio 2010\Projects\LoL Champions and Positions\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.Manage.resources
+C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.exe
+C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.pdb
