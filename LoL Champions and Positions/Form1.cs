@@ -129,8 +129,9 @@ namespace LoL_Champions_and_Positions
                                 {
                                     containedChampion.Name = response.NewName;
                                     containedChampion.Image = response.Picture;
+                                    break; // Champion names should be unique so it should be safe to use break here;
                                 }
-                                break; // Champion names should be unique so it should be safe to use break here;
+                                
                             }
                         }
                     }
@@ -203,6 +204,7 @@ namespace LoL_Champions_and_Positions
                 MessageBox.Show("No changes were made");
             }
             updateListCollectionDropdown();
+            BuildContextMenu();
         }
 
         private void ListCollection_SelectionChangeCommitted(object sender, EventArgs e)
@@ -261,23 +263,46 @@ namespace LoL_Champions_and_Positions
             List<System.Windows.Forms.ToolStripMenuItem> ToolStriListMenu= new List<ToolStripMenuItem>();
             foreach (ChampionCollection list in collectionList)
             {
-                /*
-                ToolStripMenuItem[] newItems = toolStripMenuItem3.DropDownItems.
-                ToolStripMenuItem newItem;
-                if (newItems == null)
+                if (list.Name == Constants.ALL_CHAMPIONS || list.Role == ListPositions.All.ToString())
+                {
+                    continue;
+                }
+
+                ToolStripMenuItem roleItem = new ToolStripMenuItem();
+                roleItem.Name = list.Role;
+                roleItem.Text = list.Role;
+                roleItem.Click += new EventHandler(newItem_Click);
+
+                ToolStripMenuItem newItem = null;
+                foreach (ToolStripMenuItem menuItems in toolStripMenuItem3.DropDownItems)
+                {
+                    if (menuItems.Text == list.Name)
+                    {
+                        newItem = menuItems;
+                    }
+                }
+
+                if (newItem == null)
                 {
                     newItem = new ToolStripMenuItem();
-                    newItem.DropDownItems.Add(list.Role);
+
                     newItem.Name = list.Name;
                     newItem.Text = list.Name;
+
+                    newItem.DropDownItems.Add(roleItem);
                     toolStripMenuItem3.DropDownItems.Add(newItem);
+
                 }
                 else
                 {
-                 * Test Chamge
-                    newItems[0].DropDownItems.Add(list.Role);
-                } rework */ 
+                    newItem.DropDownItems.Add(roleItem);
+                }
             }
+        }
+
+        public void newItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Here");
         }
     }
 }
