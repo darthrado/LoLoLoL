@@ -95,6 +95,7 @@ namespace LoL_Champions_and_Positions
         List<ChampionCollection> collectionList;
         ChampionCollection selectedCollection;
         ChampionContainer selectedChampion;
+        Control rightClickedControl;
         
 
         private void manageChamp_Click(object sender, EventArgs e)
@@ -288,6 +289,8 @@ namespace LoL_Champions_and_Positions
 
                     newItem.Name = list.Name;
                     newItem.Text = list.Name;
+                    //newItem.OwnerItem = toolStripMenuItem3;
+                    //roleItem.Owner = newItem;
 
                     newItem.DropDownItems.Add(roleItem);
                     toolStripMenuItem3.DropDownItems.Add(newItem);
@@ -302,7 +305,39 @@ namespace LoL_Champions_and_Positions
 
         public void newItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Here");
+            ToolStripMenuItem clickedMenu = (ToolStripMenuItem)sender;
+
+            ChampionContainer clickedChampion = null;
+            foreach (ChampionContainer champion in selectedCollection.ContainedChampions())
+            {
+                if(champion.PictureBox == rightClickedControl)
+                {
+                    clickedChampion = champion;
+                }
+            }
+
+            if (clickedChampion == null)
+            {
+                MessageBox.Show("If you are here it means that the developer is an idiot");
+                return;
+            }
+
+            foreach (ChampionCollection List in collectionList)
+            {
+                if (List.Name == clickedMenu.OwnerItem.Name  && (List.Role == clickedMenu.Name || List.Role == ListPositions.All.ToString()) )
+                {
+                    //To Do filter double champions
+
+                    List.Add(new Champion(clickedChampion.Name,clickedChampion.Image,clickedChampion.SearchTag,clickedChampion.Tooltip));
+                }
+            }
+
+            //MessageBox.Show(clickedMenu.OwnerItem.Name + " " + clickedMenu.Name + " " + holyshitName); //here we get the 
+        }
+
+        private void contextMenuStrip1_Opened(object sender, EventArgs e)
+        {
+             rightClickedControl = contextMenuStrip1.SourceControl;
         }
     }
 }

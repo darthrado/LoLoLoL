@@ -45,18 +45,22 @@ namespace LoL_Champions_and_Positions
         public void Add(Champion champion) 
         {
             ChampionContainer newChampion;
-            if(_contextMenu==null && _groupBox==null && _mainForm==null)
+            if(_mainForm==null)
             {
                 newChampion = new ChampionContainer(champion);
             }
             else
             {
-                if (_contextMenu == null || _groupBox == null||_mainForm==null)
-                {
-                    throw new Exception("ContextMenu or GroupBox Not Set!");
-                }
+
                 newChampion = new ChampionContainer(champion, _mainForm);
+            }
+
+            if(_groupBox!=null)
+            {
                 _groupBox.Controls.Add(newChampion.PictureBox);
+            }
+            if(_contextMenu!=null)
+            {
                 newChampion.PictureBox.ContextMenuStrip = _contextMenu;
             }
 

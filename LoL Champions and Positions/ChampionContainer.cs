@@ -23,6 +23,7 @@ namespace LoL_Champions_and_Positions
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox.Visible = false;
             this.pictureBox.Click+=new EventHandler(pictureBox_Click);
 
             this.toolTip.SetToolTip(pictureBox, champion.Tooltip);
@@ -40,6 +41,7 @@ namespace LoL_Champions_and_Positions
             this.pictureBox.Size = new System.Drawing.Size(60, 60);
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
+            this.pictureBox.Visible = false;
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox.Click += new EventHandler(pictureBox_Click);
 
