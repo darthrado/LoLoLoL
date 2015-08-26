@@ -14,8 +14,15 @@ namespace LoL_Champions_and_Positions
         public Form1()
         {
             InitializeComponent();
+            //ListPositions
+            playablePositions.Items.Clear();
+            foreach (ListPositions position in Enum.GetValues(typeof(ListPositions)))
+            {
+                playablePositions.Items.Add(position.ToString());
+            }
+
             collectionList = new List<ChampionCollection>();
-            selectedCollection = new ChampionCollection(Constants.ALL_CHAMPIONS, ListPositions.All.ToString(),contextMenuStrip1,groupBox1,this);
+            selectedCollection = new ChampionCollection(Constants.ALL_CHAMPIONS, ListPositions.All.ToString(),AllChampsContextMenu,groupBox1,this);
             collectionList.Add(selectedCollection);
 
             Champion newCHamp = new Champion("Thresh", "Thresh.png", "", "Muh best support");
@@ -39,7 +46,7 @@ namespace LoL_Champions_and_Positions
             selectedCollection.Print(textSeaarchBox.Text);
 
             selectedChampion = null;
-            selectedCollection.AddContextMenu(contextMenuStrip1);
+            selectedCollection.AddContextMenu(AllChampsContextMenu);
             selectedCollection.AddGroupBox(groupBox1);
             selectedCollection.AddFormReference(this);
 
@@ -171,7 +178,7 @@ namespace LoL_Champions_and_Positions
                     {
                         foreach (ListPositions position in Enum.GetValues(typeof(ListPositions)))
                         {
-                            collectionList.Add(new ChampionCollection(response.Name, position.ToString(), ContextMenuStrip, groupBox1,this));
+                            collectionList.Add(new ChampionCollection(response.Name, position.ToString(), CustomListsStrip, groupBox1, this));
                         }
                     }
                     else if (response.RespondCommand == ManageFormState.Edit)
@@ -260,8 +267,10 @@ namespace LoL_Champions_and_Positions
         }
         private void BuildContextMenu()
         {
+
+
             toolStripMenuItem3.DropDownItems.Clear();
-            List<System.Windows.Forms.ToolStripMenuItem> ToolStriListMenu= new List<ToolStripMenuItem>();
+
             foreach (ChampionCollection list in collectionList)
             {
                 if (list.Name == Constants.ALL_CHAMPIONS || list.Role == ListPositions.All.ToString())
@@ -326,7 +335,10 @@ namespace LoL_Champions_and_Positions
             {
                 if (List.Name == clickedMenu.OwnerItem.Name  && (List.Role == clickedMenu.Name || List.Role == ListPositions.All.ToString()) )
                 {
-                    //To Do filter double champions
+                    if (List.GetChampion(clickedChampion.Name) != null)
+                    {
+                        continue;
+                    }
 
                     List.Add(new Champion(clickedChampion.Name,clickedChampion.Image,clickedChampion.SearchTag,clickedChampion.Tooltip));
                 }
@@ -337,7 +349,72 @@ namespace LoL_Champions_and_Positions
 
         private void contextMenuStrip1_Opened(object sender, EventArgs e)
         {
-             rightClickedControl = contextMenuStrip1.SourceControl;
+             rightClickedControl = AllChampsContextMenu.SourceControl;
+        }
+
+        private void removeFromListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ChampionContainer clickedChampion = null;
+            foreach (ChampionContainer champion in selectedCollection.ContainedChampions())
+            {
+                if (champion.PictureBox == rightClickedControl)
+                {
+                    clickedChampion = champion;
+                }
+            }
+            
+            ChampionCollection tempForDelete= null; //used to store the All Champions from a set of lists with the Same name/Different role. If the removed champion is present only in the list we are removing it from, remove it from All as well
+            int deleteCounter=0;
+
+            foreach (ChampionCollection List in collectionList)
+            {
+
+                if (selectedCollection.Role == ListPositions.All.ToString())
+                {
+
+                    if (List.Name == selectedCollection.Name)
+                    {
+                        List.Remove(clickedChampion.Name);
+                    }
+
+                }
+                else
+                {
+                    if (List.Name == selectedCollection.Name && List.Role == ListPositions.All.ToString())
+                    {
+                        tempForDelete = List;
+                    }
+                    else if (List.Name == selectedCollection.Name && List.Role != ListPositions.All.ToString())
+                    {
+                        ChampionContainer hasChampion = List.GetChampion(clickedChampion.Name);
+
+                        if (List.Role == selectedCollection.Role && hasChampion!=null)
+                        {
+                            List.Remove(clickedChampion.Name);
+                            deleteCounter++;
+                            
+                        }
+                        else if (List.Role != selectedCollection.Role && hasChampion != null)
+                        {
+                            deleteCounter++;
+                        }
+
+                        
+                    }
+                }
+
+            }
+
+            if (deleteCounter == 1)
+            {
+                tempForDelete.Remove(clickedChampion.Name);
+            }
+
+        }
+
+        private void CustomListsStrip_Opened(object sender, EventArgs e)
+        {
+            rightClickedControl = CustomListsStrip.SourceControl ;
         }
     }
 }

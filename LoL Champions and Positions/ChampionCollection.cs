@@ -168,6 +168,19 @@ namespace LoL_Champions_and_Positions
             }
             
         }
+        public ChampionContainer GetChampion(string championName)
+        {
+            foreach (ChampionContainer containedChampion in _listOfChampions)
+            {
+                if (containedChampion.Name == championName)
+                {
+                    return containedChampion;
+                }
+            }
+
+            return null;
+        }
+
         public string Name { get { return _name; } set { _name = value; } }
         public string Role { get { return _role; } }
     }
