@@ -11,6 +11,7 @@ namespace LoL_Champions_and_Positions
 {
     public partial class Form1 : Form
     {
+        #region Form1Constructor
         public Form1()
         {
             InitializeComponent();
@@ -20,6 +21,7 @@ namespace LoL_Champions_and_Positions
             {
                 playablePositions.Items.Add(position.ToString());
             }
+
 
             collectionList = new List<ChampionCollection>();
             selectedCollection = new ChampionCollection(Constants.ALL_CHAMPIONS, ListPositions.All.ToString(),AllChampsContextMenu,groupBox1,this);
@@ -51,22 +53,45 @@ namespace LoL_Champions_and_Positions
             selectedCollection.AddFormReference(this);
 
             updateListCollectionDropdown();
-            championListCollection.SelectedIndex = 0;
-            playablePositions.SelectedIndex = 0;
-
+            SetFormState(Form1State.InitialView);
         }
+        #endregion
 
-        private void updateListCollectionDropdown()
+        #region ClassVariables
+        List<ChampionCollection> collectionList;
+        ChampionCollection selectedCollection;
+        ChampionContainer selectedChampion;
+        Control rightClickedControl;
+        bool displayChampionMatchupsList;
+        #endregion
+
+
+        #region Enums
+        enum Form1State
         {
-            championListCollection.Items.Clear();
-            foreach (ChampionCollection champList in collectionList)
-            {
-                if (champList.Role == ListPositions.All.ToString())
+            ListsView,
+            ChampionSelected,
+            InitialView
+        };
+        #endregion
+
+        #region Methods
+        private void updateListCollectionDropdown()
                 {
-                    championListCollection.Items.Add(champList.Name);
+                    championListCollection.Items.Clear();
+                    foreach (ChampionCollection champList in collectionList)
+                    {
+                        if (champList.Role == ListPositions.All.ToString())
+                        {
+                            championListCollection.Items.Add(champList.Name);
+                        }
+                    }
                 }
-            }
-        }
+        
+        /// <summary>
+        /// Depending on the selected values in ComboBox List and Position - gets the corresponding ChampionCollection from the list of Collections
+        /// </summary>
+        /// <returns>ChampionCollection</returns>
         ChampionCollection getSelectedList()
         {
             if (championListCollection.SelectedIndex == -1 || playablePositions.SelectedIndex == -1)
@@ -81,6 +106,143 @@ namespace LoL_Champions_and_Positions
             }
             return null;
         }
+
+        public void SetSelectedChampion(ChampionContainer selChamp)
+        {
+            selectedChampion = selChamp;
+            if (selChamp != null)
+            {
+                pictureSelectedChamp.Image = HelpMethods.getImageFromLocalDirectory(selChamp.Image);
+                selectedChampTextBox.Text = selChamp.Name;
+
+                SetFormState(Form1State.ChampionSelected);
+            }
+            else
+            {
+                pictureSelectedChamp.Image = Properties.Resources.DefaultImage;
+                selectedChampTextBox.Text = "";
+
+                SetFormState(Form1State.ListsView);
+            }
+
+        }
+
+        private void BuildContextMenu()
+        {
+
+
+            toolStripMenuItem3.DropDownItems.Clear();
+
+            foreach (ChampionCollection list in collectionList)
+            {
+                if (list.Name == Constants.ALL_CHAMPIONS || list.Role == ListPositions.All.ToString())
+                {
+                    continue;
+                }
+
+                ToolStripMenuItem roleItem = new ToolStripMenuItem();
+                roleItem.Name = list.Role;
+                roleItem.Text = list.Role;
+                roleItem.Click += new EventHandler(newItem_Click);
+
+                ToolStripMenuItem newItem = null;
+                foreach (ToolStripMenuItem menuItems in toolStripMenuItem3.DropDownItems)
+                {
+                    if (menuItems.Text == list.Name)
+                    {
+                        newItem = menuItems;
+                    }
+                }
+
+                if (newItem == null)
+                {
+                    newItem = new ToolStripMenuItem();
+
+                    newItem.Name = list.Name;
+                    newItem.Text = list.Name;
+                    //newItem.OwnerItem = toolStripMenuItem3;
+                    //roleItem.Owner = newItem;
+
+                    newItem.DropDownItems.Add(roleItem);
+                    toolStripMenuItem3.DropDownItems.Add(newItem);
+
+                }
+                else
+                {
+                    newItem.DropDownItems.Add(roleItem);
+                }
+            }
+        }
+
+        void SetFormState(Form1State formState)
+        {
+            if (formState == Form1State.ChampionSelected)
+            {
+                if (selectedChampion == null)
+                {
+                    throw new Exception("No Selected Champion");
+                }
+
+                championListCollection.Enabled = false;
+                playablePositions.Enabled = false;
+
+                pictureSelectedChamp.Enabled = true;
+                selectedChampTextBox.Visible = true;
+                ChampionDetailsButton.Enabled = true;
+                ButtonMatchupDetails.Enabled = true;
+                BackButton.Enabled = true;
+
+                groupBox1.Text = selectedChampion.Name + " Matchups Info";
+
+            }
+            if (formState == Form1State.ListsView)
+            {
+                if (selectedCollection == null)
+                {
+                    throw new Exception("No selected List");
+                }
+
+                championListCollection.Enabled = true;
+                playablePositions.Enabled = true;
+
+                pictureSelectedChamp.Enabled = false;
+                selectedChampTextBox.Visible = false;
+                ChampionDetailsButton.Enabled = false;
+                ButtonMatchupDetails.Enabled = false;
+                BackButton.Enabled = false;
+
+                groupBox1.Text = selectedCollection.Name + "/" + selectedCollection.Role;
+
+                if (displayChampionMatchupsList)
+                {
+                    displayChampionMatchupsList = false;
+                    //TODO once matchup collection is implemented: matchupCollection hide
+                    selectedCollection.Print(textSeaarchBox.Text);
+                }
+            }
+            if (formState == Form1State.InitialView)
+            {
+                displayChampionMatchupsList = false;
+
+                championListCollection.Enabled = true;
+                playablePositions.Enabled = true;
+
+                pictureSelectedChamp.Enabled = false;
+                selectedChampTextBox.Visible = false;
+                ChampionDetailsButton.Enabled = false;
+                ButtonMatchupDetails.Enabled = false;
+                BackButton.Enabled = false;
+
+                groupBox1.Text = Constants.ALL_CHAMPIONS + "/" + ListPositions.All.ToString();
+                championListCollection.SelectedIndex = 0;
+                playablePositions.SelectedIndex = 0;
+
+            }
+        }
+
+        #endregion
+
+        #region EventHandlers
 
         private void Form1_Resize(object sender, EventArgs e)
         {
@@ -99,11 +261,6 @@ namespace LoL_Champions_and_Positions
             }
             
         }
-        List<ChampionCollection> collectionList;
-        ChampionCollection selectedCollection;
-        ChampionContainer selectedChampion;
-        Control rightClickedControl;
-        
 
         private void manageChamp_Click(object sender, EventArgs e)
         {
@@ -231,6 +388,7 @@ namespace LoL_Champions_and_Positions
                     selectedCollection.Print(textSeaarchBox.Text);
                 }
             }
+            SetFormState(Form1State.ListsView);
         }
 
         private void Positions_SelectionChangeCommitted(object sender, EventArgs e)
@@ -249,67 +407,7 @@ namespace LoL_Champions_and_Positions
                     selectedCollection.Print(textSeaarchBox.Text);
                 }
             }
-        }
-        public void SetSelectedChampion(ChampionContainer selChamp)
-        {
-            selectedChampion = selChamp;
-            if (selChamp != null)
-            {
-                pictureSelectedChamp.Image = HelpMethods.getImageFromLocalDirectory(selChamp.Image);
-                selectedChampTextBox.Text = selChamp.Name;
-            }
-            else
-            {
-                pictureSelectedChamp.Image = Properties.Resources.DefaultImage;
-                selectedChampTextBox.Text = "";
-            }
-
-        }
-        private void BuildContextMenu()
-        {
-
-
-            toolStripMenuItem3.DropDownItems.Clear();
-
-            foreach (ChampionCollection list in collectionList)
-            {
-                if (list.Name == Constants.ALL_CHAMPIONS || list.Role == ListPositions.All.ToString())
-                {
-                    continue;
-                }
-
-                ToolStripMenuItem roleItem = new ToolStripMenuItem();
-                roleItem.Name = list.Role;
-                roleItem.Text = list.Role;
-                roleItem.Click += new EventHandler(newItem_Click);
-
-                ToolStripMenuItem newItem = null;
-                foreach (ToolStripMenuItem menuItems in toolStripMenuItem3.DropDownItems)
-                {
-                    if (menuItems.Text == list.Name)
-                    {
-                        newItem = menuItems;
-                    }
-                }
-
-                if (newItem == null)
-                {
-                    newItem = new ToolStripMenuItem();
-
-                    newItem.Name = list.Name;
-                    newItem.Text = list.Name;
-                    //newItem.OwnerItem = toolStripMenuItem3;
-                    //roleItem.Owner = newItem;
-
-                    newItem.DropDownItems.Add(roleItem);
-                    toolStripMenuItem3.DropDownItems.Add(newItem);
-
-                }
-                else
-                {
-                    newItem.DropDownItems.Add(roleItem);
-                }
-            }
+            SetFormState(Form1State.ListsView);
         }
 
         public void newItem_Click(object sender, EventArgs e)
@@ -319,7 +417,7 @@ namespace LoL_Champions_and_Positions
             ChampionContainer clickedChampion = null;
             foreach (ChampionContainer champion in selectedCollection.ContainedChampions())
             {
-                if(champion.PictureBox == rightClickedControl)
+                if (champion.PictureBox == rightClickedControl)
                 {
                     clickedChampion = champion;
                 }
@@ -333,14 +431,14 @@ namespace LoL_Champions_and_Positions
 
             foreach (ChampionCollection List in collectionList)
             {
-                if (List.Name == clickedMenu.OwnerItem.Name  && (List.Role == clickedMenu.Name || List.Role == ListPositions.All.ToString()) )
+                if (List.Name == clickedMenu.OwnerItem.Name && (List.Role == clickedMenu.Name || List.Role == ListPositions.All.ToString()))
                 {
                     if (List.GetChampion(clickedChampion.Name) != null)
                     {
                         continue;
                     }
 
-                    List.Add(new Champion(clickedChampion.Name,clickedChampion.Image,clickedChampion.SearchTag,clickedChampion.Tooltip));
+                    List.Add(new Champion(clickedChampion.Name, clickedChampion.Image, clickedChampion.SearchTag, clickedChampion.Tooltip));
                 }
             }
 
@@ -349,7 +447,7 @@ namespace LoL_Champions_and_Positions
 
         private void contextMenuStrip1_Opened(object sender, EventArgs e)
         {
-             rightClickedControl = AllChampsContextMenu.SourceControl;
+            rightClickedControl = AllChampsContextMenu.SourceControl;
         }
 
         private void removeFromListToolStripMenuItem_Click(object sender, EventArgs e)
@@ -362,9 +460,9 @@ namespace LoL_Champions_and_Positions
                     clickedChampion = champion;
                 }
             }
-            
-            ChampionCollection tempForDelete= null; //used to store the All Champions from a set of lists with the Same name/Different role. If the removed champion is present only in the list we are removing it from, remove it from All as well
-            int deleteCounter=0;
+
+            ChampionCollection tempForDelete = null; //used to store the All Champions from a set of lists with the Same name/Different role. If the removed champion is present only in the list we are removing it from, remove it from All as well
+            int deleteCounter = 0;
 
             foreach (ChampionCollection List in collectionList)
             {
@@ -388,18 +486,17 @@ namespace LoL_Champions_and_Positions
                     {
                         ChampionContainer hasChampion = List.GetChampion(clickedChampion.Name);
 
-                        if (List.Role == selectedCollection.Role && hasChampion!=null)
+                        if (List.Role == selectedCollection.Role && hasChampion != null)
                         {
                             List.Remove(clickedChampion.Name);
                             deleteCounter++;
-                            
+
                         }
                         else if (List.Role != selectedCollection.Role && hasChampion != null)
                         {
                             deleteCounter++;
                         }
 
-                        
                     }
                 }
 
@@ -414,7 +511,42 @@ namespace LoL_Champions_and_Positions
 
         private void CustomListsStrip_Opened(object sender, EventArgs e)
         {
-            rightClickedControl = CustomListsStrip.SourceControl ;
+            rightClickedControl = CustomListsStrip.SourceControl;
         }
+
+        private void BackButton_Click(object sender, EventArgs e)
+        {
+            SetFormState(Form1State.ListsView);
+        }
+
+        private void ButtonMatchupDetails_Click(object sender, EventArgs e)
+        {
+            displayChampionMatchupsList = true;
+            //TODO once ChampionMatchupsList is implemented do stuff here
+        }
+        #endregion
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

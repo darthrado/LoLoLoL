@@ -42,11 +42,12 @@
             this.buttonManageLists = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureSelectedChamp = new System.Windows.Forms.PictureBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.ChampionDetailsButton = new System.Windows.Forms.Button();
             this.selectedChampTextBox = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.BackButton = new System.Windows.Forms.Button();
             this.CustomListsStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeFromListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ButtonMatchupDetails = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.AllChampsContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSelectedChamp)).BeginInit();
@@ -74,7 +75,7 @@
             "AD Carry",
             "Support"});
             this.playablePositions.Location = new System.Drawing.Point(7, 123);
-            this.playablePositions.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.playablePositions.Margin = new System.Windows.Forms.Padding(2);
             this.playablePositions.Name = "playablePositions";
             this.playablePositions.Size = new System.Drawing.Size(122, 21);
             this.playablePositions.TabIndex = 1;
@@ -88,7 +89,7 @@
             "I play",
             "I train"});
             this.championListCollection.Location = new System.Drawing.Point(7, 85);
-            this.championListCollection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.championListCollection.Margin = new System.Windows.Forms.Padding(2);
             this.championListCollection.Name = "championListCollection";
             this.championListCollection.Size = new System.Drawing.Size(120, 21);
             this.championListCollection.TabIndex = 2;
@@ -98,10 +99,10 @@
             // 
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Location = new System.Drawing.Point(136, 11);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox1.Size = new System.Drawing.Size(704, 382);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Size = new System.Drawing.Size(704, 420);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Text";
@@ -132,7 +133,7 @@
             // textSeaarchBox
             // 
             this.textSeaarchBox.Location = new System.Drawing.Point(9, 148);
-            this.textSeaarchBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textSeaarchBox.Margin = new System.Windows.Forms.Padding(2);
             this.textSeaarchBox.Name = "textSeaarchBox";
             this.textSeaarchBox.Size = new System.Drawing.Size(120, 20);
             this.textSeaarchBox.TabIndex = 4;
@@ -179,14 +180,14 @@
             this.pictureSelectedChamp.TabIndex = 8;
             this.pictureSelectedChamp.TabStop = false;
             // 
-            // button1
+            // ChampionDetailsButton
             // 
-            this.button1.Location = new System.Drawing.Point(7, 340);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(119, 23);
-            this.button1.TabIndex = 9;
-            this.button1.Text = "Details";
-            this.button1.UseVisualStyleBackColor = true;
+            this.ChampionDetailsButton.Location = new System.Drawing.Point(7, 378);
+            this.ChampionDetailsButton.Name = "ChampionDetailsButton";
+            this.ChampionDetailsButton.Size = new System.Drawing.Size(122, 23);
+            this.ChampionDetailsButton.TabIndex = 9;
+            this.ChampionDetailsButton.Text = "Details";
+            this.ChampionDetailsButton.UseVisualStyleBackColor = true;
             // 
             // selectedChampTextBox
             // 
@@ -197,21 +198,22 @@
             this.selectedChampTextBox.TabIndex = 10;
             this.selectedChampTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // button2
+            // BackButton
             // 
-            this.button2.Location = new System.Drawing.Point(7, 370);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(119, 23);
-            this.button2.TabIndex = 11;
-            this.button2.Text = "Back";
-            this.button2.UseVisualStyleBackColor = true;
+            this.BackButton.Location = new System.Drawing.Point(7, 407);
+            this.BackButton.Name = "BackButton";
+            this.BackButton.Size = new System.Drawing.Size(124, 23);
+            this.BackButton.TabIndex = 11;
+            this.BackButton.Text = "Back";
+            this.BackButton.UseVisualStyleBackColor = true;
+            this.BackButton.Click += new System.EventHandler(this.BackButton_Click);
             // 
             // CustomListsStrip
             // 
             this.CustomListsStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.removeFromListToolStripMenuItem});
             this.CustomListsStrip.Name = "CustomListsStrip";
-            this.CustomListsStrip.Size = new System.Drawing.Size(170, 48);
+            this.CustomListsStrip.Size = new System.Drawing.Size(170, 26);
             this.CustomListsStrip.Opened += new System.EventHandler(this.CustomListsStrip_Opened);
             // 
             // removeFromListToolStripMenuItem
@@ -221,14 +223,25 @@
             this.removeFromListToolStripMenuItem.Text = "Remove From List";
             this.removeFromListToolStripMenuItem.Click += new System.EventHandler(this.removeFromListToolStripMenuItem_Click);
             // 
+            // ButtonMatchupDetails
+            // 
+            this.ButtonMatchupDetails.Location = new System.Drawing.Point(9, 349);
+            this.ButtonMatchupDetails.Name = "ButtonMatchupDetails";
+            this.ButtonMatchupDetails.Size = new System.Drawing.Size(122, 23);
+            this.ButtonMatchupDetails.TabIndex = 12;
+            this.ButtonMatchupDetails.Text = "Matchup Details";
+            this.ButtonMatchupDetails.UseVisualStyleBackColor = true;
+            this.ButtonMatchupDetails.Click += new System.EventHandler(this.ButtonMatchupDetails_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(851, 407);
-            this.Controls.Add(this.button2);
+            this.ClientSize = new System.Drawing.Size(851, 442);
+            this.Controls.Add(this.ButtonMatchupDetails);
+            this.Controls.Add(this.BackButton);
             this.Controls.Add(this.selectedChampTextBox);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.ChampionDetailsButton);
             this.Controls.Add(this.pictureSelectedChamp);
             this.Controls.Add(this.playablePositions);
             this.Controls.Add(this.label3);
@@ -238,7 +251,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.championListCollection);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Resize += new System.EventHandler(this.Form1_Resize);
@@ -273,11 +286,12 @@
         private System.Windows.Forms.ToolStripMenuItem aDCToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem supportToolStripMenuItem;*/
         private System.Windows.Forms.PictureBox pictureSelectedChamp;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button ChampionDetailsButton;
         private System.Windows.Forms.TextBox selectedChampTextBox;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button BackButton;
         private System.Windows.Forms.ContextMenuStrip CustomListsStrip;
         private System.Windows.Forms.ToolStripMenuItem removeFromListToolStripMenuItem;
+        private System.Windows.Forms.Button ButtonMatchupDetails;
     }
 }
 
