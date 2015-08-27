@@ -80,5 +80,18 @@ namespace LoL_Champions_and_Positions
             }
         }
 
+        public bool AddMatchup(string enemyChampion, string matchupInfo)
+        {
+            return _champion.AddMatchup(enemyChampion, matchupInfo);
+        }
+        public bool EditMatchup(string enemyChampion, string matchupInfo)
+        {
+            return _champion.EditMatchup(enemyChampion, matchupInfo);
+        }
+        public bool DeleteMatchup(string enemyChampion)
+        {
+            return _champion.DeleteMatchup(enemyChampion);
+        }
+
     }
 }
