@@ -192,8 +192,6 @@ namespace LoL_Champions_and_Positions
                 ButtonMatchupDetails.Enabled = true;
                 BackButton.Enabled = true;
 
-                groupBox1.Text = selectedChampion.Name + " Matchups Info";
-
             }
             if (formState == Form1State.ListsView)
             {
@@ -216,6 +214,7 @@ namespace LoL_Champions_and_Positions
                 if (displayChampionMatchupsList)
                 {
                     displayChampionMatchupsList = false;
+                    
                     //TODO once matchup collection is implemented: matchupCollection hide
                     selectedCollection.Print(textSeaarchBox.Text);
                 }
@@ -522,9 +521,15 @@ namespace LoL_Champions_and_Positions
         private void ButtonMatchupDetails_Click(object sender, EventArgs e)
         {
             displayChampionMatchupsList = true;
+            groupBox1.Text = selectedChampion.Name + " Matchups Info";
             //TODO once ChampionMatchupsList is implemented do stuff here
         }
         #endregion
+
+        private void textSeaarchBox_TextChanged(object sender, EventArgs e)
+        {
+            selectedCollection.Print(textSeaarchBox.Text);
+        }
 
 
 
