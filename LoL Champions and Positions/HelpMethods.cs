@@ -70,7 +70,6 @@ namespace LoL_Champions_and_Positions
                             if (existingChampion.Name == champion)
                             {
                                 newListEntry.Add(new Champion(existingChampion.Name,existingChampion.Image,existingChampion.SearchTag,existingChampion.Tooltip));
-
                             }
                         }
                     }
@@ -82,6 +81,18 @@ namespace LoL_Champions_and_Positions
                 {
                     Champion newChampion = new Champion(lineComponents[1], lineComponents[2], lineComponents[3], lineComponents[4]);
                     AllChampionsCollection.Add(newChampion);
+                }
+                //Matchup parse format: Champion///EnemyChampion///MatchupDetails
+                else if(lineComponents[0] == LineType.Matchup.ToString())
+                {
+                    ChampionContainer matchupChampion = AllChampionsCollection.GetChampion(lineComponents[1]);
+                    if (matchupChampion == null)
+                    {
+                        throw new Exception("Champion Missing: Can't add matchup");
+                        //Technically if my program works correctly, i should never get here since all champions are Exported before the matchups
+                    }
+                    matchupChampion.AddMatchup(lineComponents[2], lineComponents[3]);
+
                 }
                 //Not Developed Yet - ToDo
                 else if (lineComponents[0] == LineType.Item.ToString())
@@ -144,6 +155,18 @@ namespace LoL_Champions_and_Positions
                     this.saveLines.Enqueue(lineToParse);
                 }
             }
+            foreach (ChampionCollection allChampions in List)
+            {
+                if (allChampions.Name == Constants.ALL_CHAMPIONS)
+                {
+                    foreach (ChampionContainer champion in allChampions.ContainedChampions())
+                    {
+                        
+
+                    }
+                    break;
+                }
+            }
 
             // To Do: Items
             return true;
@@ -153,7 +176,8 @@ namespace LoL_Champions_and_Positions
         {
             Champion,
             List,
-            Item
+            Item,
+            Matchup
         };
 
     }
