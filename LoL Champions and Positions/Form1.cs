@@ -17,14 +17,14 @@ namespace LoL_Champions_and_Positions
             InitializeComponent();
             //ListPositions
             playablePositions.Items.Clear();
-            foreach (ListPositions position in Enum.GetValues(typeof(ListPositions)))
+            foreach (Enums.ListPositions position in Enum.GetValues(typeof(Enums.ListPositions)))
             {
                 playablePositions.Items.Add(position.ToString());
             }
 
 
             collectionList = new List<ChampionCollection>();
-            selectedCollection = new ChampionCollection(Constants.ALL_CHAMPIONS, ListPositions.All.ToString(),AllChampsContextMenu,groupBox1,this);
+            selectedCollection = new ChampionCollection(Constants.ALL_CHAMPIONS, Enums.ListPositions.All.ToString(), AllChampsContextMenu, groupBox1, this);
             collectionList.Add(selectedCollection);
 
             Champion newCHamp = new Champion("Thresh", "Thresh.png", "", "Muh best support");
@@ -81,7 +81,7 @@ namespace LoL_Champions_and_Positions
                     championListCollection.Items.Clear();
                     foreach (ChampionCollection champList in collectionList)
                     {
-                        if (champList.Role == ListPositions.All.ToString())
+                        if (champList.Role == Enums.ListPositions.All.ToString())
                         {
                             championListCollection.Items.Add(champList.Name);
                         }
@@ -135,7 +135,7 @@ namespace LoL_Champions_and_Positions
 
             foreach (ChampionCollection list in collectionList)
             {
-                if (list.Name == Constants.ALL_CHAMPIONS || list.Role == ListPositions.All.ToString())
+                if (list.Name == Constants.ALL_CHAMPIONS || list.Role == Enums.ListPositions.All.ToString())
                 {
                     continue;
                 }
@@ -232,7 +232,7 @@ namespace LoL_Champions_and_Positions
                 ButtonMatchupDetails.Enabled = false;
                 BackButton.Enabled = false;
 
-                groupBox1.Text = Constants.ALL_CHAMPIONS + "/" + ListPositions.All.ToString();
+                groupBox1.Text = Constants.ALL_CHAMPIONS + "/" + Enums.ListPositions.All.ToString();
                 championListCollection.SelectedIndex = 0;
                 playablePositions.SelectedIndex = 0;
 
@@ -263,7 +263,7 @@ namespace LoL_Champions_and_Positions
 
         private void manageChamp_Click(object sender, EventArgs e)
         {
-            Manage manageChamp = new Manage(collectionList, ManageDialogue.Champion);
+            Manage manageChamp = new Manage(collectionList, Enums.ManageDialogue.Champion);
 
             manageChamp.ShowDialog();
 
@@ -271,7 +271,7 @@ namespace LoL_Champions_and_Positions
             {
                 foreach (ManageFormResponse response in manageChamp.FormResponse)
                 {
-                    if (response.RespondCommand == ManageFormState.New)
+                    if (response.RespondCommand == Enums.ManageFormState.New)
                     {
                         foreach (ChampionCollection collectionItem in collectionList)
                         {
@@ -283,7 +283,7 @@ namespace LoL_Champions_and_Positions
                             }
                         }
                     }
-                    else if (response.RespondCommand == ManageFormState.Edit)
+                    else if (response.RespondCommand == Enums.ManageFormState.Edit)
                     {
                         foreach (ChampionCollection collectionItem in collectionList)
                         {
@@ -299,7 +299,7 @@ namespace LoL_Champions_and_Positions
                             }
                         }
                     }
-                    else if (response.RespondCommand == ManageFormState.Delete)
+                    else if (response.RespondCommand == Enums.ManageFormState.Delete)
                     {
                         foreach (ChampionCollection collectionItem in collectionList)
                         {
@@ -322,7 +322,7 @@ namespace LoL_Champions_and_Positions
 
         private void manageLists_Click(object sender, EventArgs e)
         {
-            Manage manageList = new Manage(collectionList, ManageDialogue.List);
+            Manage manageList = new Manage(collectionList, Enums.ManageDialogue.List);
 
             manageList.ShowDialog();
 
@@ -330,14 +330,14 @@ namespace LoL_Champions_and_Positions
             {
                 foreach (ManageFormResponse response in manageList.FormResponse)
                 {
-                    if (response.RespondCommand == ManageFormState.New)
+                    if (response.RespondCommand == Enums.ManageFormState.New)
                     {
-                        foreach (ListPositions position in Enum.GetValues(typeof(ListPositions)))
+                        foreach (Enums.ListPositions position in Enum.GetValues(typeof(Enums.ListPositions)))
                         {
                             collectionList.Add(new ChampionCollection(response.Name, position.ToString(), CustomListsStrip, groupBox1, this));
                         }
                     }
-                    else if (response.RespondCommand == ManageFormState.Edit)
+                    else if (response.RespondCommand == Enums.ManageFormState.Edit)
                     {
                         foreach (ChampionCollection collectionItem in collectionList)
                         {
@@ -347,7 +347,7 @@ namespace LoL_Champions_and_Positions
                             }
                         }
                     }
-                    else if (response.RespondCommand == ManageFormState.Delete)
+                    else if (response.RespondCommand == Enums.ManageFormState.Delete)
                     { 
                         for (int i=collectionList.Count-1; i>=0; i--)
                         {
@@ -430,7 +430,7 @@ namespace LoL_Champions_and_Positions
 
             foreach (ChampionCollection List in collectionList)
             {
-                if (List.Name == clickedMenu.OwnerItem.Name && (List.Role == clickedMenu.Name || List.Role == ListPositions.All.ToString()))
+                if (List.Name == clickedMenu.OwnerItem.Name && (List.Role == clickedMenu.Name || List.Role == Enums.ListPositions.All.ToString()))
                 {
                     if (List.GetChampion(clickedChampion.Name) != null)
                     {
@@ -466,7 +466,7 @@ namespace LoL_Champions_and_Positions
             foreach (ChampionCollection List in collectionList)
             {
 
-                if (selectedCollection.Role == ListPositions.All.ToString())
+                if (selectedCollection.Role == Enums.ListPositions.All.ToString())
                 {
 
                     if (List.Name == selectedCollection.Name)
@@ -477,11 +477,11 @@ namespace LoL_Champions_and_Positions
                 }
                 else
                 {
-                    if (List.Name == selectedCollection.Name && List.Role == ListPositions.All.ToString())
+                    if (List.Name == selectedCollection.Name && List.Role == Enums.ListPositions.All.ToString())
                     {
                         tempForDelete = List;
                     }
-                    else if (List.Name == selectedCollection.Name && List.Role != ListPositions.All.ToString())
+                    else if (List.Name == selectedCollection.Name && List.Role != Enums.ListPositions.All.ToString())
                     {
                         ChampionContainer hasChampion = List.GetChampion(clickedChampion.Name);
 

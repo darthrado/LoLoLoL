@@ -11,7 +11,7 @@ namespace LoL_Champions_and_Positions
 {
     public partial class Manage : Form
     {
-        public Manage(List<ChampionCollection> InputList, ManageDialogue launchMode)
+        public Manage(List<ChampionCollection> InputList, Enums.ManageDialogue launchMode)
         {
             InitializeComponent();
 
@@ -23,20 +23,20 @@ namespace LoL_Champions_and_Positions
             FillList(InputList, launchMode);
             SetListBox(SearchBar.Text);
 
-            if (_launchMode == ManageDialogue.List)
+            if (_launchMode == Enums.ManageDialogue.List)
             {
                 Picture.Visible = false;
                 PictureName.Visible = false;
                 label3.Visible = false;
             }
 
-            SetState(ManageFormState.None);
+            SetState(Enums.ManageFormState.None);
             
         }
 
-        ManageDialogue _launchMode;
-        ManageFormState _formState;
-        ManageFormState _previousState;
+        Enums.ManageDialogue _launchMode;
+        Enums.ManageFormState _formState;
+        Enums.ManageFormState _previousState;
         List<ListEntry> _intputList;
 
         /// <summary>
@@ -75,14 +75,14 @@ namespace LoL_Champions_and_Positions
         /// </summary>
         /// <param name="inputList">List(ChampionCollection) - Contains basically all List and Champion data in the app </param>
         /// <param name="launchMode">Launch mode depending on whether the form is called to insert champions or lists</param>
-        void FillList(List<ChampionCollection> inputList, ManageDialogue launchMode)
+        void FillList(List<ChampionCollection> inputList, Enums.ManageDialogue launchMode)
         {
-            if (launchMode == ManageDialogue.Champion)
+            if (launchMode == Enums.ManageDialogue.Champion)
             {
 
                 foreach (ChampionCollection InputListEntry in inputList)
                 {
-                    if (InputListEntry.Name == Constants.ALL_CHAMPIONS && InputListEntry.Role == ListPositions.All.ToString())
+                    if (InputListEntry.Name == Constants.ALL_CHAMPIONS && InputListEntry.Role == Enums.ListPositions.All.ToString())
                     {
                         List<ChampionContainer> tempChampList = InputListEntry.ContainedChampions();
                         foreach (ChampionContainer champion in tempChampList)
@@ -92,11 +92,11 @@ namespace LoL_Champions_and_Positions
                     }
                 }
             }
-            else if (launchMode == ManageDialogue.List)
+            else if (launchMode == Enums.ManageDialogue.List)
             {
                 foreach (ChampionCollection InputListEntry in inputList)
                 {
-                    if (InputListEntry.Name != Constants.ALL_CHAMPIONS && InputListEntry.Role == ListPositions.All.ToString())
+                    if (InputListEntry.Name != Constants.ALL_CHAMPIONS && InputListEntry.Role == Enums.ListPositions.All.ToString())
                     {
                         bool notEmptyWarning;
                         if(InputListEntry.ContainedChampions() != null)
@@ -136,9 +136,9 @@ namespace LoL_Champions_and_Positions
         /// Sets the state of the form and enables/disables the appropriate fields
         /// </summary>
         /// <param name="newState">ManageFormState enum - this will be the new form state</param>
-        void SetState(ManageFormState newState)
+        void SetState(Enums.ManageFormState newState)
         {
-            if (newState == ManageFormState.New || newState == ManageFormState.Edit)
+            if (newState == Enums.ManageFormState.New || newState == Enums.ManageFormState.Edit)
             {
                 ListBox.Enabled = false;
 
@@ -155,14 +155,14 @@ namespace LoL_Champions_and_Positions
 
 
             }
-            else if (newState == ManageFormState.Delete)
+            else if (newState == Enums.ManageFormState.Delete)
             {
-                if (_formState != ManageFormState.ItemSelected)
+                if (_formState != Enums.ManageFormState.ItemSelected)
                 {
                     return;
                 }
             }
-            else if (newState == ManageFormState.None)
+            else if (newState == Enums.ManageFormState.None)
             {
                 ListBox.Enabled = true;
 
@@ -183,7 +183,7 @@ namespace LoL_Champions_and_Positions
 
                 ListBox.ClearSelected();
             }
-            else if (newState == ManageFormState.ItemSelected)
+            else if (newState == Enums.ManageFormState.ItemSelected)
             {
                 DeleteItem.Enabled = true;
             }
@@ -213,7 +213,7 @@ namespace LoL_Champions_and_Positions
 
         private void AddNew_Click(object sender, EventArgs e)
         {
-            SetState(ManageFormState.New);
+            SetState(Enums.ManageFormState.New);
 
             ItemName.Text = "";
             PictureName.Text = "";
@@ -228,7 +228,7 @@ namespace LoL_Champions_and_Positions
         {
             bool warningDialogResult = false;
 
-            SetState(ManageFormState.Delete);
+            SetState(Enums.ManageFormState.Delete);
 
             ListEntry itemToDelete = GetListEntry(ItemName.Text);
 
@@ -240,11 +240,11 @@ namespace LoL_Champions_and_Positions
             if (itemToDelete.Warning != false)
             {
                 string warningMessage = "";
-                if (_launchMode == ManageDialogue.Champion)
+                if (_launchMode == Enums.ManageDialogue.Champion)
                 {
                     warningMessage = "If you delete this champion, it will be deleted across all lists along with any Hints on him. Continue?";
                 }
-                else if (_launchMode == ManageDialogue.List)
+                else if (_launchMode == Enums.ManageDialogue.List)
                 {
                     warningMessage = "List is not empty! Continue anyway?";
                 }
@@ -271,7 +271,7 @@ namespace LoL_Champions_and_Positions
 
         private void EditItem_Click(object sender, EventArgs e)
         {
-            SetState(ManageFormState.Edit);
+            SetState(Enums.ManageFormState.Edit);
         }
 
         private void BackButton_Click(object sender, EventArgs e)
@@ -292,7 +292,7 @@ namespace LoL_Champions_and_Positions
             }
             else
             {
-                SetState(ManageFormState.None);
+                SetState(Enums.ManageFormState.None);
             }
 
 
@@ -301,7 +301,7 @@ namespace LoL_Champions_and_Positions
         private void SaveButton_Click(object sender, EventArgs e)
         {
 
-            if (_formState == ManageFormState.New)
+            if (_formState == Enums.ManageFormState.New)
             {
                 if (GetListEntry(ItemName.Text) == null && (!Constants.IsReservedWord(ItemName.Text)))
                 {
@@ -324,7 +324,7 @@ namespace LoL_Champions_and_Positions
                     return;
                 }
             }
-            else if (_formState == ManageFormState.Edit)
+            else if (_formState == Enums.ManageFormState.Edit)
             {
                 string oldItem = ListBox.Items[ListBox.SelectedIndex].ToString();
                 if ((GetListEntry(ItemName.Text) != null && ItemName.Text != oldItem) || Constants.IsReservedWord(ItemName.Text))
@@ -350,7 +350,7 @@ namespace LoL_Champions_and_Positions
                 }
             }
             SetListBox(SearchBar.Text);
-            SetState(ManageFormState.None);
+            SetState(Enums.ManageFormState.None);
         }
 
         private void ReloadImage_Click(object sender, EventArgs e)
@@ -379,7 +379,7 @@ namespace LoL_Champions_and_Positions
                     PictureName.Text = selectedItem.PictureName;
                     Picture.Image = HelpMethods.getImageFromLocalDirectory(selectedItem.PictureName);
                 }
-                SetState(ManageFormState.ItemSelected);
+                SetState(Enums.ManageFormState.ItemSelected);
             }
         }
 

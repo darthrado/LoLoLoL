@@ -5,29 +5,7 @@ using System.Text;
 
 namespace LoL_Champions_and_Positions
 {
-    public enum ManageDialogue
-    {
-        Champion,
-        List
-    };
-
-    public enum ManageFormState
-    {
-        None,
-        Edit,
-        New,
-        ItemSelected,
-        Delete
-    };
-    public enum ListPositions
-    {
-        All,
-        Top,
-        Jungle,
-        Mid,
-        ADC,
-        Support
-    };
+ 
 
     public class ChampionToFile : FileManager<ChampionCollection>
     {
@@ -46,7 +24,7 @@ namespace LoL_Champions_and_Positions
 
             List<ChampionCollection> result= new List<ChampionCollection>();
             ChampionCollection AllChampionsCollection;
-            result.Add(new ChampionCollection(Constants.ALL_CHAMPIONS,ListPositions.All.ToString()));
+            result.Add(new ChampionCollection(Constants.ALL_CHAMPIONS,Enums.ListPositions.All.ToString()));
             AllChampionsCollection = result[0];
 
             while (saveLines.Count > 0)
@@ -82,6 +60,11 @@ namespace LoL_Champions_and_Positions
                 {
                     Champion newChampion = new Champion(lineComponents[1], lineComponents[2], lineComponents[3], lineComponents[4]);
                     AllChampionsCollection.Add(newChampion);
+                }
+                    //Matchup parse format: Champion///Champion///Information
+                else if (lineComponents[0] == LineType.Matchup.ToString())
+                {
+
                 }
                 //Not Developed Yet - ToDo
                 else if (lineComponents[0] == LineType.Item.ToString())
@@ -153,7 +136,8 @@ namespace LoL_Champions_and_Positions
         {
             Champion,
             List,
-            Item
+            Item,
+            Matchup
         };
 
     }

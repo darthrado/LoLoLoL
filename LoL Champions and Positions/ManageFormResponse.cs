@@ -7,9 +7,9 @@ namespace LoL_Champions_and_Positions
 {
     public class ManageFormResponse
     {
-        public ManageFormResponse(ManageFormState responseCommand, string name, string picture)
+        public ManageFormResponse(Enums.ManageFormState responseCommand, string name, string picture)
         {
-            if(responseCommand == ManageFormState.Edit)
+            if (responseCommand == Enums.ManageFormState.Edit)
             {
                 throw new Exception("Don't call Edit response without a name change");
             }
@@ -19,14 +19,14 @@ namespace LoL_Champions_and_Positions
             NewName = name;
 
         }
-        public ManageFormResponse(ManageFormState responseCommand, string name, string picture,string newName)
+        public ManageFormResponse(Enums.ManageFormState responseCommand, string name, string picture, string newName)
         {
             Name = name;
             NewName = newName;
             Picture = picture;
             RespondCommand = responseCommand;
         }
-        public ManageFormState RespondCommand { get; private set; }
+        public Enums.ManageFormState RespondCommand { get; private set; }
         public string Name { get; private set; }
         public string Picture { get; private set; }
         public string NewName { get; private set; }
