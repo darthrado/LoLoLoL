@@ -20,21 +20,6 @@ namespace LoL_Champions_and_Positions
         string _searchTag;
         string _tooltip;
 
-        private class Matchup
-        {
-            public Matchup()
-            {
-            }
-            public Matchup(string enemyChampion, string matchInformation)
-            {
-                _enemyChampion = enemyChampion;
-                _matchInformation = matchInformation;
-            }
-            string _enemyChampion;
-            string _matchInformation;
-            public string EnemyChampion {get{return _enemyChampion;} set{_enemyChampion = value;}}
-            public string MatchInformation {get {return _matchInformation;} set {_matchInformation = value;}}
-        }
         List<Matchup> matchupList;
 
         private Matchup getMatchup(string championName)
@@ -92,6 +77,10 @@ namespace LoL_Champions_and_Positions
             }
 
             return false;
+        }
+        public List<Matchup> GetAllMatchups()
+        {
+            return this.matchupList;
         }
 
         public string Name { get { return _name; } set { _name = value; } }

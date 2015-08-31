@@ -135,12 +135,21 @@ namespace LoL_Champions_and_Positions
             }
             foreach (ChampionCollection allChampions in List)
             {
+                string separator = Constants.SLASH_SEPARATOR;
+
                 if (allChampions.Name == Constants.ALL_CHAMPIONS)
                 {
                     foreach (ChampionContainer champion in allChampions.ContainedChampions())
                     {
-                        
 
+                        foreach (Matchup matchup in champion.GetAllMatchups())
+                        {
+                            string lineToParse = LineType.Matchup.ToString() + separator +
+                                                 champion.Name + separator +
+                                                 matchup.EnemyChampion + separator +
+                                                 matchup.MatchInformation;
+                            this.saveLines.Enqueue(lineToParse);
+                        }
                     }
                     break;
                 }
@@ -187,5 +196,20 @@ namespace LoL_Champions_and_Positions
         }
     }
 
+    public class Matchup
+    {
+        public Matchup()
+        {
+        }
+        public Matchup(string enemyChampion, string matchInformation)
+        {
+            _enemyChampion = enemyChampion;
+            _matchInformation = matchInformation;
+        }
+        string _enemyChampion;
+        string _matchInformation;
+        public string EnemyChampion { get { return _enemyChampion; } set { _enemyChampion = value; } }
+        public string MatchInformation { get { return _matchInformation; } set { _matchInformation = value; } }
+    }
 
 }
