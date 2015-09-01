@@ -22,9 +22,45 @@ namespace LoL_Champions_and_Positions
                 playablePositions.Items.Add(position.ToString());
             }
 
+            initListCollection(); //Initializes the champion collection List
 
+            selectedCollection.Print(textSeaarchBox.Text);
+
+            selectedChampion = null;
+            selectedCollection.AddContextMenu(AllChampsContextMenu);
+            selectedCollection.AddGroupBox(groupBox1);
+            selectedCollection.AddFormReference(this);
+
+            updateListCollectionDropdown();
+            SetFormState(Form1State.InitialView);
+        }
+        #endregion
+
+        #region ClassVariables
+        List<ChampionCollection> collectionList;
+        ChampionCollection selectedCollection;
+        ChampionCollection allChampionsCollection;
+        ChampionContainer selectedChampion;
+        Control rightClickedControl;
+        bool displayChampionMatchupsList;
+        #endregion
+
+
+        #region Enums
+        enum Form1State
+        {
+            ListsView,
+            ChampionSelected,
+            InitialView
+        };
+        #endregion
+
+        #region Methods
+        private void initListCollection()
+        {
             collectionList = new List<ChampionCollection>();
             selectedCollection = new ChampionCollection(Constants.ALL_CHAMPIONS, Enums.ListPositions.All.ToString(), AllChampsContextMenu, groupBox1, this);
+            allChampionsCollection = selectedCollection;
             collectionList.Add(selectedCollection);
 
             Champion newCHamp = new Champion("Thresh", "Thresh.png", "", "Muh best support");
@@ -45,37 +81,8 @@ namespace LoL_Champions_and_Positions
             selectedCollection.Add(newCHamp);
             newCHamp = new Champion("Draven", "Draven.png", "", "League of DRAVEEEEEN");
             selectedCollection.Add(newCHamp);
-            selectedCollection.Print(textSeaarchBox.Text);
-
-            selectedChampion = null;
-            selectedCollection.AddContextMenu(AllChampsContextMenu);
-            selectedCollection.AddGroupBox(groupBox1);
-            selectedCollection.AddFormReference(this);
-
-            updateListCollectionDropdown();
-            SetFormState(Form1State.InitialView);
         }
-        #endregion
 
-        #region ClassVariables
-        List<ChampionCollection> collectionList;
-        ChampionCollection selectedCollection;
-        ChampionContainer selectedChampion;
-        Control rightClickedControl;
-        bool displayChampionMatchupsList;
-        #endregion
-
-
-        #region Enums
-        enum Form1State
-        {
-            ListsView,
-            ChampionSelected,
-            InitialView
-        };
-        #endregion
-
-        #region Methods
         private void updateListCollectionDropdown()
                 {
                     championListCollection.Items.Clear();

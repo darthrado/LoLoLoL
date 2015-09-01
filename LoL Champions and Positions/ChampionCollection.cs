@@ -89,31 +89,36 @@ namespace LoL_Champions_and_Positions
                 throw new Exception("Attempting to Print without Groupbox Set");
             }
 
-            int X = _groupBox.Location.X+Constants.CHAMPION_HORIZONTAL_OFFSET;
-            int Y = _groupBox.Location.Y+Constants.CHAMPION_VERTICAL_OFFSET;
+            int X = _groupBox.DisplayRectangle.Left + Constants.CHAMPION_HORIZONTAL_OFFSET;
+            int Y = _groupBox.DisplayRectangle.Top + Constants.CHAMPION_VERTICAL_OFFSET;
             int i=0;
+
+            if (value == Constants.SEARCH_TEXT)
+            {
+                value = "";
+            }
 
             while (i < _listOfChampions.Count)
             {
-                if (value == Constants.SEARCH_TEXT)
-                {
-                    value = "";
-                }
-
+                // If Name or Search tag contains Search Value or Search Value is Empty
                 if (_listOfChampions[i].Name.Contains(value) || _listOfChampions[i].SearchTag.Contains(value)||value == "")
                 {
+                    //Set Location + make visible
                     _listOfChampions[i].SetLocation(X, Y);
                     _listOfChampions[i].Visible = true;
                 }
                 else
                 {
+                    //Clear Location + make invisible
                     _listOfChampions[i].SetLocation(0, 0);
                     _listOfChampions[i].Visible = false;
+                    i++;
+                    continue;
                 }
 
-                if (X + 2*(Constants.CHAMPION_HORIZONTAL_OFFSET + Constants.CHAMPION_FRAME_WIDTH) > _groupBox.Location.X + _groupBox.Width)
+                if (X + 2 * (Constants.CHAMPION_HORIZONTAL_OFFSET + Constants.CHAMPION_FRAME_WIDTH) > _groupBox.DisplayRectangle.Left + _groupBox.Width)
                 {
-                    X = _groupBox.Location.X + Constants.CHAMPION_HORIZONTAL_OFFSET;
+                    X = _groupBox.DisplayRectangle.Left + Constants.CHAMPION_HORIZONTAL_OFFSET;
                     Y += (Constants.CHAMPION_FRAME_HEIGHT + Constants.CHAMPION_VERTICAL_OFFSET);
                 }
                 else
