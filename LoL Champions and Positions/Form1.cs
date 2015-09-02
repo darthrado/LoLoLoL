@@ -26,15 +26,6 @@ namespace LoL_Champions_and_Positions
 
             selectedCollection.Print(textSeaarchBox.Text);
 
-            selectedChampion = null;
-            selectedCollection.AddContextMenu(AllChampsContextMenu);
-            selectedCollection.AddGroupBox(ref groupBox1);
-            selectedCollection.AddFormReference(this);
-
-            updateListCollectionDropdown();
-            SetFormState(Form1State.InitialView);
-
-            selectedCollection.Print("");
             saveFile = new ChampionToFile();
         }
         #endregion
@@ -61,31 +52,69 @@ namespace LoL_Champions_and_Positions
         #endregion
 
         #region Methods
+        /// <summary>
+        /// initListCollection assumes that the clast list collection has not been loaded or has just been reloaded from a file.
+        /// It's job is to set all apropriate variables correctly, unsuring that the screen will load correctly with the new data.
+        /// </summary>
         private void initListCollection()
         {
-            collectionList = new List<ChampionCollection>();
-            selectedCollection = new ChampionCollection(Constants.ALL_CHAMPIONS, Enums.ListPositions.All.ToString()/*, AllChampsContextMenu, groupBox1, this*/);
-            allChampionsCollection = selectedCollection;
-            collectionList.Add(selectedCollection);
+            if (collectionList == null)
+            {
+                // Temporary init for test purpouses.
+                collectionList = new List<ChampionCollection>();
+                selectedCollection = new ChampionCollection(Constants.ALL_CHAMPIONS, Enums.ListPositions.All.ToString()/*, AllChampsContextMenu, groupBox1, this*/);
+                allChampionsCollection = selectedCollection;
+                collectionList.Add(selectedCollection);
 
-            Champion newCHamp = new Champion("Thresh", "Thresh.png", "", "Muh best support");
-            selectedCollection.Add(newCHamp);
-            newCHamp = new Champion("Ezreal", "Ezreal.png", "", "Gay");
-            selectedCollection.Add(newCHamp);
-            newCHamp = new Champion("Taric", "Taric.png", "", "HA GAYYYYYYY");
-            selectedCollection.Add(newCHamp);
-            newCHamp = new Champion("Ahri", "Ahri.png", "", "Foxy lady");
-            selectedCollection.Add(newCHamp);
-            newCHamp = new Champion("Nami", "Nami.png", "", "Sushi");
-            selectedCollection.Add(newCHamp);
-            newCHamp = new Champion("Tryndamere", "Tryndamere.png", "", "Wanker");
-            selectedCollection.Add(newCHamp);
-            newCHamp = new Champion("Fiora", "Fiora.png", "", "I loooooong for a wortzy opponenet");
-            selectedCollection.Add(newCHamp);
-            newCHamp = new Champion("Elise", "Elise.png", "", "Spider Woman");
-            selectedCollection.Add(newCHamp);
-            newCHamp = new Champion("Draven", "Draven.png", "", "League of DRAVEEEEEN");
-            selectedCollection.Add(newCHamp);
+                Champion newCHamp = new Champion("Thresh", "Thresh.png", "", "Muh best support");
+                selectedCollection.Add(newCHamp);
+                newCHamp = new Champion("Ezreal", "Ezreal.png", "", "Gay");
+                selectedCollection.Add(newCHamp);
+                newCHamp = new Champion("Taric", "Taric.png", "", "HA GAYYYYYYY");
+                selectedCollection.Add(newCHamp);
+                newCHamp = new Champion("Ahri", "Ahri.png", "", "Foxy lady");
+                selectedCollection.Add(newCHamp);
+                newCHamp = new Champion("Nami", "Nami.png", "", "Sushi");
+                selectedCollection.Add(newCHamp);
+                newCHamp = new Champion("Tryndamere", "Tryndamere.png", "", "Wanker");
+                selectedCollection.Add(newCHamp);
+                newCHamp = new Champion("Fiora", "Fiora.png", "", "I loooooong for a wortzy opponenet");
+                selectedCollection.Add(newCHamp);
+                newCHamp = new Champion("Elise", "Elise.png", "", "Spider Woman");
+                selectedCollection.Add(newCHamp);
+                newCHamp = new Champion("Draven", "Draven.png", "", "League of DRAVEEEEEN");
+                selectedCollection.Add(newCHamp);
+
+                selectedCollection.AddContextMenu(AllChampsContextMenu);
+                selectedCollection.AddGroupBox(ref groupBox1);
+                selectedCollection.AddFormReference(this);
+            }
+            else
+            {
+                foreach (ChampionCollection List in collectionList)
+                {
+                    
+                    List.AddGroupBox(ref this.groupBox1);
+                    List.AddFormReference(this);
+
+                    if (List.Name == Constants.ALL_CHAMPIONS)
+                    {
+                        List.AddContextMenu(this.AllChampsContextMenu);
+                        selectedCollection = List;
+                    }
+                    else
+                    {
+                        List.AddContextMenu(this.CustomListsStrip);
+                    }
+                }
+            }
+
+            selectedChampion = null;
+            updateListCollectionDropdown();
+            BuildContextMenu();
+            SetFormState(Form1State.InitialView);
+
+            selectedCollection.Print("");
         }
 
         private void updateListCollectionDropdown()
@@ -257,20 +286,22 @@ namespace LoL_Champions_and_Positions
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            System.Drawing.Point gbLocation = groupBox1.Location;
-
-            int initialSize = (groupBox1.Width - Constants.CHAMPION_HORIZONTAL_OFFSET) / (Constants.CHAMPION_FRAME_WIDTH + Constants.CHAMPION_HORIZONTAL_OFFSET);
-
-            groupBox1.Height = this.ClientSize.Height - gbLocation.Y-Constants.GROUP_BOX_BORDER_OFFSET;
-            groupBox1.Width = this.ClientSize.Width - gbLocation.X-Constants.GROUP_BOX_BORDER_OFFSET;
-
-            int afterSize = (groupBox1.Width - Constants.CHAMPION_HORIZONTAL_OFFSET) / (Constants.CHAMPION_FRAME_WIDTH + Constants.CHAMPION_HORIZONTAL_OFFSET);
-
-            if (initialSize != afterSize)
+            if (selectedCollection != null)
             {
-                selectedCollection.Print(textSeaarchBox.Text);
+                System.Drawing.Point gbLocation = groupBox1.Location;
+
+                int initialSize = (groupBox1.Width - Constants.CHAMPION_HORIZONTAL_OFFSET) / (Constants.CHAMPION_FRAME_WIDTH + Constants.CHAMPION_HORIZONTAL_OFFSET);
+
+                groupBox1.Height = this.ClientSize.Height - gbLocation.Y - Constants.GROUP_BOX_BORDER_OFFSET;
+                groupBox1.Width = this.ClientSize.Width - gbLocation.X - Constants.GROUP_BOX_BORDER_OFFSET;
+
+                int afterSize = (groupBox1.Width - Constants.CHAMPION_HORIZONTAL_OFFSET) / (Constants.CHAMPION_FRAME_WIDTH + Constants.CHAMPION_HORIZONTAL_OFFSET);
+
+                if (initialSize != afterSize)
+                {
+                    selectedCollection.Print(textSeaarchBox.Text);
+                }
             }
-            
         }
 
         private void manageChamp_Click(object sender, EventArgs e)
@@ -328,7 +359,13 @@ namespace LoL_Champions_and_Positions
             {
                 MessageBox.Show("No changes were made");
             }
+
+            //View newly added/edite champions
             selectedCollection.Print(textSeaarchBox.Text);
+
+            //Save changes to file
+            saveFile.ImportLines(collectionList);
+            saveFile.saveToFile("rekt.gg");
 
         }
 
@@ -379,8 +416,14 @@ namespace LoL_Champions_and_Positions
             {
                 MessageBox.Show("No changes were made");
             }
+
+            //Update the dropdown with the newly added/edited lists and rebuild the context menu
             updateListCollectionDropdown();
             BuildContextMenu();
+
+            //Save changes to file
+            saveFile.ImportLines(collectionList);
+            saveFile.saveToFile("rekt.gg");
         }
 
         private void ListCollection_SelectionChangeCommitted(object sender, EventArgs e)
@@ -453,7 +496,9 @@ namespace LoL_Champions_and_Positions
                 }
             }
 
-            //MessageBox.Show(clickedMenu.OwnerItem.Name + " " + clickedMenu.Name + " " + holyshitName); //here we get the 
+            //Save changes to file
+            saveFile.ImportLines(collectionList);
+            saveFile.saveToFile("rekt.gg");
         }
 
         private void contextMenuStrip1_Opened(object sender, EventArgs e)
@@ -517,6 +562,11 @@ namespace LoL_Champions_and_Positions
             {
                 tempForDelete.Remove(clickedChampion.Name);
             }
+            selectedCollection.Print(textSeaarchBox.Text);
+
+            //Save changes to file
+            saveFile.ImportLines(collectionList);
+            saveFile.saveToFile("rekt.gg");
 
         }
 
@@ -553,39 +603,13 @@ namespace LoL_Champions_and_Positions
         {
             saveFile.getFromFile("rekt.gg");
             this.groupBox1.Controls.Clear();
-            List<ChampionCollection> newCollection= saveFile.ExportLines();
-            foreach (ChampionCollection List in newCollection)
-            {
-                List.AddContextMenu(this.AllChampsContextMenu);
-                List.AddGroupBox(ref this.groupBox1);
-                List.AddFormReference(this);
-            }
-            collectionList= newCollection;
-            selectedCollection.Print("");
+            collectionList.Clear();
+            collectionList = saveFile.ExportLines();
+
+            initListCollection();
             //Warning: When Loading a List, you must reset all variables connected with that list
             //When Using the Add% functions on a list, Print of the currently selected list should be called so that posible data changes are updated
         }
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }

@@ -50,6 +50,12 @@
     <Compile Include="Champion.cs" />
     <Compile Include="ChampionCollection.cs" />
     <Compile Include="ChampionContainer.cs" />
+    <Compile Include="ChampionDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChampionDetails.Designer.cs">
+      <DependentUpon>ChampionDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="FileManager.cs" />
@@ -69,6 +75,9 @@
     <Compile Include="ManageFormResponse.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ChampionDetails.resx">
+      <DependentUpon>ChampionDetails.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
