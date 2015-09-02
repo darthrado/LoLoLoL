@@ -9,12 +9,16 @@ namespace LoL_Champions_and_Positions
 
     public class ChampionToFile : FileManager<ChampionCollection>
     {
-        ChampionToFile(){}
-        ChampionToFile(List<ChampionCollection> Champions)
+        public ChampionToFile(){}
+        public ChampionToFile(List<ChampionCollection> Champions)
         {
             ImportLines(Champions);
         }
 
+        /// <summary>
+        /// Parses the containes String Lines to an ChampionCollectionString
+        /// </summary>
+        /// <returns></returns>
         public override List<ChampionCollection> ExportLines()
         {
             if (saveLines.Count<=0)
@@ -38,7 +42,8 @@ namespace LoL_Champions_and_Positions
                 {
                     ChampionCollection newListEntry = new ChampionCollection(lineComponents[1], lineComponents[2]);
                     separator[0] = Constants.AT_SEPARATOR;
-                    string[] listOfChampions = lineComponents[3].Split(separator,StringSplitOptions.None);
+                    string[] listOfChampions = null;
+                    listOfChampions = lineComponents[3].Split(separator, StringSplitOptions.None);
 
                     List<ChampionContainer> allChampions = AllChampionsCollection.ContainedChampions();
                     foreach (string champion in listOfChampions)
@@ -48,6 +53,7 @@ namespace LoL_Champions_and_Positions
                             if (existingChampion.Name == champion)
                             {
                                 newListEntry.Add(new Champion(existingChampion.Name,existingChampion.Image,existingChampion.SearchTag,existingChampion.Tooltip));
+                                continue;
                             }
                         }
                     }
@@ -86,6 +92,11 @@ namespace LoL_Champions_and_Positions
 
             return result;
         }
+        /// <summary>
+        /// Parses a Champion Collection List to a String[] format ready for filesave
+        /// </summary>
+        /// <param name="List"></param>
+        /// <returns></returns>
         public override bool ImportLines(List<ChampionCollection> List)
         {
             // First enqueue all champions

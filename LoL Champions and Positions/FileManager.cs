@@ -39,7 +39,7 @@ namespace LoL_Champions_and_Positions
 		    byte[] IV = null;
 
 		    //write data
-		    byte[] Encryption = AES.EncryptStringToByte("Initialize",Key,IV);
+		    byte[] Encryption = AES.EncryptStringToByte("Initialize",ref Key,ref IV);
 		    seriList.Add(Key);
 		    seriList.Add(IV);
 
@@ -47,7 +47,7 @@ namespace LoL_Champions_and_Positions
 		    {
                 newLine = saveLines.Dequeue();
 
-                Encryption = AES.EncryptStringToByte(newLine, Key, IV);
+                Encryption = AES.EncryptStringToByte(newLine,ref Key,ref IV);
 			    seriList.Add(Encryption);
 		    }
 		    serializator.Serialize(saveFile,seriList);
@@ -64,6 +64,7 @@ namespace LoL_Champions_and_Positions
 		    BinaryFormatter formatter = new BinaryFormatter();
 
 		    string ReadLine;
+            bool enumFlag = false;
 
 		    try
 		    {
@@ -74,20 +75,22 @@ namespace LoL_Champions_and_Positions
 			    sr.Close();
 			    return false;
 		    }
-		    List<byte[]>.Enumerator e = deSeriList.GetEnumerator();
-		    e.MoveNext();
-		    byte[] Key = e.Current;
-		    e.MoveNext();
-		    byte[] IV  = e.Current;
 
-		    while (e.MoveNext() )
-		    {
-			    ReadLine=AES.DecryptStringFromByte(e.Current,Key,IV);
+            List<byte[]>.Enumerator e = deSeriList.GetEnumerator();
 
-                saveLines.Enqueue(ReadLine);
-		    }
-		    sr.Close();
 
+            enumFlag=e.MoveNext();
+                byte[] Key = e.Current;
+                enumFlag = e.MoveNext();
+                byte[] IV = e.Current;
+
+                while (e.MoveNext())
+                {
+                    ReadLine = AES.DecryptStringFromByte(e.Current, Key, IV);
+
+                    saveLines.Enqueue(ReadLine);
+                }
+                sr.Close();
             return true;
         }
     }

@@ -86,6 +86,7 @@ namespace LoL_Champions_and_Positions
         {
             if (_groupBox == null)
             {
+                return;
                 throw new Exception("Attempting to Print without Groupbox Set");
             }
 
@@ -143,7 +144,7 @@ namespace LoL_Champions_and_Positions
                 champion.PictureBox.ContextMenuStrip = contextMenu;
             }
         }
-        public void AddGroupBox(System.Windows.Forms.GroupBox groupBox)
+        public void AddGroupBox(ref System.Windows.Forms.GroupBox groupBox)
         {
             _groupBox = groupBox;
             foreach (ChampionContainer champion in _listOfChampions)

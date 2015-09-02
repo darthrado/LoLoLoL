@@ -28,11 +28,14 @@ namespace LoL_Champions_and_Positions
 
             selectedChampion = null;
             selectedCollection.AddContextMenu(AllChampsContextMenu);
-            selectedCollection.AddGroupBox(groupBox1);
+            selectedCollection.AddGroupBox(ref groupBox1);
             selectedCollection.AddFormReference(this);
 
             updateListCollectionDropdown();
             SetFormState(Form1State.InitialView);
+
+            selectedCollection.Print("");
+            saveFile = new ChampionToFile();
         }
         #endregion
 
@@ -43,6 +46,8 @@ namespace LoL_Champions_and_Positions
         ChampionContainer selectedChampion;
         Control rightClickedControl;
         bool displayChampionMatchupsList;
+
+        ChampionToFile saveFile;
         #endregion
 
 
@@ -59,7 +64,7 @@ namespace LoL_Champions_and_Positions
         private void initListCollection()
         {
             collectionList = new List<ChampionCollection>();
-            selectedCollection = new ChampionCollection(Constants.ALL_CHAMPIONS, Enums.ListPositions.All.ToString(), AllChampsContextMenu, groupBox1, this);
+            selectedCollection = new ChampionCollection(Constants.ALL_CHAMPIONS, Enums.ListPositions.All.ToString()/*, AllChampsContextMenu, groupBox1, this*/);
             allChampionsCollection = selectedCollection;
             collectionList.Add(selectedCollection);
 
@@ -536,6 +541,29 @@ namespace LoL_Champions_and_Positions
         private void textSeaarchBox_TextChanged(object sender, EventArgs e)
         {
             selectedCollection.Print(textSeaarchBox.Text);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            saveFile.ImportLines(collectionList);
+            saveFile.saveToFile("rekt.gg");
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            saveFile.getFromFile("rekt.gg");
+            this.groupBox1.Controls.Clear();
+            List<ChampionCollection> newCollection= saveFile.ExportLines();
+            foreach (ChampionCollection List in newCollection)
+            {
+                List.AddContextMenu(this.AllChampsContextMenu);
+                List.AddGroupBox(ref this.groupBox1);
+                List.AddFormReference(this);
+            }
+            collectionList= newCollection;
+            selectedCollection.Print("");
+            //Warning: When Loading a List, you must reset all variables connected with that list
+            //When Using the Add% functions on a list, Print of the currently selected list should be called so that posible data changes are updated
         }
 
 

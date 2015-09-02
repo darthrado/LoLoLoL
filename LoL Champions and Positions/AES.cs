@@ -9,7 +9,7 @@ namespace LoL_Champions_and_Positions
 {
     class AES
     {
-        public static byte[] EncryptStringToByte(string sourceText, byte[] key,byte[] IV)
+        public static byte[] EncryptStringToByte(string sourceText,ref byte[] key,ref byte[] IV)
         {
 
             if (sourceText == null || sourceText == "")
