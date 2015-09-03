@@ -26,7 +26,7 @@ namespace LoL_Champions_and_Positions
             this.pictureBox.Visible = false;
             this.pictureBox.Click+=new EventHandler(pictureBox_Click);
 
-            this.toolTip.SetToolTip(pictureBox, champion.Tooltip);
+            this.toolTip.SetToolTip(pictureBox, champion.Name);
         }
         public ChampionContainer(Champion champion,Form1 mainForm)
         {
@@ -45,7 +45,7 @@ namespace LoL_Champions_and_Positions
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox.Click += new EventHandler(pictureBox_Click);
 
-            this.toolTip.SetToolTip(pictureBox, champion.Tooltip);
+            this.toolTip.SetToolTip(pictureBox, champion.Name);
         }
 
         private Champion _champion;
@@ -58,7 +58,7 @@ namespace LoL_Champions_and_Positions
         public string Name { get { return _champion.Name; } set { _champion.Name = value; } }
         public string Image { get { return _champion.Image; } set { _champion.Image = value; pictureBox.Image = HelpMethods.getImageFromLocalDirectory(value); } }
         public string SearchTag { get { return _champion.SearchTag; } set { _champion.SearchTag = value; } }
-        public string Tooltip { get { return _champion.Tooltip; } set { _champion.Tooltip = value; } }
+        public string Description { get { return _champion.Description; } set { _champion.Description = value; } }
 
         public int X { get { return pictureBox.Location.X; } }
         public int Y { get { return pictureBox.Location.Y; } }

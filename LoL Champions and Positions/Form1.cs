@@ -492,7 +492,7 @@ namespace LoL_Champions_and_Positions
                         continue;
                     }
 
-                    List.Add(new Champion(clickedChampion.Name, clickedChampion.Image, clickedChampion.SearchTag, clickedChampion.Tooltip));
+                    List.Add(new Champion(clickedChampion.Name, clickedChampion.Image, clickedChampion.SearchTag, clickedChampion.Description));
                 }
             }
 
@@ -585,6 +585,7 @@ namespace LoL_Champions_and_Positions
             displayChampionMatchupsList = true;
             groupBox1.Text = selectedChampion.Name + " Matchups Info";
             //TODO once ChampionMatchupsList is implemented do stuff here
+            
         }
         #endregion
 
@@ -609,6 +610,23 @@ namespace LoL_Champions_and_Positions
             initListCollection();
             //Warning: When Loading a List, you must reset all variables connected with that list
             //When Using the Add% functions on a list, Print of the currently selected list should be called so that posible data changes are updated
+        }
+
+        private void ChampionDetailsButton_Click(object sender, EventArgs e)
+        {
+            if (selectedChampion != null)
+            {
+                ChampionDetails championDialog = new ChampionDetails(selectedChampion);
+
+                championDialog.ShowDialog();
+
+                if (championDialog.ChangesMade)
+                {
+                    selectedChampion = championDialog.Result;
+                    saveFile.ImportLines(collectionList);
+                    saveFile.saveToFile("rekt.gg");
+                }
+            }
         }
 
 

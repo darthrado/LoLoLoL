@@ -52,7 +52,7 @@ namespace LoL_Champions_and_Positions
                         {
                             if (existingChampion.Name == champion)
                             {
-                                newListEntry.Add(new Champion(existingChampion.Name,existingChampion.Image,existingChampion.SearchTag,existingChampion.Tooltip));
+                                newListEntry.Add(new Champion(existingChampion.Name,existingChampion.Image,existingChampion.SearchTag,existingChampion.Description));
                                 continue;
                             }
                         }
@@ -60,7 +60,7 @@ namespace LoL_Champions_and_Positions
                     result.Add(newListEntry);
 
                 }
-                //Champion parse format: Champion///Name///Image///Description///searchTags
+                //Champion parse format: Champion///Name///Image///searchTags///Description
                 else if (lineComponents[0] == LineType.Champion.ToString())
                 {
                     Champion newChampion = new Champion(lineComponents[1], lineComponents[2], lineComponents[3], lineComponents[4]);
@@ -109,9 +109,9 @@ namespace LoL_Champions_and_Positions
                     {
                         string lineToParse = LineType.Champion.ToString() + separator + 
                                              champion.Name + separator + 
-                                             champion.Image + separator + 
-                                             champion.Tooltip + separator + 
-                                             champion.SearchTag;
+                                             champion.Image + separator +
+                                              champion.SearchTag + separator + 
+                                             champion.Description;
                         this.saveLines.Enqueue(lineToParse);
                     }
                     break;

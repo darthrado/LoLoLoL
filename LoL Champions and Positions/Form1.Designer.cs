@@ -77,7 +77,7 @@
             "AD Carry",
             "Support"});
             this.playablePositions.Location = new System.Drawing.Point(7, 123);
-            this.playablePositions.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.playablePositions.Margin = new System.Windows.Forms.Padding(2);
             this.playablePositions.Name = "playablePositions";
             this.playablePositions.Size = new System.Drawing.Size(122, 21);
             this.playablePositions.TabIndex = 1;
@@ -91,7 +91,7 @@
             "I play",
             "I train"});
             this.championListCollection.Location = new System.Drawing.Point(7, 85);
-            this.championListCollection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.championListCollection.Margin = new System.Windows.Forms.Padding(2);
             this.championListCollection.Name = "championListCollection";
             this.championListCollection.Size = new System.Drawing.Size(120, 21);
             this.championListCollection.TabIndex = 2;
@@ -101,9 +101,9 @@
             // 
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Location = new System.Drawing.Point(136, 11);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox1.Size = new System.Drawing.Size(704, 420);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
@@ -135,7 +135,7 @@
             // textSeaarchBox
             // 
             this.textSeaarchBox.Location = new System.Drawing.Point(9, 148);
-            this.textSeaarchBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textSeaarchBox.Margin = new System.Windows.Forms.Padding(2);
             this.textSeaarchBox.Name = "textSeaarchBox";
             this.textSeaarchBox.Size = new System.Drawing.Size(120, 20);
             this.textSeaarchBox.TabIndex = 4;
@@ -191,6 +191,7 @@
             this.ChampionDetailsButton.TabIndex = 9;
             this.ChampionDetailsButton.Text = "Details";
             this.ChampionDetailsButton.UseVisualStyleBackColor = true;
+            this.ChampionDetailsButton.Click += new System.EventHandler(this.ChampionDetailsButton_Click);
             // 
             // selectedChampTextBox
             // 
@@ -276,7 +277,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.championListCollection);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Resize += new System.EventHandler(this.Form1_Resize);
