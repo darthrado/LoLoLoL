@@ -76,7 +76,7 @@ namespace LoL_Champions_and_Positions
         {
             if (_mainForm != null)
             {
-                _mainForm.SetSelectedChampion(this);
+                _mainForm.ProcessChampionPictureClick(this);
             }
         }
 

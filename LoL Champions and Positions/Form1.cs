@@ -63,8 +63,8 @@ namespace LoL_Champions_and_Positions
                 // Temporary init for test purpouses.
                 collectionList = new List<ChampionCollection>();
                 selectedCollection = new ChampionCollection(Constants.ALL_CHAMPIONS, Enums.ListPositions.All.ToString()/*, AllChampsContextMenu, groupBox1, this*/);
-                allChampionsCollection = selectedCollection;
                 collectionList.Add(selectedCollection);
+                allChampionsCollection = collectionList[0];
 
                 Champion newCHamp = new Champion("Thresh", "Thresh.png", "", "Muh best support");
                 selectedCollection.Add(newCHamp);
@@ -93,7 +93,7 @@ namespace LoL_Champions_and_Positions
             {
                 foreach (ChampionCollection List in collectionList)
                 {
-                    
+
                     List.AddGroupBox(ref this.groupBox1);
                     List.AddFormReference(this);
 
@@ -101,12 +101,14 @@ namespace LoL_Champions_and_Positions
                     {
                         List.AddContextMenu(this.AllChampsContextMenu);
                         selectedCollection = List;
+                        allChampionsCollection = List;
                     }
                     else
                     {
                         List.AddContextMenu(this.CustomListsStrip);
                     }
                 }
+
             }
 
             selectedChampion = null;
@@ -118,17 +120,17 @@ namespace LoL_Champions_and_Positions
         }
 
         private void updateListCollectionDropdown()
+        {
+            championListCollection.Items.Clear();
+            foreach (ChampionCollection champList in collectionList)
+            {
+                if (champList.Role == Enums.ListPositions.All.ToString())
                 {
-                    championListCollection.Items.Clear();
-                    foreach (ChampionCollection champList in collectionList)
-                    {
-                        if (champList.Role == Enums.ListPositions.All.ToString())
-                        {
-                            championListCollection.Items.Add(champList.Name);
-                        }
-                    }
+                    championListCollection.Items.Add(champList.Name);
                 }
-        
+            }
+        }
+
         /// <summary>
         /// Depending on the selected values in ComboBox List and Position - gets the corresponding ChampionCollection from the list of Collections
         /// </summary>
@@ -148,22 +150,29 @@ namespace LoL_Champions_and_Positions
             return null;
         }
 
-        public void SetSelectedChampion(ChampionContainer selChamp)
+        public void ProcessChampionPictureClick(ChampionContainer selChamp)
         {
-            selectedChampion = selChamp;
-            if (selChamp != null)
+            if (displayChampionMatchupsList == false)
             {
-                pictureSelectedChamp.Image = HelpMethods.getImageFromLocalDirectory(selChamp.Image);
-                selectedChampTextBox.Text = selChamp.Name;
+                selectedChampion = selChamp;
+                if (selChamp != null)
+                {
+                    pictureSelectedChamp.Image = HelpMethods.getImageFromLocalDirectory(selChamp.Image);
+                    selectedChampTextBox.Text = selChamp.Name;
 
-                SetFormState(Form1State.ChampionSelected);
+                    SetFormState(Form1State.ChampionSelected);
+                }
+                else
+                {
+                    pictureSelectedChamp.Image = Properties.Resources.DefaultImage;
+                    selectedChampTextBox.Text = "";
+
+                    SetFormState(Form1State.ListsView);
+                }
             }
             else
             {
-                pictureSelectedChamp.Image = Properties.Resources.DefaultImage;
-                selectedChampTextBox.Text = "";
-
-                SetFormState(Form1State.ListsView);
+                MessageBox.Show("Penis");
             }
 
         }
@@ -255,7 +264,7 @@ namespace LoL_Champions_and_Positions
                 if (displayChampionMatchupsList)
                 {
                     displayChampionMatchupsList = false;
-                    
+
                     //TODO once matchup collection is implemented: matchupCollection hide
                     selectedCollection.Print(textSeaarchBox.Text);
                 }
@@ -320,7 +329,7 @@ namespace LoL_Champions_and_Positions
                         {
                             if (collectionItem.Name == Constants.ALL_CHAMPIONS)
                             {
-                                collectionItem.Add(new Champion(response.Name,response.Picture,"",""));
+                                collectionItem.Add(new Champion(response.Name, response.Picture, "", ""));
 
                                 break;
                             }
@@ -338,7 +347,7 @@ namespace LoL_Champions_and_Positions
                                     containedChampion.Image = response.Picture;
                                     break; // Champion names should be unique so it should be safe to use break here;
                                 }
-                                
+
                             }
                         }
                     }
@@ -375,7 +384,7 @@ namespace LoL_Champions_and_Positions
 
             manageList.ShowDialog();
 
-            if (manageList.FormResponse.Count>0)
+            if (manageList.FormResponse.Count > 0)
             {
                 foreach (ManageFormResponse response in manageList.FormResponse)
                 {
@@ -397,8 +406,8 @@ namespace LoL_Champions_and_Positions
                         }
                     }
                     else if (response.RespondCommand == Enums.ManageFormState.Delete)
-                    { 
-                        for (int i=collectionList.Count-1; i>=0; i--)
+                    {
+                        for (int i = collectionList.Count - 1; i >= 0; i--)
                         {
                             if (response.Name == collectionList[i].Name)
                             {
@@ -577,15 +586,28 @@ namespace LoL_Champions_and_Positions
 
         private void BackButton_Click(object sender, EventArgs e)
         {
+            allChampionsCollection.AddContextMenu(AllChampsContextMenu);
+            allChampionsCollection.Hide();
+
             SetFormState(Form1State.ListsView);
+
         }
 
         private void ButtonMatchupDetails_Click(object sender, EventArgs e)
         {
             displayChampionMatchupsList = true;
             groupBox1.Text = selectedChampion.Name + " Matchups Info";
+            allChampionsCollection.AddContextMenu(null);
+            selectedCollection.Hide();
+            allChampionsCollection.Print(textSeaarchBox.Text);
+            allChampionsCollection.AddGroupBox(ref groupBox1); // TOTOTO
+
+            if (true)
+            {
+                MessageBox.Show(allChampionsCollection.GetChampion("Nami").Visible.ToString());
+            }
             //TODO once ChampionMatchupsList is implemented do stuff here
-            
+
         }
         #endregion
 
