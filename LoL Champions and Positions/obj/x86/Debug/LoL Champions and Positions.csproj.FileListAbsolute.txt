@@ -34,3 +34,4 @@ C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions a
 C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.csprojResolveAssemblyReference.cache
 C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.ChampionDetails.resources
 C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.ChampionDetails.resources
+C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.MatchupDetails.resources

@@ -92,6 +92,10 @@ namespace LoL_Champions_and_Positions
         {
             return _champion.DeleteMatchup(enemyChampion);
         }
+        public string GetMatchupInfo(string enemyChampion)
+        {
+            return _champion.getMatchupInfo(enemyChampion);
+        }
         public List<Matchup> GetAllMatchups() { return _champion.GetAllMatchups(); }
     }
 }

@@ -86,8 +86,12 @@ namespace LoL_Champions_and_Positions
                 {
                     throw new Exception("Parsing error: Unknown Line Type");
                 }
-                
 
+                //distribute the references of the main collection to the other lists
+                foreach (ChampionContainer champion in AllChampionsCollection.ContainedChampions())
+                {
+                    HelpMethods.UpdateChampionAcrossAllCollections(ref result, champion);
+                }
             }
 
             return result;
@@ -204,6 +208,18 @@ namespace LoL_Champions_and_Positions
             }
 
             return result;
+        }
+        public static void UpdateChampionAcrossAllCollections(ref List<ChampionCollection> collectionList, ChampionContainer modifiedChampion)
+        {
+            foreach (ChampionCollection collection in collectionList)
+            {
+                ChampionContainer forEdit = null;
+                forEdit = collection.GetChampion(modifiedChampion.Name);
+                if (forEdit != null)
+                {
+                    forEdit = modifiedChampion;
+                }
+            }
         }
     }
 

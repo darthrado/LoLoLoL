@@ -149,6 +149,7 @@ namespace LoL_Champions_and_Positions
             }
             return null;
         }
+        
 
         public void ProcessChampionPictureClick(ChampionContainer selChamp)
         {
@@ -172,7 +173,19 @@ namespace LoL_Champions_and_Positions
             }
             else
             {
-                MessageBox.Show("Penis");
+                if (selectedChampion != null)
+                {
+                    MatchupDetails championDialog = new MatchupDetails(selectedChampion,selChamp);
+
+                    championDialog.ShowDialog();
+
+                    if (championDialog.ChangesMade)
+                    {
+                        HelpMethods.UpdateChampionAcrossAllCollections(ref collectionList,championDialog.Result);
+                        saveFile.ImportLines(collectionList);
+                        saveFile.saveToFile("rekt.gg");
+                    }
+                }
             }
 
         }
@@ -644,6 +657,7 @@ namespace LoL_Champions_and_Positions
 
                 if (championDialog.ChangesMade)
                 {
+                    HelpMethods.UpdateChampionAcrossAllCollections(ref collectionList, championDialog.Result);
                     selectedChampion = championDialog.Result;
                     saveFile.ImportLines(collectionList);
                     saveFile.saveToFile("rekt.gg");
