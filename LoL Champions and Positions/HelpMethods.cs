@@ -88,10 +88,11 @@ namespace LoL_Champions_and_Positions
                 }
 
                 //distribute the references of the main collection to the other lists
-                foreach (ChampionContainer champion in AllChampionsCollection.ContainedChampions())
-                {
-                    HelpMethods.UpdateChampionAcrossAllCollections(ref result, champion);
-                }
+            }
+
+            foreach (ChampionContainer champion in AllChampionsCollection.ContainedChampions())
+            {
+                HelpMethods.UpdateChampionAcrossAllCollections(ref result, champion);
             }
 
             return result;
@@ -213,13 +214,12 @@ namespace LoL_Champions_and_Positions
         {
             foreach (ChampionCollection collection in collectionList)
             {
-                ChampionContainer forEdit = null;
-                forEdit = collection.GetChampion(modifiedChampion.Name);
-                if (forEdit != null)
-                {
-                    forEdit = modifiedChampion;
-                }
+                collection.ReplaceExistingChampion(modifiedChampion);
             }
+        }
+        public static int ChampionContainerComparer(ChampionContainer value1, ChampionContainer value2)
+        {
+            return value1.Name.CompareTo(value2.Name);
         }
     }
 
@@ -237,6 +237,7 @@ namespace LoL_Champions_and_Positions
         string _matchInformation;
         public string EnemyChampion { get { return _enemyChampion; } set { _enemyChampion = value; } }
         public string MatchInformation { get { return _matchInformation; } set { _matchInformation = value; } }
+
     }
 
 }

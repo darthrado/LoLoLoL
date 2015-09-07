@@ -21,12 +21,15 @@ namespace LoL_Champions_and_Positions
             {
                 playablePositions.Items.Add(position.ToString());
             }
+            saveFile = new ChampionToFile();
+            saveFile.getFromFile("rekt.gg");
+            this.controlPanel.Controls.Clear();
+            collectionList = saveFile.ExportLines();
 
             initListCollection(); //Initializes the champion collection List
 
             selectedCollection.Print(textSeaarchBox.Text);
 
-            saveFile = new ChampionToFile();
         }
         #endregion
 
@@ -60,41 +63,14 @@ namespace LoL_Champions_and_Positions
         {
             if (collectionList == null)
             {
-                // Temporary init for test purpouses.
-                collectionList = new List<ChampionCollection>();
-                selectedCollection = new ChampionCollection(Constants.ALL_CHAMPIONS, Enums.ListPositions.All.ToString()/*, AllChampsContextMenu, groupBox1, this*/);
-                collectionList.Add(selectedCollection);
-                allChampionsCollection = collectionList[0];
-
-                Champion newCHamp = new Champion("Thresh", "Thresh.png", "", "Muh best support");
-                selectedCollection.Add(newCHamp);
-                newCHamp = new Champion("Ezreal", "Ezreal.png", "", "Gay");
-                selectedCollection.Add(newCHamp);
-                newCHamp = new Champion("Taric", "Taric.png", "", "HA GAYYYYYYY");
-                selectedCollection.Add(newCHamp);
-                newCHamp = new Champion("Ahri", "Ahri.png", "", "Foxy lady");
-                selectedCollection.Add(newCHamp);
-                newCHamp = new Champion("Nami", "Nami.png", "", "Sushi");
-                selectedCollection.Add(newCHamp);
-                newCHamp = new Champion("Tryndamere", "Tryndamere.png", "", "Wanker");
-                selectedCollection.Add(newCHamp);
-                newCHamp = new Champion("Fiora", "Fiora.png", "", "I loooooong for a wortzy opponenet");
-                selectedCollection.Add(newCHamp);
-                newCHamp = new Champion("Elise", "Elise.png", "", "Spider Woman");
-                selectedCollection.Add(newCHamp);
-                newCHamp = new Champion("Draven", "Draven.png", "", "League of DRAVEEEEEN");
-                selectedCollection.Add(newCHamp);
-
-                selectedCollection.AddContextMenu(AllChampsContextMenu);
-                selectedCollection.AddGroupBox(ref groupBox1);
-                selectedCollection.AddFormReference(this);
+                MessageBox.Show("Awww shit nigga");
             }
             else
             {
                 foreach (ChampionCollection List in collectionList)
                 {
 
-                    List.AddGroupBox(ref this.groupBox1);
+                    List.AddControlPanel(ref this.controlPanel);
                     List.AddFormReference(this);
 
                     if (List.Name == Constants.ALL_CHAMPIONS)
@@ -102,6 +78,8 @@ namespace LoL_Champions_and_Positions
                         List.AddContextMenu(this.AllChampsContextMenu);
                         selectedCollection = List;
                         allChampionsCollection = List;
+                        allChampionsCollection.Sort();
+
                     }
                     else
                     {
@@ -312,12 +290,14 @@ namespace LoL_Champions_and_Positions
             {
                 System.Drawing.Point gbLocation = groupBox1.Location;
 
-                int initialSize = (groupBox1.Width - Constants.CHAMPION_HORIZONTAL_OFFSET) / (Constants.CHAMPION_FRAME_WIDTH + Constants.CHAMPION_HORIZONTAL_OFFSET);
+                int initialSize = (controlPanel.Width - Constants.CHAMPION_HORIZONTAL_OFFSET) / (Constants.CHAMPION_FRAME_WIDTH + Constants.CHAMPION_HORIZONTAL_OFFSET);
 
                 groupBox1.Height = this.ClientSize.Height - gbLocation.Y - Constants.GROUP_BOX_BORDER_OFFSET;
                 groupBox1.Width = this.ClientSize.Width - gbLocation.X - Constants.GROUP_BOX_BORDER_OFFSET;
+                controlPanel.Height = groupBox1.Height ;
+                controlPanel.Width = groupBox1.Width - Constants.GROUP_BOX_BORDER_OFFSET;
 
-                int afterSize = (groupBox1.Width - Constants.CHAMPION_HORIZONTAL_OFFSET) / (Constants.CHAMPION_FRAME_WIDTH + Constants.CHAMPION_HORIZONTAL_OFFSET);
+                int afterSize = (controlPanel.Width - Constants.CHAMPION_HORIZONTAL_OFFSET) / (Constants.CHAMPION_FRAME_WIDTH + Constants.CHAMPION_HORIZONTAL_OFFSET);
 
                 if (initialSize != afterSize)
                 {
@@ -405,7 +385,7 @@ namespace LoL_Champions_and_Positions
                     {
                         foreach (Enums.ListPositions position in Enum.GetValues(typeof(Enums.ListPositions)))
                         {
-                            collectionList.Add(new ChampionCollection(response.Name, position.ToString(), CustomListsStrip, groupBox1, this));
+                            collectionList.Add(new ChampionCollection(response.Name, position.ToString(), CustomListsStrip, controlPanel, this));
                         }
                     }
                     else if (response.RespondCommand == Enums.ManageFormState.Edit)
@@ -613,7 +593,7 @@ namespace LoL_Champions_and_Positions
             allChampionsCollection.AddContextMenu(null);
             selectedCollection.Hide();
             allChampionsCollection.Print(textSeaarchBox.Text);
-            allChampionsCollection.AddGroupBox(ref groupBox1); // TOTOTO
+            allChampionsCollection.AddControlPanel(ref controlPanel); // TOTOTO
 
             if (true)
             {
@@ -638,7 +618,7 @@ namespace LoL_Champions_and_Positions
         private void button2_Click(object sender, EventArgs e)
         {
             saveFile.getFromFile("rekt.gg");
-            this.groupBox1.Controls.Clear();
+            this.controlPanel.Controls.Clear();
             collectionList.Clear();
             collectionList = saveFile.ExportLines();
 

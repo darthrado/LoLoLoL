@@ -79,7 +79,6 @@ namespace LoL_Champions_and_Positions
                 _mainForm.ProcessChampionPictureClick(this);
             }
         }
-
         public bool AddMatchup(string enemyChampion, string matchupInfo)
         {
             return _champion.AddMatchup(enemyChampion, matchupInfo);

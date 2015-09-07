@@ -33,6 +33,7 @@
             this.playablePositions = new System.Windows.Forms.ComboBox();
             this.championListCollection = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.controlPanel = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.AllChampsContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
@@ -99,6 +100,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.controlPanel);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Location = new System.Drawing.Point(136, 11);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
@@ -108,6 +110,14 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Text";
+            // 
+            // controlPanel
+            // 
+            this.controlPanel.AutoScroll = true;
+            this.controlPanel.Location = new System.Drawing.Point(5, 13);
+            this.controlPanel.Name = "controlPanel";
+            this.controlPanel.Size = new System.Drawing.Size(694, 402);
+            this.controlPanel.TabIndex = 2;
             // 
             // label2
             // 
@@ -261,7 +271,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1005, 432);
+            this.ClientSize = new System.Drawing.Size(1062, 554);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.ButtonMatchupDetails);
@@ -320,6 +330,7 @@
         private System.Windows.Forms.Button ButtonMatchupDetails;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Panel controlPanel;
     }
 }
 

@@ -7,21 +7,21 @@ namespace LoL_Champions_and_Positions
 {
     public class ChampionCollection
     {
-        public ChampionCollection(string name, string role, List<ChampionContainer> initList, System.Windows.Forms.ContextMenuStrip contextMenu, System.Windows.Forms.GroupBox groupBox,Form1 mainForm)
+        public ChampionCollection(string name, string role, List<ChampionContainer> initList, System.Windows.Forms.ContextMenuStrip contextMenu, System.Windows.Forms.Panel controlPanel,Form1 mainForm)
         {
             _name = name;
             _role = role;
             _listOfChampions = initList;
-            _groupBox = groupBox;
+            _controlPanel = controlPanel;
             _contextMenu = contextMenu;
             _mainForm = mainForm;
         }
-        public ChampionCollection(string name, string role, System.Windows.Forms.ContextMenuStrip contextMenu, System.Windows.Forms.GroupBox groupBox, Form1 mainForm)
+        public ChampionCollection(string name, string role, System.Windows.Forms.ContextMenuStrip contextMenu, System.Windows.Forms.Panel controlPanel, Form1 mainForm)
         {
             _name = name;
             _role = role;
             _listOfChampions = new List<ChampionContainer>();
-            _groupBox = groupBox;
+            _controlPanel = controlPanel;
             _contextMenu = contextMenu;
             _mainForm = mainForm;
         }
@@ -30,7 +30,7 @@ namespace LoL_Champions_and_Positions
             _name = name;
             _role = role;
             _listOfChampions = new List<ChampionContainer>();
-            _groupBox = null;
+            _controlPanel = null;
             _contextMenu = null;
             _mainForm = null;
         }
@@ -38,7 +38,7 @@ namespace LoL_Champions_and_Positions
         private string _name;
         private string _role;
         private List<ChampionContainer> _listOfChampions;
-        private System.Windows.Forms.GroupBox _groupBox;
+        private System.Windows.Forms.Panel _controlPanel;
         System.Windows.Forms.ContextMenuStrip _contextMenu;
         Form1 _mainForm;
 
@@ -55,9 +55,9 @@ namespace LoL_Champions_and_Positions
                 newChampion = new ChampionContainer(champion, _mainForm);
             }
 
-            if(_groupBox!=null)
+            if(_controlPanel!=null)
             {
-                _groupBox.Controls.Add(newChampion.PictureBox);
+                _controlPanel.Controls.Add(newChampion.PictureBox);
             }
             if(_contextMenu!=null)
             {
@@ -82,16 +82,38 @@ namespace LoL_Champions_and_Positions
 
             return false;
         }
+        public void ReplaceExistingChampion(ChampionContainer modChampion)
+        {
+            for (int i = 0; i<_listOfChampions.Count; i++)
+            {
+                if (_listOfChampions[i].Name == modChampion.Name)
+                {
+                    _listOfChampions[i] = modChampion;
+                }
+            }
+        }
+
+        public void Sort()
+        {
+            if (_listOfChampions == null)
+            {
+                return;
+            }
+
+            System.Comparison<ChampionContainer> newComparison = new Comparison<ChampionContainer>(HelpMethods.ChampionContainerComparer);
+            this._listOfChampions.Sort(newComparison);
+        }
+
         public void Print(string value) 
         {
-            if (_groupBox == null)
+            if (_controlPanel == null)
             {
                 return;
                 throw new Exception("Attempting to Print without Groupbox Set");
             }
 
-            int X = _groupBox.DisplayRectangle.Left + Constants.CHAMPION_HORIZONTAL_OFFSET;
-            int Y = _groupBox.DisplayRectangle.Top + Constants.CHAMPION_VERTICAL_OFFSET;
+            int X = _controlPanel.DisplayRectangle.Left + Constants.CHAMPION_HORIZONTAL_OFFSET;
+            int Y = _controlPanel.DisplayRectangle.Top + Constants.CHAMPION_VERTICAL_OFFSET;
             int i=0;
 
             if (value == Constants.SEARCH_TEXT)
@@ -117,9 +139,9 @@ namespace LoL_Champions_and_Positions
                     continue;
                 }
 
-                if (X + 2 * (Constants.CHAMPION_HORIZONTAL_OFFSET + Constants.CHAMPION_FRAME_WIDTH) > _groupBox.DisplayRectangle.Left + _groupBox.Width)
+                if (X + 2 * (Constants.CHAMPION_HORIZONTAL_OFFSET + Constants.CHAMPION_FRAME_WIDTH) > _controlPanel.DisplayRectangle.Left + _controlPanel.Width)
                 {
-                    X = _groupBox.DisplayRectangle.Left + Constants.CHAMPION_HORIZONTAL_OFFSET;
+                    X = _controlPanel.DisplayRectangle.Left + Constants.CHAMPION_HORIZONTAL_OFFSET;
                     Y += (Constants.CHAMPION_FRAME_HEIGHT + Constants.CHAMPION_VERTICAL_OFFSET);
                 }
                 else
@@ -144,12 +166,12 @@ namespace LoL_Champions_and_Positions
                 champion.PictureBox.ContextMenuStrip = contextMenu;
             }
         }
-        public void AddGroupBox(ref System.Windows.Forms.GroupBox groupBox)
+        public void AddControlPanel(ref System.Windows.Forms.Panel controlPanel)
         {
-            _groupBox = groupBox;
+            _controlPanel = controlPanel;
             foreach (ChampionContainer champion in _listOfChampions)
             {
-                groupBox.Controls.Add(champion.PictureBox);
+                controlPanel.Controls.Add(champion.PictureBox);
             }
 
         }
