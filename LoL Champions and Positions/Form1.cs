@@ -136,7 +136,7 @@ namespace LoL_Champions_and_Positions
                 selectedChampion = selChamp;
                 if (selChamp != null)
                 {
-                    pictureSelectedChamp.Image = HelpMethods.getImageFromLocalDirectory(selChamp.Image);
+                    pictureSelectedChamp.Image = HelpMethods.getImageFromLocalDirectory(selChamp.Image,false);
                     selectedChampTextBox.Text = selChamp.Name;
 
                     SetFormState(Form1State.ChampionSelected);

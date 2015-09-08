@@ -18,8 +18,8 @@ namespace LoL_Champions_and_Positions
             enemyChampionName = enemyChampion.Name;
             resultChampion = champion;
             ChangesMade = false;
-            championImage.Image = HelpMethods.getImageFromLocalDirectory(champion.Image);
-            enemyImage.Image = HelpMethods.getImageFromLocalDirectory(enemyChampion.Image);
+            championImage.Image = HelpMethods.getImageFromLocalDirectory(champion.Image,false);
+            enemyImage.Image = HelpMethods.getImageFromLocalDirectory(enemyChampion.Image,false);
             championName.Text = champion.Name;
             enemyName.Text = enemyChampionName;
             if (matchupDetailsText != null)

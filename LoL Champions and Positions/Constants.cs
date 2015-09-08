@@ -14,11 +14,12 @@ namespace LoL_Champions_and_Positions
         public const int CHAMPION_FRAME_HEIGHT = 60;
         public const string SEARCH_TEXT = "Search...";
         public const string ALL_CHAMPIONS = "All Champions";
+        public const string CUSTOM_LIST_ALL = "All Positions";
         public const string SLASH_SEPARATOR = "///";
         public const string AT_SEPARATOR = "@@@";
         public static bool IsReservedWord(string word)
         {
-            if (word == ALL_CHAMPIONS || word == SEARCH_TEXT)
+            if (word == ALL_CHAMPIONS || word == SEARCH_TEXT ||word == CUSTOM_LIST_ALL)
             {
                 return true;
             }

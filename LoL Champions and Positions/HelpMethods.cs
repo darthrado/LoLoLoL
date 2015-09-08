@@ -5,9 +5,9 @@ using System.Text;
 
 namespace LoL_Champions_and_Positions
 {
- 
 
-    public class ChampionToFile : FileManager<ChampionCollection>
+
+    public class ChampionToFile : FileManagerLibrary.FileManager<ChampionCollection>  //FileManager<ChampionCollection>
     {
         public ChampionToFile(){}
         public ChampionToFile(List<ChampionCollection> Champions)
@@ -19,17 +19,16 @@ namespace LoL_Champions_and_Positions
         /// Parses the containes String Lines to an ChampionCollectionString
         /// </summary>
         /// <returns></returns>
-        public override List<ChampionCollection> ExportLines()
+        public override Dictionary<Guid,ChampionCollection> ExportLines()
         {
             if (saveLines.Count<=0)
             {
                 return null;
             }
 
-            List<ChampionCollection> result= new List<ChampionCollection>();
-            ChampionCollection AllChampionsCollection;
-            result.Add(new ChampionCollection(Constants.ALL_CHAMPIONS,Enums.ListPositions.All.ToString()));
-            AllChampionsCollection = result[0];
+            Dictionary<Guid, ChampionCollection> result = new Dictionary<Guid, ChampionCollection>();
+            ChampionCollection AllChampionsCollection = new ChampionCollection(Constants.ALL_CHAMPIONS,Enums.ListPositions.All.ToString());
+            result.Add(AllChampionsCollection.UniqueID, AllChampionsCollection);
 
             while (saveLines.Count > 0)
             {
@@ -45,19 +44,12 @@ namespace LoL_Champions_and_Positions
                     string[] listOfChampions = null;
                     listOfChampions = lineComponents[3].Split(separator, StringSplitOptions.None);
 
-                    List<ChampionContainer> allChampions = AllChampionsCollection.ContainedChampions();
                     foreach (string champion in listOfChampions)
                     {
-                        foreach (ChampionContainer existingChampion in allChampions)
-                        {
-                            if (existingChampion.Name == champion)
-                            {
-                                newListEntry.Add(new Champion(existingChampion.Name,existingChampion.Image,existingChampion.SearchTag,existingChampion.Description));
-                                continue;
-                            }
-                        }
+                        Guid uniqueID = AllChampionsCollection.GetChampionID(champion);
+                        newListEntry.Add(AllChampionsCollection.ListOfChampions[uniqueID]);
                     }
-                    result.Add(newListEntry);
+                    result.Add(newListEntry.UniqueID,newListEntry);
 
                 }
                 //Champion parse format: Champion///Name///Image///searchTags///Description
@@ -69,13 +61,13 @@ namespace LoL_Champions_and_Positions
                 //Matchup parse format: Champion///EnemyChampion///MatchupDetails
                 else if(lineComponents[0] == LineType.Matchup.ToString())
                 {
-                    ChampionContainer matchupChampion = AllChampionsCollection.GetChampion(lineComponents[1]);
-                    if (matchupChampion == null)
+                    Guid matchupChampionID = AllChampionsCollection.GetChampionID(lineComponents[1]);
+                    if (matchupChampionID == Guid.Empty)
                     {
                         throw new Exception("Champion Missing: Can't add matchup");
                         //Technically if my program works correctly, i should never get here since all champions are Exported before the matchups
                     }
-                    matchupChampion.AddMatchup(lineComponents[2], lineComponents[3]);
+                    AllChampionsCollection.ListOfChampions[matchupChampionID].AddMatchup(lineComponents[2], lineComponents[3]);
 
                 }
                 //Not Developed Yet - ToDo
@@ -89,11 +81,11 @@ namespace LoL_Champions_and_Positions
 
                 //distribute the references of the main collection to the other lists
             }
-
+            /*
             foreach (ChampionContainer champion in AllChampionsCollection.ContainedChampions())
             {
                 HelpMethods.UpdateChampionAcrossAllCollections(ref result, champion);
-            }
+            }*/
 
             return result;
         }
@@ -187,28 +179,57 @@ namespace LoL_Champions_and_Positions
 
     public class HelpMethods
     {
+        private static Dictionary<string,System.Drawing.Image> imageDictionary = new Dictionary<string,System.Drawing.Image>();
 
         public static string getAppPath()
         {
+
             string result = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
             result = result.Replace("file:\\", "");
             return result;
         }
-        public static System.Drawing.Image getImageFromLocalDirectory(string filename)
+
+        private static bool ThumbnailCallback()
         {
-            string directoryPath = HelpMethods.getAppPath();
-            string imageLocation = directoryPath + "\\images\\" + filename;
+            return false;
+        }
+
+        public static System.Drawing.Image getImageFromLocalDirectory(string filename,bool thumbnail)
+        {
             System.Drawing.Image result;
-            try
+
+            if (imageDictionary.ContainsKey(filename))
             {
-             result = System.Drawing.Image.FromFile(imageLocation);
+                return imageDictionary[filename];
             }
-            catch
+            else
             {
-                result = Properties.Resources.ImageMissing;
+
+                string directoryPath = HelpMethods.getAppPath();
+                string imageLocation = directoryPath + "\\images\\" + filename;
+
+                try
+                {
+                    result = System.Drawing.Image.FromFile(imageLocation);
+                    imageDictionary.Add(filename, result);
+                }
+                catch
+                {
+                    result = Properties.Resources.ImageMissing;
+                }
             }
 
-            return result;
+            if (thumbnail)
+            {
+                System.Drawing.Image.GetThumbnailImageAbort myCallback = new System.Drawing.Image.GetThumbnailImageAbort(ThumbnailCallback);
+                return result.GetThumbnailImage(60, 60, myCallback, IntPtr.Zero);
+            }
+            else
+            {
+                return result;
+            }
+
+            
         }
         public static void UpdateChampionAcrossAllCollections(ref List<ChampionCollection> collectionList, ChampionContainer modifiedChampion)
         {

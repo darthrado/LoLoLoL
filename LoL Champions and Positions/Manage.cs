@@ -203,7 +203,7 @@ namespace LoL_Champions_and_Positions
             ListBox.Items.Clear();
             foreach (ListEntry item in _intputList)
             {
-                if (item.Name.Contains(searchPhrase) || searchPhrase == "" || searchPhrase == Constants.SEARCH_TEXT)
+                if (item.Name.ToUpper().Contains(searchPhrase.ToUpper()) || searchPhrase == "" || searchPhrase == Constants.SEARCH_TEXT)
                 {
                     ListBox.Items.Add(item.Name);
                 }
@@ -287,7 +287,7 @@ namespace LoL_Champions_and_Positions
                 {
                     ItemName.Text = selectedItem.Name;
                     PictureName.Text = selectedItem.PictureName;
-                    Picture.Image = HelpMethods.getImageFromLocalDirectory(selectedItem.PictureName);
+                    Picture.Image = HelpMethods.getImageFromLocalDirectory(selectedItem.PictureName,false);
                 }
             }
             else
@@ -355,7 +355,7 @@ namespace LoL_Champions_and_Positions
 
         private void ReloadImage_Click(object sender, EventArgs e)
         {
-            Picture.Image = HelpMethods.getImageFromLocalDirectory(PictureName.Text);
+            Picture.Image = HelpMethods.getImageFromLocalDirectory(PictureName.Text,false);
         }
 
         private void Ok_Click(object sender, EventArgs e)
@@ -377,7 +377,7 @@ namespace LoL_Champions_and_Positions
                 {
                     ItemName.Text = selectedItem.Name;
                     PictureName.Text = selectedItem.PictureName;
-                    Picture.Image = HelpMethods.getImageFromLocalDirectory(selectedItem.PictureName);
+                    Picture.Image = HelpMethods.getImageFromLocalDirectory(selectedItem.PictureName,false);
                 }
                 SetState(Enums.ManageFormState.ItemSelected);
             }

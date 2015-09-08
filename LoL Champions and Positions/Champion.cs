@@ -9,12 +9,14 @@ namespace LoL_Champions_and_Positions
     {
         public Champion(string name, string image, string searchTag, string description)
         {
+            _uniqueID = Guid.NewGuid();
             _name = name;
             _image = image;
             _searchTag = searchTag;
             _description = description;
             matchupList = new List<Matchup>();
         }
+        Guid _uniqueID;
         string _name;
         string _image;
         string _searchTag;
@@ -87,5 +89,6 @@ namespace LoL_Champions_and_Positions
         public string Image { get { return _image; } set { _image = value; } }
         public string SearchTag { get { return _searchTag; } set { _searchTag = value; } }
         public string Description { get { return _description; } set { _description = value; } }
+        public Guid UniqueID { get { return _uniqueID; } }
     }
 }

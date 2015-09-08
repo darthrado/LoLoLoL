@@ -8,6 +8,8 @@ namespace LoL_Champions_and_Positions
     /// <summary>
     /// 
     /// </summary>
+    /// 
+    /* Deprecated for now
     public class ChampionContainer
     {
         public ChampionContainer(Champion champion)
@@ -16,7 +18,7 @@ namespace LoL_Champions_and_Positions
             pictureBox = new System.Windows.Forms.PictureBox();
             toolTip = new System.Windows.Forms.ToolTip();
 
-            this.pictureBox.Image = HelpMethods.getImageFromLocalDirectory(champion.Image);
+            this.pictureBox.Image = HelpMethods.getImageFromLocalDirectory(champion.Image,true);
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Name = "pictureBox"+champion.Name;
             this.pictureBox.Size = new System.Drawing.Size(60, 60);
@@ -35,7 +37,7 @@ namespace LoL_Champions_and_Positions
             pictureBox = new System.Windows.Forms.PictureBox();
             toolTip = new System.Windows.Forms.ToolTip();
 
-            this.pictureBox.Image = HelpMethods.getImageFromLocalDirectory(champion.Image);
+            this.pictureBox.Image = HelpMethods.getImageFromLocalDirectory(champion.Image,true);
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Name = "pictureBox" + champion.Name;
             this.pictureBox.Size = new System.Drawing.Size(60, 60);
@@ -56,7 +58,7 @@ namespace LoL_Champions_and_Positions
 
         //public Champion ChampionPr { get { return _champion; } }
         public string Name { get { return _champion.Name; } set { _champion.Name = value; } }
-        public string Image { get { return _champion.Image; } set { _champion.Image = value; pictureBox.Image = HelpMethods.getImageFromLocalDirectory(value); } }
+        public string Image { get { return _champion.Image; } set { _champion.Image = value; pictureBox.Image = HelpMethods.getImageFromLocalDirectory(value,true); } }
         public string SearchTag { get { return _champion.SearchTag; } set { _champion.SearchTag = value; } }
         public string Description { get { return _champion.Description; } set { _champion.Description = value; } }
 
@@ -96,5 +98,5 @@ namespace LoL_Champions_and_Positions
             return _champion.getMatchupInfo(enemyChampion);
         }
         public List<Matchup> GetAllMatchups() { return _champion.GetAllMatchups(); }
-    }
+    }*/
 }

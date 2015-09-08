@@ -14,7 +14,7 @@ namespace LoL_Champions_and_Positions
         public ChampionDetails(ChampionContainer champion)
         {
             InitializeComponent();
-            pictureBox1.Image = HelpMethods.getImageFromLocalDirectory(champion.Image);
+            pictureBox1.Image = HelpMethods.getImageFromLocalDirectory(champion.Image,false);
             championName.Text = champion.Name;
             championDetailsText.Text = champion.Description;
             searchTag.Text = champion.SearchTag;

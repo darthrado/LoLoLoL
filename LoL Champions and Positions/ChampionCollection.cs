@@ -7,81 +7,57 @@ namespace LoL_Champions_and_Positions
 {
     public class ChampionCollection
     {
-        public ChampionCollection(string name, string role, List<ChampionContainer> initList, System.Windows.Forms.ContextMenuStrip contextMenu, System.Windows.Forms.Panel controlPanel,Form1 mainForm)
+/*        public ChampionCollection(string name, string role, List<ChampionContainer> initList, System.Windows.Forms.ContextMenuStrip contextMenu, System.Windows.Forms.Panel controlPanel,Form1 mainForm)
         {
+            _uniqueID = Guid.NewGuid();
             _name = name;
             _role = role;
             _listOfChampions = initList;
             _controlPanel = controlPanel;
             _contextMenu = contextMenu;
             _mainForm = mainForm;
-        }
+        }*/
         public ChampionCollection(string name, string role, System.Windows.Forms.ContextMenuStrip contextMenu, System.Windows.Forms.Panel controlPanel, Form1 mainForm)
         {
+            _uniqueID = Guid.NewGuid();
             _name = name;
             _role = role;
-            _listOfChampions = new List<ChampionContainer>();
-            _controlPanel = controlPanel;
+            _listOfChampions = new Dictionary<Guid,Champion>();
+            /*_controlPanel = controlPanel;
             _contextMenu = contextMenu;
-            _mainForm = mainForm;
+            _mainForm = mainForm;*/
         }
         public ChampionCollection(string name, string role)
         {
+            _uniqueID = Guid.NewGuid();
             _name = name;
             _role = role;
-            _listOfChampions = new List<ChampionContainer>();
+            _listOfChampions = new Dictionary<Guid,Champion>();
+            /*
             _controlPanel = null;
             _contextMenu = null;
-            _mainForm = null;
+            _mainForm = null;*/
         }
 
+        private Guid _uniqueID;
         private string _name;
         private string _role;
-        private List<ChampionContainer> _listOfChampions;
+        //private List<ChampionContainer> _listOfChampions;
+        private Dictionary<Guid, Champion> _listOfChampions;
+        /*
         private System.Windows.Forms.Panel _controlPanel;
         System.Windows.Forms.ContextMenuStrip _contextMenu;
-        Form1 _mainForm;
+        Form1 _mainForm;*/
 
         public void Add(Champion champion) 
         {
-            ChampionContainer newChampion;
-            if(_mainForm==null)
-            {
-                newChampion = new ChampionContainer(champion);
-            }
-            else
-            {
-
-                newChampion = new ChampionContainer(champion, _mainForm);
-            }
-
-            if(_controlPanel!=null)
-            {
-                _controlPanel.Controls.Add(newChampion.PictureBox);
-            }
-            if(_contextMenu!=null)
-            {
-                newChampion.PictureBox.ContextMenuStrip = _contextMenu;
-            }
-
-
-            _listOfChampions.Add(newChampion);
+            _listOfChampions.Add(champion.UniqueID, champion);
         }
-        public bool Remove(string championName) 
+        public void Remove(Guid championID) 
         {
-            for(int i=0; i<_listOfChampions.Count; i++)
-            {
-                if (_listOfChampions[i].Name == championName)
-                {
-                    _listOfChampions[i].Visible = false;
-                    _listOfChampions.RemoveAt(i);
-                    
-                    return true;
-                }
-            }
-
-            return false;
+            _listOfChampions.Remove(championID);
         }
+        /*
         public void ReplaceExistingChampion(ChampionContainer modChampion)
         {
             for (int i = 0; i<_listOfChampions.Count; i++)
@@ -91,7 +67,7 @@ namespace LoL_Champions_and_Positions
                     _listOfChampions[i] = modChampion;
                 }
             }
-        }
+        }*/
 
         public void Sort()
         {
@@ -99,11 +75,11 @@ namespace LoL_Champions_and_Positions
             {
                 return;
             }
-
-            System.Comparison<ChampionContainer> newComparison = new Comparison<ChampionContainer>(HelpMethods.ChampionContainerComparer);
-            this._listOfChampions.Sort(newComparison);
+            /*
+            System.Comparison<Champion> newComparison = new Comparison<Champion>(HelpMethods.ChampionContainerComparer);
+            this._listOfChampions.Sort(newComparison);*/
         }
-
+        /*
         public void Print(string value) 
         {
             if (_controlPanel == null)
@@ -123,8 +99,9 @@ namespace LoL_Champions_and_Positions
 
             while (i < _listOfChampions.Count)
             {
+            
                 // If Name or Search tag contains Search Value or Search Value is Empty
-                if (_listOfChampions[i].Name.Contains(value) || _listOfChampions[i].SearchTag.Contains(value)||value == "")
+                if (_listOfChampions[i].Name.ToUpper().Contains(value.ToUpper()) || _listOfChampions[i].SearchTag.ToUpper() == value.ToUpper()||value == "")
                 {
                     //Set Location + make visible
                     _listOfChampions[i].SetLocation(X, Y);
@@ -133,8 +110,8 @@ namespace LoL_Champions_and_Positions
                 else
                 {
                     //Clear Location + make invisible
-                    _listOfChampions[i].SetLocation(0, 0);
                     _listOfChampions[i].Visible = false;
+                    _listOfChampions[i].SetLocation(0, 0);
                     i++;
                     continue;
                 }
@@ -150,7 +127,8 @@ namespace LoL_Champions_and_Positions
                 }
                 i++;
             }
-        }
+        }*/
+        /*
         public void Hide() 
         {
             foreach (ChampionContainer champion in _listOfChampions)
@@ -174,19 +152,13 @@ namespace LoL_Champions_and_Positions
                 controlPanel.Controls.Add(champion.PictureBox);
             }
 
+        }*/
+
+        public Dictionary<Guid,Champion> ContainedChampions() 
+        {
+            return _listOfChampions;
         }
-
-        public List<ChampionContainer> ContainedChampions() 
-        { 
-            List<ChampionContainer> result = new List<ChampionContainer>();
-
-            foreach (ChampionContainer champion in _listOfChampions)
-            {
-                result.Add(champion);
-            }
-
-            return result;
-        }
+        /*
         public void AddFormReference(Form1 mainForm)
         {
             _mainForm = mainForm;
@@ -195,21 +167,24 @@ namespace LoL_Champions_and_Positions
                 champion.setMainForm(_mainForm);
             }
             
-        }
-        public ChampionContainer GetChampion(string championName)
+        }*/
+        // change?
+        public Guid GetChampionID(string championName)
         {
-            foreach (ChampionContainer containedChampion in _listOfChampions)
+            foreach (Guid key in _listOfChampions.Keys)
             {
-                if (containedChampion.Name == championName)
+                if (_listOfChampions[key].Name == championName)
                 {
-                    return containedChampion;
+                    return key;
                 }
             }
 
-            return null;
+            return Guid.Empty;
         }
 
+        public Dictionary<Guid, Champion> ListOfChampions { get { return _listOfChampions; } }
         public string Name { get { return _name; } set { _name = value; } }
-        public string Role { get { return _role; } }
+        public string Role { get { return _role; } set { _role = value; } }
+        public Guid UniqueID { get { return _uniqueID; } }
     }
 }
