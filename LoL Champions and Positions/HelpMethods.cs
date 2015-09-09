@@ -7,12 +7,10 @@ namespace LoL_Champions_and_Positions
 {
 
 
-    public class ChampionToFile : FileManagerLibrary.FileManager<ChampionCollection>  //FileManager<ChampionCollection>
+    public class ChampionToFile : FileManagerLibrary.FileManager<Dictionary<Guid,ChampionCollection>>  //FileManager<ChampionCollection>
     {
-        public ChampionToFile(){}
-        public ChampionToFile(List<ChampionCollection> Champions)
+        public ChampionToFile()
         {
-            ImportLines(Champions);
         }
 
         /// <summary>
@@ -28,7 +26,7 @@ namespace LoL_Champions_and_Positions
 
 
             Dictionary<Guid, ChampionCollection> result = new Dictionary<Guid, ChampionCollection>();
-            ChampionCollection AllChampionsCollection = new ChampionCollection(Constants.ALL_CHAMPIONS,Enums.ListPositions.All.ToString());
+            ChampionCollection AllChampionsCollection = new ChampionCollection(Constants.ALL_CHAMPIONS,Constants.CUSTOM_LIST_ALL);
             result.Add(AllChampionsCollection.UniqueID, AllChampionsCollection);
 
             while (saveLines.Count > 0)
@@ -48,7 +46,10 @@ namespace LoL_Champions_and_Positions
                     foreach (string champion in listOfChampions)
                     {
                         Guid uniqueID = AllChampionsCollection.GetChampionID(champion);
-                        newListEntry.Add(AllChampionsCollection.ListOfChampions[uniqueID]);
+                        if (uniqueID != Guid.Empty)
+                        {
+                            newListEntry.Add(AllChampionsCollection.ListOfChampions[uniqueID]);
+                        }
                     }
                     result.Add(newListEntry.UniqueID,newListEntry);
 
@@ -97,8 +98,13 @@ namespace LoL_Champions_and_Positions
         /// </summary>
         /// <param name="List"></param>
         /// <returns></returns>
-        public override bool ImportLines()
+        public override bool ImportLines(Dictionary<Guid,ChampionCollection> inputLine)
         {
+            if (Engine.ChampionListCollection.Count == 0)
+            {
+                throw new Exception("Can't save empty data");
+            }
+
             string separator = Constants.SLASH_SEPARATOR;
             string initialParseLine = LineType.Position.ToString();
             foreach (string key in Engine.ListPositions)

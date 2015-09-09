@@ -11,7 +11,7 @@ namespace LoL_Champions_and_Positions
 {
     public partial class Manage : Form
     {
-        public Manage(List<ChampionCollection> InputList, Enums.ManageDialogue launchMode)
+        public Manage(Enums.ManageDialogue launchMode)
         {
             InitializeComponent();
 
@@ -20,7 +20,7 @@ namespace LoL_Champions_and_Positions
             _formResponseList = new List<ManageFormResponse>();
             FormResponse = new List<ManageFormResponse>();
 
-            FillList(InputList, launchMode);
+            FillList(launchMode);
             SetListBox(SearchBar.Text);
 
             if (_launchMode == Enums.ManageDialogue.List)
@@ -50,16 +50,19 @@ namespace LoL_Champions_and_Positions
         /// </summary>
         private class ListEntry
         {
-            public ListEntry(string name,bool warning)
+            public ListEntry(Guid uniqueID, string name,bool warning)
             {
+                UniqueID = uniqueID;
                 Name = name;
             }
-            public ListEntry(string name, string picture, bool warning)
+            public ListEntry(Guid uniqueID,string name, string picture, bool warning)
             {
+                UniqueID = uniqueID;
                 Name = name;
                 PictureName = picture;
                 Warning = warning;
             }
+            public Guid UniqueID { get; private set; }
             public bool Warning { get; private set; }
             public string Name { get; private set; }
             public string PictureName { get; private set; }
@@ -75,42 +78,37 @@ namespace LoL_Champions_and_Positions
         /// </summary>
         /// <param name="inputList">List(ChampionCollection) - Contains basically all List and Champion data in the app </param>
         /// <param name="launchMode">Launch mode depending on whether the form is called to insert champions or lists</param>
-        void FillList(List<ChampionCollection> inputList, Enums.ManageDialogue launchMode)
+        void FillList(Enums.ManageDialogue launchMode)
         {
             if (launchMode == Enums.ManageDialogue.Champion)
             {
-
-                foreach (ChampionCollection InputListEntry in inputList)
+                foreach (Guid key in Engine.AllChampionsList.ListOfChampions.Keys)
                 {
-                    if (InputListEntry.Name == Constants.ALL_CHAMPIONS && InputListEntry.Role == Enums.ListPositions.All.ToString())
-                    {
-                        List<ChampionContainer> tempChampList = InputListEntry.ContainedChampions();
-                        foreach (ChampionContainer champion in tempChampList)
-                        {
-                            _intputList.Add(new ListEntry(champion.Name, champion.Image, true));
-                        }
-                    }
+                    _intputList.Add(new ListEntry(key,Engine.AllChampionsList.ListOfChampions[key].Name, Engine.AllChampionsList.ListOfChampions[key].Image, true));
                 }
             }
             else if (launchMode == Enums.ManageDialogue.List)
             {
-                foreach (ChampionCollection InputListEntry in inputList)
+                foreach (Guid key in Engine.GetAllListsWithPosition(Constants.CUSTOM_LIST_ALL))
                 {
-                    if (InputListEntry.Name != Constants.ALL_CHAMPIONS && InputListEntry.Role == Enums.ListPositions.All.ToString())
+                    if (Engine.ChampionListCollection[key].Name == Constants.ALL_CHAMPIONS)
                     {
-                        bool notEmptyWarning;
-                        if(InputListEntry.ContainedChampions() != null)
-                        {
-                            notEmptyWarning = true;
-                        }
-                        else
-                        {
-                            notEmptyWarning = false;
-                        }
-                        _intputList.Add(new ListEntry(InputListEntry.Name,notEmptyWarning));
+                        continue;
                     }
+
+                    bool notEmptyWarning;
+                    if (Engine.ChampionListCollection[key].ListOfChampions.Count > 0)
+                    {
+                        notEmptyWarning = true;
+                    }
+                    else
+                    {
+                        notEmptyWarning = false;
+                    }
+                    _intputList.Add(new ListEntry(key,Engine.ChampionListCollection[key].Name, notEmptyWarning));
                 }
             }
+                // TODO: ADD Positions Fill Form
             else
             {
                 //mandatory something happaned something happaned dialogue
@@ -259,7 +257,7 @@ namespace LoL_Champions_and_Positions
 
             if (warningDialogResult== true || itemToDelete.Warning == false) //if warning message ok
             {
-                _formResponseList.Add(new ManageFormResponse(_formState, ItemName.Text, PictureName.Text));
+                _formResponseList.Add(new ManageFormResponse(_formState, itemToDelete.UniqueID, itemToDelete.Name, itemToDelete.PictureName));
                 _intputList.Remove(itemToDelete);
                 SetListBox("");
             }
@@ -305,8 +303,8 @@ namespace LoL_Champions_and_Positions
             {
                 if (GetListEntry(ItemName.Text) == null && (!Constants.IsReservedWord(ItemName.Text)))
                 {
-                    _formResponseList.Add(new ManageFormResponse(_formState, ItemName.Text, PictureName.Text));
-                    _intputList.Add(new ListEntry(ItemName.Text,PictureName.Text,false));
+                    _formResponseList.Add(new ManageFormResponse(_formState,Guid.Empty, ItemName.Text, PictureName.Text));
+                    _intputList.Add(new ListEntry(Guid.Empty,ItemName.Text,PictureName.Text,false));
                 }
                 else
                 {
@@ -344,8 +342,9 @@ namespace LoL_Champions_and_Positions
                 }
                 else
                 {
-                    _formResponseList.Add(new ManageFormResponse(_formState, oldItem, PictureName.Text, ItemName.Text));
-                    GetListEntry(oldItem).EditEntry(ItemName.Text,PictureName.Text);
+                    ListEntry editedItem = GetListEntry(oldItem);
+                    editedItem.EditEntry(ItemName.Text,PictureName.Text);
+                    _formResponseList.Add(new ManageFormResponse(_formState, editedItem.UniqueID,editedItem.Name,editedItem.PictureName));
                     
                 }
             }

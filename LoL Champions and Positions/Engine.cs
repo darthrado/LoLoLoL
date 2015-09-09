@@ -28,7 +28,8 @@ namespace LoL_Champions_and_Positions
             selectedChampionList = null;
 
             championListCollection = sourceCollection;
-            allChampionsList = championListCollection[GetListReference(Constants.ALL_CHAMPIONS, Constants.CUSTOM_LIST_ALL)];
+            Guid allChampsUID = GetListReference(Constants.ALL_CHAMPIONS, Constants.CUSTOM_LIST_ALL);
+            allChampionsList = championListCollection[allChampsUID];
             selectedChampionList = allChampionsList;
 
             
@@ -243,6 +244,7 @@ namespace LoL_Champions_and_Positions
         public static ChampionCollection SelectedChampionList { get { return SelectedChampionList; } }
         public static Dictionary<Guid, ChampionCollection> ChampionListCollection { get { return championListCollection; } }
         public static HashSet<string> ListPositions { get { return listPositions; } }
+        public static Champion SelectedChampion { get { return selectedChampion; } }
 
     }
 }

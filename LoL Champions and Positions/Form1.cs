@@ -114,31 +114,24 @@ namespace LoL_Champions_and_Positions
         /// Depending on the selected values in ComboBox List and Position - gets the corresponding ChampionCollection from the list of Collections
         /// </summary>
         /// <returns>ChampionCollection</returns>
-        ChampionCollection getSelectedList()
+        Guid getSelectedList()
         {
             if (championListCollection.SelectedIndex == -1 || playablePositions.SelectedIndex == -1)
-                return null;
+                return Guid.Empty;
 
-            foreach (ChampionCollection ListEntry in collectionList)
-            {
-                if (ListEntry.Name == championListCollection.Items[championListCollection.SelectedIndex].ToString() && ListEntry.Role == playablePositions.Items[playablePositions.SelectedIndex].ToString())
-                {
-                    return ListEntry;
-                }
-            }
-            return null;
+            return Engine.GetListReference(championListCollection.Items[championListCollection.SelectedIndex].ToString(),playablePositions.Items[playablePositions.SelectedIndex].ToString());
         }
         
 
-        public void ProcessChampionPictureClick(ChampionContainer selChamp)
+        public void ProcessChampionPictureClick(Guid clickedChampionUID)
         {
             if (displayChampionMatchupsList == false)
             {
-                selectedChampion = selChamp;
-                if (selChamp != null)
+                Engine.SetSelectedChampion(clickedChampionUID);
+                if (clickedChampionUID != Guid.Empty)
                 {
-                    pictureSelectedChamp.Image = HelpMethods.getImageFromLocalDirectory(selChamp.Image,false);
-                    selectedChampTextBox.Text = selChamp.Name;
+                    pictureSelectedChamp.Image = HelpMethods.getImageFromLocalDirectory(Engine.SelectedChampion.Image,false);
+                    selectedChampTextBox.Text = Engine.SelectedChampion.Name;
 
                     SetFormState(Form1State.ChampionSelected);
                 }
@@ -152,16 +145,16 @@ namespace LoL_Champions_and_Positions
             }
             else
             {
-                if (selectedChampion != null)
+                if (Engine.SelectedChampion != null)
                 {
-                    MatchupDetails championDialog = new MatchupDetails(selectedChampion,selChamp);
+                    MatchupDetails championDialog = new MatchupDetails(Engine.SelectedChampion,Engine.AllChampionsList.ListOfChampions[clickedChampionUID]);
 
                     championDialog.ShowDialog();
 
                     if (championDialog.ChangesMade)
                     {
-                        HelpMethods.UpdateChampionAcrossAllCollections(ref collectionList,championDialog.Result);
-                        saveFile.ImportLines(collectionList);
+                        //HelpMethods.UpdateChampionAcrossAllCollections(ref collectionList,championDialog.Result);
+                        saveFile.ImportLines(Engine.ChampionListCollection);
                         saveFile.saveToFile("rekt.gg");
                     }
                 }
@@ -175,22 +168,22 @@ namespace LoL_Champions_and_Positions
 
             toolStripMenuItem3.DropDownItems.Clear();
 
-            foreach (ChampionCollection list in collectionList)
+            foreach (Guid key in Engine.ChampionListCollection.Keys)
             {
-                if (list.Name == Constants.ALL_CHAMPIONS || list.Role == Enums.ListPositions.All.ToString())
+                if (Engine.ChampionListCollection[key].Name == Constants.ALL_CHAMPIONS || Engine.ChampionListCollection[key].Role == Constants.CUSTOM_LIST_ALL)
                 {
                     continue;
                 }
 
                 ToolStripMenuItem roleItem = new ToolStripMenuItem();
-                roleItem.Name = list.Role;
-                roleItem.Text = list.Role;
+                roleItem.Name = Engine.ChampionListCollection[key].Role;
+                roleItem.Text = Engine.ChampionListCollection[key].Role;
                 roleItem.Click += new EventHandler(newItem_Click);
 
                 ToolStripMenuItem newItem = null;
                 foreach (ToolStripMenuItem menuItems in toolStripMenuItem3.DropDownItems)
                 {
-                    if (menuItems.Text == list.Name)
+                    if (menuItems.Text == Engine.ChampionListCollection[key].Name)
                     {
                         newItem = menuItems;
                     }
@@ -200,8 +193,8 @@ namespace LoL_Champions_and_Positions
                 {
                     newItem = new ToolStripMenuItem();
 
-                    newItem.Name = list.Name;
-                    newItem.Text = list.Name;
+                    newItem.Name = Engine.ChampionListCollection[key].Name;
+                    newItem.Text = Engine.ChampionListCollection[key].Name;
                     //newItem.OwnerItem = toolStripMenuItem3;
                     //roleItem.Owner = newItem;
 
@@ -220,7 +213,7 @@ namespace LoL_Champions_and_Positions
         {
             if (formState == Form1State.ChampionSelected)
             {
-                if (selectedChampion == null)
+                if (Engine.SelectedChampion == null)
                 {
                     throw new Exception("No Selected Champion");
                 }
@@ -237,7 +230,7 @@ namespace LoL_Champions_and_Positions
             }
             if (formState == Form1State.ListsView)
             {
-                if (selectedCollection == null)
+                if (Engine.SelectedChampionList == null)
                 {
                     throw new Exception("No selected List");
                 }
@@ -251,14 +244,14 @@ namespace LoL_Champions_and_Positions
                 ButtonMatchupDetails.Enabled = false;
                 BackButton.Enabled = false;
 
-                groupBox1.Text = selectedCollection.Name + "/" + selectedCollection.Role;
+                groupBox1.Text = Engine.SelectedChampionList.Name + "/" + Engine.SelectedChampionList.Role;
 
                 if (displayChampionMatchupsList)
                 {
                     displayChampionMatchupsList = false;
 
                     //TODO once matchup collection is implemented: matchupCollection hide
-                    selectedCollection.Print(textSeaarchBox.Text);
+                    //selectedCollection.Print(textSeaarchBox.Text);
                 }
             }
             if (formState == Form1State.InitialView)
@@ -274,7 +267,7 @@ namespace LoL_Champions_and_Positions
                 ButtonMatchupDetails.Enabled = false;
                 BackButton.Enabled = false;
 
-                groupBox1.Text = Constants.ALL_CHAMPIONS + "/" + Enums.ListPositions.All.ToString();
+                groupBox1.Text = Constants.ALL_CHAMPIONS + "/" + Constants.CUSTOM_LIST_ALL;
                 championListCollection.SelectedIndex = 0;
                 playablePositions.SelectedIndex = 0;
 
@@ -287,6 +280,7 @@ namespace LoL_Champions_and_Positions
 
         private void Form1_Resize(object sender, EventArgs e)
         {
+            /*
             if (selectedCollection != null)
             {
                 System.Drawing.Point gbLocation = groupBox1.Location;
@@ -304,12 +298,12 @@ namespace LoL_Champions_and_Positions
                 {
                     selectedCollection.Print(textSeaarchBox.Text);
                 }
-            }
+            }*/
         }
 
         private void manageChamp_Click(object sender, EventArgs e)
         {
-            Manage manageChamp = new Manage(collectionList, Enums.ManageDialogue.Champion);
+            Manage manageChamp = new Manage(Enums.ManageDialogue.Champion);
 
             manageChamp.ShowDialog();
 
@@ -319,38 +313,18 @@ namespace LoL_Champions_and_Positions
                 {
                     if (response.RespondCommand == Enums.ManageFormState.New)
                     {
-                        foreach (ChampionCollection collectionItem in collectionList)
-                        {
-                            if (collectionItem.Name == Constants.ALL_CHAMPIONS)
-                            {
-                                collectionItem.Add(new Champion(response.Name, response.Picture, "", ""));
-
-                                break;
-                            }
-                        }
+                        Engine.CreateChampion(new Champion(response.Name,response.Picture,"",""));
                     }
                     else if (response.RespondCommand == Enums.ManageFormState.Edit)
                     {
-                        foreach (ChampionCollection collectionItem in collectionList)
-                        {
-                            foreach (ChampionContainer containedChampion in collectionItem.ContainedChampions())
-                            {
-                                if (containedChampion.Name == response.Name)
-                                {
-                                    containedChampion.Name = response.NewName;
-                                    containedChampion.Image = response.Picture;
-                                    break; // Champion names should be unique so it should be safe to use break here;
-                                }
+                        Champion forEdit = Engine.AllChampionsList.ListOfChampions[response.UniqueID];
 
-                            }
-                        }
+                        forEdit.Name = response.Name;
+                        forEdit.Image = response.Picture;
                     }
                     else if (response.RespondCommand == Enums.ManageFormState.Delete)
                     {
-                        foreach (ChampionCollection collectionItem in collectionList)
-                        {
-                            collectionItem.Remove(response.Name);
-                        }
+                        Engine.DeleteChampion(response.UniqueID);
                     }
                     else
                     {
@@ -364,17 +338,17 @@ namespace LoL_Champions_and_Positions
             }
 
             //View newly added/edite champions
-            selectedCollection.Print(textSeaarchBox.Text);
+            //selectedCollection.Print(textSeaarchBox.Text);
 
             //Save changes to file
-            saveFile.ImportLines(collectionList);
+            saveFile.ImportLines(Engine.ChampionListCollection);
             saveFile.saveToFile("rekt.gg");
 
         }
 
         private void manageLists_Click(object sender, EventArgs e)
         {
-            Manage manageList = new Manage(collectionList, Enums.ManageDialogue.List);
+            Manage manageList = new Manage(Enums.ManageDialogue.List);
 
             manageList.ShowDialog();
 
@@ -384,30 +358,17 @@ namespace LoL_Champions_and_Positions
                 {
                     if (response.RespondCommand == Enums.ManageFormState.New)
                     {
-                        foreach (Enums.ListPositions position in Enum.GetValues(typeof(Enums.ListPositions)))
-                        {
-                            collectionList.Add(new ChampionCollection(response.Name, position.ToString(), CustomListsStrip, controlPanel, this));
-                        }
+                        Engine.AddList(response.Name);
                     }
                     else if (response.RespondCommand == Enums.ManageFormState.Edit)
                     {
-                        foreach (ChampionCollection collectionItem in collectionList)
-                        {
-                            if (response.Name == collectionItem.Name)
-                            {
-                                collectionItem.Name = response.NewName;
-                            }
-                        }
+                        Engine.RenameList(Engine.GetAllListsWithName(Engine.ChampionListCollection[response.UniqueID].Name), response.Name);
+                       
+
                     }
                     else if (response.RespondCommand == Enums.ManageFormState.Delete)
                     {
-                        for (int i = collectionList.Count - 1; i >= 0; i--)
-                        {
-                            if (response.Name == collectionList[i].Name)
-                            {
-                                collectionList.RemoveAt(i);
-                            }
-                        }
+                        Engine.RemoveList(Engine.GetAllListsWithName(response.Name));
                     }
                     else
                     {
@@ -425,33 +386,34 @@ namespace LoL_Champions_and_Positions
             BuildContextMenu();
 
             //Save changes to file
-            saveFile.ImportLines(collectionList);
+            saveFile.ImportLines(Engine.ChampionListCollection);
             saveFile.saveToFile("rekt.gg");
         }
 
         private void ListCollection_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (selectedCollection != null)
+            Guid selectionUID = getSelectedList();
+
+            if (selectionUID != Guid.Empty)
             {
-                ChampionCollection newCollection = getSelectedList();
 
-                if (newCollection != null)
-                {
+                //selectedCollection.Hide();
 
-                    selectedCollection.Hide();
+                Engine.SetSelectedList(selectionUID);
 
-                    selectedCollection = newCollection;
+                //selectedCollection.Print(textSeaarchBox.Text);
 
-                    selectedCollection.Print(textSeaarchBox.Text);
-                }
+                //TO DO PRINT
             }
             SetFormState(Form1State.ListsView);
         }
 
         private void Positions_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (selectedCollection != null)
+            if (Engine.SelectedChampionList != null)
             {
+                // TO DO PRINT
+                /* wow such a bad code
                 ChampionCollection newCollection = getSelectedList();
 
                 if (newCollection != null)
@@ -462,13 +424,14 @@ namespace LoL_Champions_and_Positions
                     selectedCollection = newCollection;
 
                     selectedCollection.Print(textSeaarchBox.Text);
-                }
+                }*/
             }
             SetFormState(Form1State.ListsView);
         }
 
         public void newItem_Click(object sender, EventArgs e)
         {
+            /*
             ToolStripMenuItem clickedMenu = (ToolStripMenuItem)sender;
 
             ChampionContainer clickedChampion = null;
@@ -498,10 +461,11 @@ namespace LoL_Champions_and_Positions
                     List.Add(new Champion(clickedChampion.Name, clickedChampion.Image, clickedChampion.SearchTag, clickedChampion.Description));
                 }
             }
-
+            */
             //Save changes to file
-            saveFile.ImportLines(collectionList);
+            saveFile.ImportLines(Engine.ChampionListCollection);
             saveFile.saveToFile("rekt.gg");
+             
         }
 
         private void contextMenuStrip1_Opened(object sender, EventArgs e)
@@ -511,6 +475,7 @@ namespace LoL_Champions_and_Positions
 
         private void removeFromListToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            /*
             ChampionContainer clickedChampion = null;
             foreach (ChampionContainer champion in selectedCollection.ContainedChampions())
             {
@@ -518,57 +483,13 @@ namespace LoL_Champions_and_Positions
                 {
                     clickedChampion = champion;
                 }
-            }
+            }*/
+            Guid forRemoveID = Guid.Empty; // TO DO get rightclicked champion picture UID
 
-            ChampionCollection tempForDelete = null; //used to store the All Champions from a set of lists with the Same name/Different role. If the removed champion is present only in the list we are removing it from, remove it from All as well
-            int deleteCounter = 0;
-
-            foreach (ChampionCollection List in collectionList)
-            {
-
-                if (selectedCollection.Role == Enums.ListPositions.All.ToString())
-                {
-
-                    if (List.Name == selectedCollection.Name)
-                    {
-                        List.Remove(clickedChampion.Name);
-                    }
-
-                }
-                else
-                {
-                    if (List.Name == selectedCollection.Name && List.Role == Enums.ListPositions.All.ToString())
-                    {
-                        tempForDelete = List;
-                    }
-                    else if (List.Name == selectedCollection.Name && List.Role != Enums.ListPositions.All.ToString())
-                    {
-                        ChampionContainer hasChampion = List.GetChampion(clickedChampion.Name);
-
-                        if (List.Role == selectedCollection.Role && hasChampion != null)
-                        {
-                            List.Remove(clickedChampion.Name);
-                            deleteCounter++;
-
-                        }
-                        else if (List.Role != selectedCollection.Role && hasChampion != null)
-                        {
-                            deleteCounter++;
-                        }
-
-                    }
-                }
-
-            }
-
-            if (deleteCounter == 1)
-            {
-                tempForDelete.Remove(clickedChampion.Name);
-            }
-            selectedCollection.Print(textSeaarchBox.Text);
+            Engine.RemoveChampionFromList(Engine.SelectedChampionList.UniqueID, forRemoveID);
 
             //Save changes to file
-            saveFile.ImportLines(collectionList);
+            saveFile.ImportLines(Engine.ChampionListCollection);
             saveFile.saveToFile("rekt.gg");
 
         }
@@ -580,9 +501,10 @@ namespace LoL_Champions_and_Positions
 
         private void BackButton_Click(object sender, EventArgs e)
         {
+            /*
             allChampionsCollection.AddContextMenu(AllChampsContextMenu);
             allChampionsCollection.Hide();
-
+            */
             SetFormState(Form1State.ListsView);
 
         }
@@ -590,29 +512,24 @@ namespace LoL_Champions_and_Positions
         private void ButtonMatchupDetails_Click(object sender, EventArgs e)
         {
             displayChampionMatchupsList = true;
-            groupBox1.Text = selectedChampion.Name + " Matchups Info";
-            allChampionsCollection.AddContextMenu(null);
-            selectedCollection.Hide();
-            allChampionsCollection.Print(textSeaarchBox.Text);
-            allChampionsCollection.AddControlPanel(ref controlPanel); // TOTOTO
+            groupBox1.Text = Engine.SelectedChampion.Name + " Matchups Info";
+            //allChampionsCollection.AddContextMenu(null);
+            //selectedCollection.Hide();
+            //allChampionsCollection.Print(textSeaarchBox.Text);
+            //allChampionsCollection.AddControlPanel(ref controlPanel); // TOTOTO
 
-            if (true)
-            {
-                MessageBox.Show(allChampionsCollection.GetChampion("Nami").Visible.ToString());
-            }
-            //TODO once ChampionMatchupsList is implemented do stuff here
 
         }
         #endregion
 
         private void textSeaarchBox_TextChanged(object sender, EventArgs e)
         {
-            selectedCollection.Print(textSeaarchBox.Text);
+            //selectedCollection.Print(textSeaarchBox.Text);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            saveFile.ImportLines(collectionList);
+            saveFile.ImportLines(Engine.ChampionListCollection);
             saveFile.saveToFile("rekt.gg");
         }
 
@@ -620,8 +537,8 @@ namespace LoL_Champions_and_Positions
         {
             saveFile.getFromFile("rekt.gg");
             this.controlPanel.Controls.Clear();
-            collectionList.Clear();
-            collectionList = saveFile.ExportLines();
+            //collectionList.Clear();
+            Engine.fillListCollection(saveFile.ExportLines());
 
             initListCollection();
             //Warning: When Loading a List, you must reset all variables connected with that list
@@ -630,17 +547,16 @@ namespace LoL_Champions_and_Positions
 
         private void ChampionDetailsButton_Click(object sender, EventArgs e)
         {
-            if (selectedChampion != null)
+            if (Engine.SelectedChampion != null)
             {
-                ChampionDetails championDialog = new ChampionDetails(selectedChampion);
+                ChampionDetails championDialog = new ChampionDetails();
 
                 championDialog.ShowDialog();
 
                 if (championDialog.ChangesMade)
                 {
-                    HelpMethods.UpdateChampionAcrossAllCollections(ref collectionList, championDialog.Result);
-                    selectedChampion = championDialog.Result;
-                    saveFile.ImportLines(collectionList);
+                    //HelpMethods.UpdateChampionAcrossAllCollections(ref collectionList, championDialog.Result);
+                    saveFile.ImportLines(Engine.ChampionListCollection);
                     saveFile.saveToFile("rekt.gg");
                 }
             }

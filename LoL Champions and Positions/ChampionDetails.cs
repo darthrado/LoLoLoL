@@ -11,21 +11,21 @@ namespace LoL_Champions_and_Positions
 {
     public partial class ChampionDetails : Form
     {
-        public ChampionDetails(Champion champion)
+        public ChampionDetails()
         {
+            if (Engine.SelectedChampion == null)
+            {
+                throw new Exception("No selected Champion");
+            }
+
             InitializeComponent();
-            pictureBox1.Image = HelpMethods.getImageFromLocalDirectory(champion.Image,false);
-            championName.Text = champion.Name;
-            championDetailsText.Text = champion.Description;
-            searchTag.Text = champion.SearchTag;
+            pictureBox1.Image = HelpMethods.getImageFromLocalDirectory(Engine.SelectedChampion.Image, false);
+            championName.Text = Engine.SelectedChampion.Name;
+            championDetailsText.Text = Engine.SelectedChampion.Description;
+            searchTag.Text = Engine.SelectedChampion.SearchTag;
             ChangesMade = false;
-
-            resultChampion = champion;
         }
-
-        private Champion resultChampion;
         public bool ChangesMade { get; private set;}
-        public Champion Result { get { return resultChampion; } }
 
         private void editButton_Click(object sender, EventArgs e)
         {
@@ -37,11 +37,11 @@ namespace LoL_Champions_and_Positions
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            if (resultChampion.Description != championDetailsText.Text || resultChampion.SearchTag != searchTag.Text)
+            if (Engine.SelectedChampion.Description != championDetailsText.Text || Engine.SelectedChampion.SearchTag != searchTag.Text)
             {
 
-                resultChampion.Description = championDetailsText.Text;
-                resultChampion.SearchTag = searchTag.Text;
+                Engine.SelectedChampion.Description = championDetailsText.Text;
+                Engine.SelectedChampion.SearchTag = searchTag.Text;
                 ChangesMade = true;
 
                 saveButton.Enabled = false;
@@ -53,8 +53,8 @@ namespace LoL_Champions_and_Positions
 
         private void backButton_Click(object sender, EventArgs e)
         {
-            championDetailsText.Text = resultChampion.Description;
-            searchTag.Text = resultChampion.SearchTag;
+            championDetailsText.Text = Engine.SelectedChampion.Description;
+            searchTag.Text = Engine.SelectedChampion.SearchTag;
 
             saveButton.Enabled = false;
             backButton.Enabled = false;
