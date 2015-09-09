@@ -13,6 +13,27 @@ namespace LoL_Champions_and_Positions
         private static Champion selectedChampion;
         private static ChampionCollection selectedChampionList;
 
+        public static void fillListCollection(Dictionary<Guid,ChampionCollection> sourceCollection)
+        {
+            if (championListCollection.Count != 0)
+            {
+                championListCollection.Clear();
+            }
+            if (listPositions.Count != 0)
+            {
+                listPositions.Clear();
+            }
+            allChampionsList = null;
+            selectedChampion = null;
+            selectedChampionList = null;
+
+            championListCollection = sourceCollection;
+            allChampionsList = championListCollection[GetListReference(Constants.ALL_CHAMPIONS, Constants.CUSTOM_LIST_ALL)];
+            selectedChampionList = allChampionsList;
+
+            
+        }
+
         //List manipulation Methods
         public static void AddList(string name)
         {
@@ -40,7 +61,17 @@ namespace LoL_Champions_and_Positions
                 championListCollection.Remove(unid);
             }
         }
-        public static Guid GetListReference(string name, string position);
+        public static Guid GetListReference(string name, string position)
+        {
+            foreach (Guid key in championListCollection.Keys)
+            {
+                if (championListCollection[key].Name == name && championListCollection[key].Role == position)
+                {
+                    return key;
+                }
+            }
+            return Guid.Empty;
+        }
         public static List<Guid> GetAllListsWithName(string name)
         {
             List<Guid> result = new List<Guid>();
@@ -60,7 +91,7 @@ namespace LoL_Champions_and_Positions
             List<Guid> result = new List<Guid>();
             foreach (Guid key in championListCollection.Keys)
             {
-                if (championListCollection[key].Name == position)
+                if (championListCollection[key].Role == position)
                 {
                     result.Add(key);
                 }
@@ -70,14 +101,27 @@ namespace LoL_Champions_and_Positions
         }
 
         //Position manipulation Methods
-        public static void AddPosition(string name)
+        public static void AddPosition(string roleName)
         {
-            if (listPositions.Contains(name))
+            if (listPositions.Contains(roleName))
             {
                 throw new Exception("List Already Exists");
             }
 
-            listPositions.Add(name);
+            List<string> listOfNames = new List<string>();
+            foreach(Guid key in championListCollection.Keys)
+            {
+                if(championListCollection[key].Name!=Constants.ALL_CHAMPIONS && !listOfNames.Contains(championListCollection[key].Name))
+                {
+                    listOfNames.Add(championListCollection[key].Name);
+                }
+            }
+            foreach(string name in listOfNames)
+            {
+                ChampionCollection newCollection = new ChampionCollection(name,roleName);
+            }
+
+            listPositions.Add(roleName);
         }
         public static void RemovePosition(string name)
         {
@@ -194,6 +238,11 @@ namespace LoL_Champions_and_Positions
                 selectedChampion = null;
             }
         }
+
+        public static ChampionCollection AllChampionsList { get { return allChampionsList; } }
+        public static ChampionCollection SelectedChampionList { get { return SelectedChampionList; } }
+        public static Dictionary<Guid, ChampionCollection> ChampionListCollection { get { return championListCollection; } }
+        public static HashSet<string> ListPositions { get { return listPositions; } }
 
     }
 }

@@ -26,6 +26,7 @@ namespace LoL_Champions_and_Positions
                 return null;
             }
 
+
             Dictionary<Guid, ChampionCollection> result = new Dictionary<Guid, ChampionCollection>();
             ChampionCollection AllChampionsCollection = new ChampionCollection(Constants.ALL_CHAMPIONS,Enums.ListPositions.All.ToString());
             result.Add(AllChampionsCollection.UniqueID, AllChampionsCollection);
@@ -74,6 +75,13 @@ namespace LoL_Champions_and_Positions
                 else if (lineComponents[0] == LineType.Item.ToString())
                 {
                 }
+                else if (lineComponents[0] == LineType.Position.ToString())
+                {
+                    for (int i = 1; i < lineComponents.Length - 1; i++)
+                    {
+                        Engine.AddPosition(lineComponents[i]);
+                    }
+                }
                 else
                 {
                     throw new Exception("Parsing error: Unknown Line Type");
@@ -81,11 +89,6 @@ namespace LoL_Champions_and_Positions
 
                 //distribute the references of the main collection to the other lists
             }
-            /*
-            foreach (ChampionContainer champion in AllChampionsCollection.ContainedChampions())
-            {
-                HelpMethods.UpdateChampionAcrossAllCollections(ref result, champion);
-            }*/
 
             return result;
         }
@@ -94,73 +97,54 @@ namespace LoL_Champions_and_Positions
         /// </summary>
         /// <param name="List"></param>
         /// <returns></returns>
-        public override bool ImportLines(List<ChampionCollection> List)
+        public override bool ImportLines()
         {
-            // First enqueue all champions
-            foreach (ChampionCollection allChampions in List)
+            string separator = Constants.SLASH_SEPARATOR;
+            string initialParseLine = LineType.Position.ToString();
+            foreach (string key in Engine.ListPositions)
             {
-                if (allChampions.Name == Constants.ALL_CHAMPIONS)
-                {
-                    string separator = Constants.SLASH_SEPARATOR;
-                    foreach (ChampionContainer champion in allChampions.ContainedChampions())
-                    {
-                        string lineToParse = LineType.Champion.ToString() + separator + 
-                                             champion.Name + separator + 
-                                             champion.Image + separator +
-                                              champion.SearchTag + separator + 
-                                             champion.Description;
-                        this.saveLines.Enqueue(lineToParse);
-                    }
-                    break;
-                }
+                initialParseLine += separator + key;
+            }
+            // enqueue all champions
+            foreach (Guid key in Engine.AllChampionsList.ListOfChampions.Keys)
+            {
+                separator = Constants.SLASH_SEPARATOR;
+                Champion champToParse = Engine.AllChampionsList.ListOfChampions[key];
+                string lineToParse = LineType.Champion.ToString() + separator +
+                     champToParse.Name + separator +
+                     champToParse.Image + separator +
+                      champToParse.SearchTag + separator +
+                     champToParse.Description;
+                this.saveLines.Enqueue(lineToParse);
+
             }
 
-            foreach (ChampionCollection list in List)
+            foreach (Guid key in Engine.ChampionListCollection.Keys)
             {
-                string separator = Constants.SLASH_SEPARATOR;
-                if (list.Name != Constants.ALL_CHAMPIONS)
+                if (key == Engine.AllChampionsList.UniqueID)
                 {
-                    string lineToParse = LineType.List.ToString() + separator +
-                                         list.Name + separator +
-                                         list.Role + separator;
-                    bool firstPass = true;
-                    separator = Constants.AT_SEPARATOR;
-                    foreach (ChampionContainer containedChamp in list.ContainedChampions())
-                    {
-                        if (firstPass)
-                        {
-                            lineToParse += containedChamp.Name;
-                            firstPass = false;
-                        }
-                        else
-                        {
-                            lineToParse += separator + containedChamp.Name;
-                        }
-                        
-                    }
-                    this.saveLines.Enqueue(lineToParse);
+                    continue;
                 }
-            }
-            foreach (ChampionCollection allChampions in List)
-            {
-                string separator = Constants.SLASH_SEPARATOR;
+                separator = Constants.SLASH_SEPARATOR;
 
-                if (allChampions.Name == Constants.ALL_CHAMPIONS)
+                string lineToParse = LineType.List.ToString() + separator +
+                                     Engine.ChampionListCollection[key].Name + separator +
+                                     Engine.ChampionListCollection[key].Role + separator;
+                bool firstPass = true;
+                separator = Constants.AT_SEPARATOR;
+                foreach (Guid championKey in Engine.ChampionListCollection[key].ListOfChampions.Keys)
                 {
-                    foreach (ChampionContainer champion in allChampions.ContainedChampions())
+                    if (firstPass)
                     {
-
-                        foreach (Matchup matchup in champion.GetAllMatchups())
-                        {
-                            string lineToParse = LineType.Matchup.ToString() + separator +
-                                                 champion.Name + separator +
-                                                 matchup.EnemyChampion + separator +
-                                                 matchup.MatchInformation;
-                            this.saveLines.Enqueue(lineToParse);
-                        }
+                        lineToParse += Engine.ChampionListCollection[key].ListOfChampions[championKey].Name;
+                        firstPass = false;
                     }
-                    break;
+                    else
+                    {
+                        lineToParse += separator + Engine.ChampionListCollection[key].ListOfChampions[championKey].Name;
+                    }
                 }
+                
             }
 
             // To Do: Items
@@ -172,7 +156,8 @@ namespace LoL_Champions_and_Positions
             Champion,
             List,
             Item,
-            Matchup
+            Matchup,
+            Position
         };
 
     }
@@ -231,33 +216,33 @@ namespace LoL_Champions_and_Positions
 
             
         }
-        public static void UpdateChampionAcrossAllCollections(ref List<ChampionCollection> collectionList, ChampionContainer modifiedChampion)
+        /*public static void UpdateChampionAcrossAllCollections(ref List<ChampionCollection> collectionList, ChampionContainer modifiedChampion)
         {
             foreach (ChampionCollection collection in collectionList)
             {
                 collection.ReplaceExistingChampion(modifiedChampion);
             }
-        }
-        public static int ChampionContainerComparer(ChampionContainer value1, ChampionContainer value2)
+        }*/
+        /*public static int ChampionContainerComparer(ChampionContainer value1, ChampionContainer value2)
         {
             return value1.Name.CompareTo(value2.Name);
-        }
+        }*/
     }
 
     public class Matchup
     {
-        public Matchup()
-        {
-        }
         public Matchup(string enemyChampion, string matchInformation)
         {
+            _uniqueID = Guid.NewGuid();
             _enemyChampion = enemyChampion;
             _matchInformation = matchInformation;
         }
+        Guid _uniqueID;
         string _enemyChampion;
         string _matchInformation;
         public string EnemyChampion { get { return _enemyChampion; } set { _enemyChampion = value; } }
         public string MatchInformation { get { return _matchInformation; } set { _matchInformation = value; } }
+        Guid UniqueID { get { return _uniqueID; } }
 
     }
 

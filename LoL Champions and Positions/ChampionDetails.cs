@@ -11,7 +11,7 @@ namespace LoL_Champions_and_Positions
 {
     public partial class ChampionDetails : Form
     {
-        public ChampionDetails(ChampionContainer champion)
+        public ChampionDetails(Champion champion)
         {
             InitializeComponent();
             pictureBox1.Image = HelpMethods.getImageFromLocalDirectory(champion.Image,false);
@@ -23,9 +23,9 @@ namespace LoL_Champions_and_Positions
             resultChampion = champion;
         }
 
-        private ChampionContainer resultChampion;
+        private Champion resultChampion;
         public bool ChangesMade { get; private set;}
-        public ChampionContainer Result { get { return resultChampion; } }
+        public Champion Result { get { return resultChampion; } }
 
         private void editButton_Click(object sender, EventArgs e)
         {

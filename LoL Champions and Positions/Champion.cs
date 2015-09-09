@@ -9,60 +9,56 @@ namespace LoL_Champions_and_Positions
     {
         public Champion(string name, string image, string searchTag, string description)
         {
-            _uniqueID = Guid.NewGuid();
             _name = name;
             _image = image;
             _searchTag = searchTag;
             _description = description;
-            matchupList = new List<Matchup>();
+            matchupList = new Dictionary<string, Matchup>();
         }
-        Guid _uniqueID;
         string _name;
         string _image;
         string _searchTag;
         string _description;
 
-        List<Matchup> matchupList;
+        Dictionary<string,Matchup> matchupList;
 
         private Matchup getMatchup(string championName)
         {
-            foreach (Matchup matchup in matchupList)
+            if (matchupList.ContainsKey(championName))
             {
-                if (championName == matchup.EnemyChampion)
-                {
-                    return matchup;
-                }
+                return matchupList[championName];
             }
-            return null;
+            else
+            {
+                return null;
+            }
         }
         public string getMatchupInfo(string championName)
         {
-            Matchup resultMatchup = getMatchup(championName);
-
-            if (resultMatchup != null)
+            if(matchupList.ContainsKey(championName))
             {
-                return resultMatchup.MatchInformation;
+                return matchupList[championName].MatchInformation;
             }
-
-            return null;
+            else
+            {
+                return null;
+            }
         }
         public bool AddMatchup(string enemyChampion, string matchupInfo)
         {
-            if (getMatchup(enemyChampion) != null)
+            if (matchupInfo.Contains(enemyChampion))
             {
                 return false;
             }
 
-            matchupList.Add(new Matchup(enemyChampion,matchupInfo));
+            matchupList.Add(enemyChampion,new Matchup(enemyChampion,matchupInfo));
             return true;
         }
         public bool EditMatchup(string enemyChampion, string matchupInfo)
         {
-            Matchup matchupForEdit = getMatchup(enemyChampion);
-
-            if (matchupForEdit != null)
+            if (matchupList.ContainsKey(enemyChampion))
             {
-                matchupForEdit.MatchInformation = matchupInfo;
+                matchupList[enemyChampion].MatchInformation = matchupInfo;
                 return true;
             }
 
@@ -70,25 +66,19 @@ namespace LoL_Champions_and_Positions
         }
         public bool DeleteMatchup(string enemyChampion)
         {
-            Matchup forDelete = getMatchup(enemyChampion);
-
-            if (forDelete != null)
+            if (matchupList.ContainsKey(enemyChampion))
             {
-                matchupList.Remove(forDelete);
+                matchupList.Remove(enemyChampion);
                 return true;
             }
 
             return false;
         }
-        public List<Matchup> GetAllMatchups()
-        {
-            return this.matchupList;
-        }
+        public Dictionary<string, Matchup> MatchupList { get { return matchupList; } }
 
         public string Name { get { return _name; } set { _name = value; } }
         public string Image { get { return _image; } set { _image = value; } }
         public string SearchTag { get { return _searchTag; } set { _searchTag = value; } }
         public string Description { get { return _description; } set { _description = value; } }
-        public Guid UniqueID { get { return _uniqueID; } }
     }
 }

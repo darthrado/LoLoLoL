@@ -24,20 +24,20 @@ namespace LoL_Champions_and_Positions
             saveFile = new ChampionToFile();
             saveFile.getFromFile("rekt.gg");
             this.controlPanel.Controls.Clear();
-            collectionList = saveFile.ExportLines();
+            Engine.fillListCollection(saveFile.ExportLines());
 
             initListCollection(); //Initializes the champion collection List
 
-            selectedCollection.Print(textSeaarchBox.Text);
+            //selectedCollection.Print(textSeaarchBox.Text);
 
         }
         #endregion
 
         #region ClassVariables
-        List<ChampionCollection> collectionList;
-        ChampionCollection selectedCollection;
-        ChampionCollection allChampionsCollection;
-        ChampionContainer selectedChampion;
+        //List<ChampionCollection> collectionList;
+        //ChampionCollection selectedCollection;
+        //ChampionCollection allChampionsCollection;
+        //ChampionContainer selectedChampion;
         Control rightClickedControl;
         bool displayChampionMatchupsList;
 
@@ -61,6 +61,7 @@ namespace LoL_Champions_and_Positions
         /// </summary>
         private void initListCollection()
         {
+            /*
             if (collectionList == null)
             {
                 MessageBox.Show("Awww shit nigga");
@@ -89,22 +90,22 @@ namespace LoL_Champions_and_Positions
 
             }
 
-            selectedChampion = null;
+            selectedChampion = null;*/
             updateListCollectionDropdown();
             BuildContextMenu();
             SetFormState(Form1State.InitialView);
 
-            selectedCollection.Print("");
+            //selectedCollection.Print("");
         }
 
         private void updateListCollectionDropdown()
         {
             championListCollection.Items.Clear();
-            foreach (ChampionCollection champList in collectionList)
+            foreach (Guid key in Engine.ChampionListCollection.Keys)
             {
-                if (champList.Role == Enums.ListPositions.All.ToString())
+                if (Engine.ChampionListCollection[key].Role == Constants.CUSTOM_LIST_ALL)
                 {
-                    championListCollection.Items.Add(champList.Name);
+                    championListCollection.Items.Add(Engine.ChampionListCollection[key].Name);
                 }
             }
         }

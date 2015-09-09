@@ -11,10 +11,10 @@ namespace LoL_Champions_and_Positions
 {
     public partial class MatchupDetails : Form
     {
-        public MatchupDetails(ChampionContainer champion,ChampionContainer enemyChampion)
+        public MatchupDetails(Champion champion,Champion enemyChampion)
         {
             InitializeComponent();
-            matchupDetails = champion.GetMatchupInfo(enemyChampion.Name);
+            matchupDetails = champion.MatchupList[enemyChampion.Name].MatchInformation;
             enemyChampionName = enemyChampion.Name;
             resultChampion = champion;
             ChangesMade = false;
@@ -30,9 +30,9 @@ namespace LoL_Champions_and_Positions
         }
         string enemyChampionName;
         string matchupDetails;
-        ChampionContainer resultChampion;
+        Champion resultChampion;
         public bool ChangesMade { get; private set; }
-        public ChampionContainer Result { get { return resultChampion; } }
+        public Champion Result { get { return resultChampion; } }
 
         private void editButton_Click(object sender, EventArgs e)
         {
