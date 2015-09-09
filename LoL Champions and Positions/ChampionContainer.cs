@@ -74,13 +74,7 @@ namespace LoL_Champions_and_Positions
         {
             _mainForm=mainForm;
         }
-        private void pictureBox_Click(object sender, EventArgs e)
-        {
-            if (_mainForm != null)
-            {
-                _mainForm.ProcessChampionPictureClick(this);
-            }
-        }
+
         public bool AddMatchup(string enemyChampion, string matchupInfo)
         {
             return _champion.AddMatchup(enemyChampion, matchupInfo);

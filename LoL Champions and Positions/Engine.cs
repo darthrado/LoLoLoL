@@ -241,7 +241,7 @@ namespace LoL_Champions_and_Positions
         }
 
         public static ChampionCollection AllChampionsList { get { return allChampionsList; } }
-        public static ChampionCollection SelectedChampionList { get { return SelectedChampionList; } }
+        public static ChampionCollection SelectedChampionList { get { return selectedChampionList; } }
         public static Dictionary<Guid, ChampionCollection> ChampionListCollection { get { return championListCollection; } }
         public static HashSet<string> ListPositions { get { return listPositions; } }
         public static Champion SelectedChampion { get { return selectedChampion; } }

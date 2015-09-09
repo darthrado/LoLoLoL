@@ -57,17 +57,6 @@ namespace LoL_Champions_and_Positions
         {
             _listOfChampions.Remove(championID);
         }
-        /*
-        public void ReplaceExistingChampion(ChampionContainer modChampion)
-        {
-            for (int i = 0; i<_listOfChampions.Count; i++)
-            {
-                if (_listOfChampions[i].Name == modChampion.Name)
-                {
-                    _listOfChampions[i] = modChampion;
-                }
-            }
-        }*/
 
         public void Sort()
         {

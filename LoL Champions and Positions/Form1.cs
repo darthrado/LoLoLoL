@@ -15,20 +15,31 @@ namespace LoL_Champions_and_Positions
         public Form1()
         {
             InitializeComponent();
+
+            championImages = new Dictionary<Guid, PictureBox>();
+            championTooltips = new Dictionary<Guid, ToolTip>();
+
             //ListPositions
             playablePositions.Items.Clear();
             foreach (Enums.ListPositions position in Enum.GetValues(typeof(Enums.ListPositions)))
             {
-                playablePositions.Items.Add(position.ToString());
+                if (position != Enums.ListPositions.All)
+                {
+                    playablePositions.Items.Add(position.ToString());
+                }
             }
+            /*First time till I fix data*/
+            playablePositions.Items.Add(Constants.CUSTOM_LIST_ALL);
+
             saveFile = new ChampionToFile();
             saveFile.getFromFile("rekt.gg");
             this.controlPanel.Controls.Clear();
             Engine.fillListCollection(saveFile.ExportLines());
+            PictureListFill();
 
             initListCollection(); //Initializes the champion collection List
 
-            //selectedCollection.Print(textSeaarchBox.Text);
+            PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
 
         }
         #endregion
@@ -38,8 +49,11 @@ namespace LoL_Champions_and_Positions
         //ChampionCollection selectedCollection;
         //ChampionCollection allChampionsCollection;
         //ChampionContainer selectedChampion;
-        Control rightClickedControl;
+        Guid rightClickedPicture;
         bool displayChampionMatchupsList;
+
+        Dictionary<Guid, PictureBox> championImages;
+        Dictionary<Guid, ToolTip> championTooltips;
 
         ChampionToFile saveFile;
         #endregion
@@ -55,6 +69,130 @@ namespace LoL_Champions_and_Positions
         #endregion
 
         #region Methods
+
+        #region Picture_Box_Manipulation_Methods
+        private void PictureListFill()
+        {
+            foreach (Guid key in Engine.AllChampionsList.ListOfChampions.Keys)
+            {
+                System.Windows.Forms.PictureBox pictureBox = new System.Windows.Forms.PictureBox();
+                System.Windows.Forms.ToolTip toolTip = new System.Windows.Forms.ToolTip();
+
+                championImages.Add(key, pictureBox);
+                championTooltips.Add(key, toolTip);
+
+                pictureBox.Image = HelpMethods.getImageFromLocalDirectory(Engine.AllChampionsList.ListOfChampions[key].Image, true);
+                pictureBox.Location = new System.Drawing.Point(0, 0);
+                pictureBox.Name = "pictureBox" + Engine.AllChampionsList.ListOfChampions[key].Name;
+                pictureBox.Size = new System.Drawing.Size(60, 60);
+                pictureBox.TabIndex = 0;
+                pictureBox.TabStop = false;
+                pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Normal;
+                pictureBox.Visible = false;
+                pictureBox.Click += new EventHandler(pictureBox_Click);
+                controlPanel.Controls.Add(pictureBox);
+
+                toolTip.SetToolTip(pictureBox, Engine.AllChampionsList.ListOfChampions[key].Name);
+            }
+        }
+        private void AddNewPictureBox(Guid championUID)
+        {
+            System.Windows.Forms.PictureBox pictureBox = new System.Windows.Forms.PictureBox();
+            System.Windows.Forms.ToolTip toolTip = new System.Windows.Forms.ToolTip();
+
+            championImages.Add(championUID, pictureBox);
+            championTooltips.Add(championUID, toolTip);
+
+            pictureBox.Image = HelpMethods.getImageFromLocalDirectory(Engine.AllChampionsList.ListOfChampions[championUID].Image, true);
+            pictureBox.Location = new System.Drawing.Point(0, 0);
+            pictureBox.Name = "pictureBox" + Engine.AllChampionsList.ListOfChampions[championUID].Name;
+            pictureBox.Size = new System.Drawing.Size(60, 60);
+            pictureBox.TabIndex = 0;
+            pictureBox.TabStop = false;
+            pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Normal;
+            pictureBox.Visible = false;
+            pictureBox.Click += new EventHandler(pictureBox_Click);
+            controlPanel.Controls.Add(pictureBox);
+
+            toolTip.SetToolTip(pictureBox, Engine.AllChampionsList.ListOfChampions[championUID].Name);
+        }
+        private void RemovePictureBox(Guid championUID)
+        {
+            controlPanel.Controls.Remove(championImages[championUID]);
+            championImages.Remove(championUID);
+            championTooltips.Remove(championUID);
+            
+        }
+        private void EditPictureBox(Guid championUID)
+        {
+            championImages[championUID].Name = "pictureBox" + Engine.AllChampionsList.ListOfChampions[championUID].Name;
+            championImages[championUID].Image = HelpMethods.getImageFromLocalDirectory(Engine.AllChampionsList.ListOfChampions[championUID].Image, true);
+            championTooltips[championUID].SetToolTip(championImages[championUID], Engine.AllChampionsList.ListOfChampions[championUID].Name);
+        }
+        private void PrintList(Guid listUID, string searchText)
+        {
+            if (championImages.Count == 0)
+            {
+                return;
+            }
+
+            int X = controlPanel.DisplayRectangle.Left + Constants.CHAMPION_HORIZONTAL_OFFSET;
+            int Y = controlPanel.DisplayRectangle.Top + Constants.CHAMPION_VERTICAL_OFFSET;
+            int i = 0;
+
+            if (searchText == Constants.SEARCH_TEXT)
+            {
+                searchText = "";
+            }
+
+            foreach(Guid key in Engine.ChampionListCollection[listUID].ListOfChampions.Keys)
+            {
+
+                // If Name or Search tag contains Search Value or Search Value is Empty
+                if (Engine.ChampionListCollection[listUID].ListOfChampions[key].Name.ToUpper().Contains(searchText.ToUpper()) || Engine.ChampionListCollection[listUID].ListOfChampions[key].SearchTag.ToUpper() == searchText.ToUpper() || searchText == "")
+                {
+                    //Set Location + make visible
+                    championImages[key].Location = new Point(X, Y);
+                    championImages[key].Visible = true;
+                }
+                else
+                {
+                    //Clear Location + make invisible
+                    championImages[key].Visible = false;
+                    championImages[key].Location = new Point(0, 0);
+                    continue;
+                }
+
+                if (X + 2 * (Constants.CHAMPION_HORIZONTAL_OFFSET + Constants.CHAMPION_FRAME_WIDTH) > controlPanel.DisplayRectangle.Left + controlPanel.Width)
+                {
+                    X = controlPanel.DisplayRectangle.Left + Constants.CHAMPION_HORIZONTAL_OFFSET;
+                    Y += (Constants.CHAMPION_FRAME_HEIGHT + Constants.CHAMPION_VERTICAL_OFFSET);
+                }
+                else
+                {
+                    X += (Constants.CHAMPION_FRAME_WIDTH + Constants.CHAMPION_HORIZONTAL_OFFSET);
+                }
+                i++;
+            }
+        }
+        #endregion
+
+        private void AttachPictureBoxAttributes(Guid listUID)
+        {
+            //champion.PictureBox.ContextMenuStrip
+            foreach (Guid key in Engine.ChampionListCollection[listUID].ListOfChampions.Keys)
+            {
+                if (listUID == Engine.AllChampionsList.UniqueID)
+                {
+                    championImages[key].ContextMenuStrip = this.AllChampsContextMenu;
+                }
+                else
+                {
+                    championImages[key].ContextMenuStrip = this.CustomListsStrip;
+                }
+            }
+        }
+        
         /// <summary>
         /// initListCollection assumes that the clast list collection has not been loaded or has just been reloaded from a file.
         /// It's job is to set all apropriate variables correctly, unsuring that the screen will load correctly with the new data.
@@ -95,7 +233,7 @@ namespace LoL_Champions_and_Positions
             BuildContextMenu();
             SetFormState(Form1State.InitialView);
 
-            //selectedCollection.Print("");
+            PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
         }
 
         private void updateListCollectionDropdown()
@@ -251,7 +389,7 @@ namespace LoL_Champions_and_Positions
                     displayChampionMatchupsList = false;
 
                     //TODO once matchup collection is implemented: matchupCollection hide
-                    //selectedCollection.Print(textSeaarchBox.Text);
+                    PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
                 }
             }
             if (formState == Form1State.InitialView)
@@ -280,25 +418,25 @@ namespace LoL_Champions_and_Positions
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            /*
-            if (selectedCollection != null)
+            if (Engine.SelectedChampionList != null)
             {
+
                 System.Drawing.Point gbLocation = groupBox1.Location;
 
                 int initialSize = (controlPanel.Width - Constants.CHAMPION_HORIZONTAL_OFFSET) / (Constants.CHAMPION_FRAME_WIDTH + Constants.CHAMPION_HORIZONTAL_OFFSET);
 
                 groupBox1.Height = this.ClientSize.Height - gbLocation.Y - Constants.GROUP_BOX_BORDER_OFFSET;
                 groupBox1.Width = this.ClientSize.Width - gbLocation.X - Constants.GROUP_BOX_BORDER_OFFSET;
-                controlPanel.Height = groupBox1.Height ;
+                controlPanel.Height = groupBox1.Height;
                 controlPanel.Width = groupBox1.Width - Constants.GROUP_BOX_BORDER_OFFSET;
 
                 int afterSize = (controlPanel.Width - Constants.CHAMPION_HORIZONTAL_OFFSET) / (Constants.CHAMPION_FRAME_WIDTH + Constants.CHAMPION_HORIZONTAL_OFFSET);
 
                 if (initialSize != afterSize)
                 {
-                    selectedCollection.Print(textSeaarchBox.Text);
+                    PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
                 }
-            }*/
+            }
         }
 
         private void manageChamp_Click(object sender, EventArgs e)
@@ -338,7 +476,7 @@ namespace LoL_Champions_and_Positions
             }
 
             //View newly added/edite champions
-            //selectedCollection.Print(textSeaarchBox.Text);
+            PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
 
             //Save changes to file
             saveFile.ImportLines(Engine.ChampionListCollection);
@@ -396,14 +534,9 @@ namespace LoL_Champions_and_Positions
 
             if (selectionUID != Guid.Empty)
             {
-
-                //selectedCollection.Hide();
-
                 Engine.SetSelectedList(selectionUID);
 
-                //selectedCollection.Print(textSeaarchBox.Text);
-
-                //TO DO PRINT
+                PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
             }
             SetFormState(Form1State.ListsView);
         }
@@ -412,56 +545,40 @@ namespace LoL_Champions_and_Positions
         {
             if (Engine.SelectedChampionList != null)
             {
-                // TO DO PRINT
-                /* wow such a bad code
-                ChampionCollection newCollection = getSelectedList();
+                Guid selectionUID = getSelectedList();
 
-                if (newCollection != null)
+                if (selectionUID != Guid.Empty)
                 {
+                    Engine.SetSelectedList(selectionUID);
 
-                    selectedCollection.Hide();
-
-                    selectedCollection = newCollection;
-
-                    selectedCollection.Print(textSeaarchBox.Text);
-                }*/
+                    PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
+                }
+                SetFormState(Form1State.ListsView);
             }
             SetFormState(Form1State.ListsView);
         }
 
         public void newItem_Click(object sender, EventArgs e)
         {
-            /*
+            
             ToolStripMenuItem clickedMenu = (ToolStripMenuItem)sender;
 
-            ChampionContainer clickedChampion = null;
-            foreach (ChampionContainer champion in selectedCollection.ContainedChampions())
-            {
-                if (champion.PictureBox == rightClickedControl)
-                {
-                    clickedChampion = champion;
-                }
-            }
+            //we already have the clicked champion ID in rightClickedPicture
 
-            if (clickedChampion == null)
-            {
-                MessageBox.Show("If you are here it means that the developer is an idiot");
-                return;
-            }
+            //Get chosen list and it's All counterpart's ID
+            Guid listUID = Engine.GetListReference(clickedMenu.OwnerItem.Name, clickedMenu.Name);
+            Guid listAllUID = Engine.GetListReference(clickedMenu.OwnerItem.Name, Constants.CUSTOM_LIST_ALL);
 
-            foreach (ChampionCollection List in collectionList)
+            //if List doesn't already contain the champion, add it to the list
+            if (Engine.ChampionListCollection[listUID].ListOfChampions.ContainsKey(rightClickedPicture) == false)
             {
-                if (List.Name == clickedMenu.OwnerItem.Name && (List.Role == clickedMenu.Name || List.Role == Enums.ListPositions.All.ToString()))
-                {
-                    if (List.GetChampion(clickedChampion.Name) != null)
-                    {
-                        continue;
-                    }
-
-                    List.Add(new Champion(clickedChampion.Name, clickedChampion.Image, clickedChampion.SearchTag, clickedChampion.Description));
-                }
+                Engine.ChampionListCollection[listUID].ListOfChampions.Add(rightClickedPicture, Engine.AllChampionsList.ListOfChampions[rightClickedPicture]);
             }
-            */
+            if (Engine.ChampionListCollection[listAllUID].ListOfChampions.ContainsKey(rightClickedPicture) == false)
+            {
+                Engine.ChampionListCollection[listAllUID].ListOfChampions.Add(rightClickedPicture, Engine.AllChampionsList.ListOfChampions[rightClickedPicture]);
+            }
+            
             //Save changes to file
             saveFile.ImportLines(Engine.ChampionListCollection);
             saveFile.saveToFile("rekt.gg");
@@ -470,7 +587,14 @@ namespace LoL_Champions_and_Positions
 
         private void contextMenuStrip1_Opened(object sender, EventArgs e)
         {
-            rightClickedControl = AllChampsContextMenu.SourceControl;
+            foreach(Guid key in championImages.Keys)
+            {
+                if(championImages[key] == AllChampsContextMenu.SourceControl)
+                {
+                    rightClickedPicture = key;
+                    break;
+                }
+            }
         }
 
         private void removeFromListToolStripMenuItem_Click(object sender, EventArgs e)
@@ -496,7 +620,14 @@ namespace LoL_Champions_and_Positions
 
         private void CustomListsStrip_Opened(object sender, EventArgs e)
         {
-            rightClickedControl = CustomListsStrip.SourceControl;
+            foreach (Guid key in championImages.Keys)
+            {
+                if (championImages[key] == CustomListsStrip.SourceControl)
+                {
+                    rightClickedPicture = key;
+                    break;
+                }
+            }
         }
 
         private void BackButton_Click(object sender, EventArgs e)
@@ -562,6 +693,22 @@ namespace LoL_Champions_and_Positions
             }
         }
 
-
+        private void pictureBox_Click(object sender, EventArgs e)
+        {
+            if (championImages.ContainsValue((PictureBox)sender))
+            {
+                foreach (Guid key in championImages.Keys)
+                {
+                    if (championImages[key] == (PictureBox)sender)
+                    {
+                        ProcessChampionPictureClick(key);
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("champion images don't contain this image??");
+            }
+        }
     }
 }
