@@ -16,26 +16,28 @@ namespace LoL_Champions_and_Positions
         {
             InitializeComponent();
 
+            playablePositions.Items.Clear();
+
             championImages = new Dictionary<Guid, PictureBox>();
             championTooltips = new Dictionary<Guid, ToolTip>();
-
-            //ListPositions
-            playablePositions.Items.Clear();
-            foreach (Enums.ListPositions position in Enum.GetValues(typeof(Enums.ListPositions)))
-            {
-                if (position != Enums.ListPositions.All)
-                {
-                    playablePositions.Items.Add(position.ToString());
-                }
-            }
             /*First time till I fix data*/
-            playablePositions.Items.Add(Constants.CUSTOM_LIST_ALL);
 
             saveFile = new ChampionToFile();
             saveFile.getFromFile("rekt.gg");
             this.controlPanel.Controls.Clear();
             Engine.fillListCollection(saveFile.ExportLines());
             PictureListFill();
+
+            foreach (Enums.ListPositions position in Enum.GetValues(typeof(Enums.ListPositions)))
+            {
+                if (position != Enums.ListPositions.All)
+                {
+                    playablePositions.Items.Add(position.ToString());
+                    Engine.AddPosition(position.ToString());
+                }
+            }
+            playablePositions.Items.Add(Constants.CUSTOM_LIST_ALL);
+            Engine.AddPosition(Constants.CUSTOM_LIST_ALL);
 
             initListCollection(); //Initializes the champion collection List
 
@@ -103,7 +105,7 @@ namespace LoL_Champions_and_Positions
             championImages.Add(championUID, pictureBox);
             championTooltips.Add(championUID, toolTip);
 
-            pictureBox.Image = HelpMethods.getImageFromLocalDirectory(Engine.AllChampionsList.ListOfChampions[championUID].Image, true);
+            pictureBox.Image = HelpMethods.getImageFromLocalDirectory(Engine.AllChampionsList.ListOfChampions[championUID].Image,true);
             pictureBox.Location = new System.Drawing.Point(0, 0);
             pictureBox.Name = "pictureBox" + Engine.AllChampionsList.ListOfChampions[championUID].Name;
             pictureBox.Size = new System.Drawing.Size(60, 60);
@@ -129,12 +131,21 @@ namespace LoL_Champions_and_Positions
             championImages[championUID].Image = HelpMethods.getImageFromLocalDirectory(Engine.AllChampionsList.ListOfChampions[championUID].Image, true);
             championTooltips[championUID].SetToolTip(championImages[championUID], Engine.AllChampionsList.ListOfChampions[championUID].Name);
         }
+        private void HideList()
+        {
+            foreach (Guid key in championImages.Keys)
+            {
+                championImages[key].Visible = false;
+            }
+        }
         private void PrintList(Guid listUID, string searchText)
         {
             if (championImages.Count == 0)
             {
                 return;
             }
+
+            HideList();
 
             int X = controlPanel.DisplayRectangle.Left + Constants.CHAMPION_HORIZONTAL_OFFSET;
             int Y = controlPanel.DisplayRectangle.Top + Constants.CHAMPION_VERTICAL_OFFSET;
@@ -159,7 +170,6 @@ namespace LoL_Champions_and_Positions
                 {
                     //Clear Location + make invisible
                     championImages[key].Visible = false;
-                    championImages[key].Location = new Point(0, 0);
                     continue;
                 }
 
@@ -452,6 +462,8 @@ namespace LoL_Champions_and_Positions
                     if (response.RespondCommand == Enums.ManageFormState.New)
                     {
                         Engine.CreateChampion(new Champion(response.Name,response.Picture,"",""));
+
+                        AddNewPictureBox(Engine.AllChampionsList.GetChampionID(response.Name));
                     }
                     else if (response.RespondCommand == Enums.ManageFormState.Edit)
                     {
@@ -459,10 +471,14 @@ namespace LoL_Champions_and_Positions
 
                         forEdit.Name = response.Name;
                         forEdit.Image = response.Picture;
+
+                        EditPictureBox(response.UniqueID);
                     }
                     else if (response.RespondCommand == Enums.ManageFormState.Delete)
                     {
                         Engine.DeleteChampion(response.UniqueID);
+
+                        RemovePictureBox(response.UniqueID);
                     }
                     else
                     {
@@ -709,6 +725,15 @@ namespace LoL_Champions_and_Positions
             {
                 throw new Exception("champion images don't contain this image??");
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Guid Result;
+
+            Result = Engine.GetListReference("List1", Constants.CUSTOM_LIST_ALL);
+
+            return;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace LoL_Champions_and_Positions
             _intputList = new List<ListEntry>();
             _launchMode = launchMode;
             _formResponseList = new List<ManageFormResponse>();
-            FormResponse = new List<ManageFormResponse>();
+            
 
             FillList(launchMode);
             SetListBox(SearchBar.Text);
@@ -27,6 +27,7 @@ namespace LoL_Champions_and_Positions
             {
                 Picture.Visible = false;
                 PictureName.Visible = false;
+                ReloadImage.Visible = false;
                 label3.Visible = false;
             }
 
@@ -377,6 +378,22 @@ namespace LoL_Champions_and_Positions
                     ItemName.Text = selectedItem.Name;
                     PictureName.Text = selectedItem.PictureName;
                     Picture.Image = HelpMethods.getImageFromLocalDirectory(selectedItem.PictureName,false);
+                }
+                SetState(Enums.ManageFormState.ItemSelected);
+            }
+        }
+        private void ListBox_Click(object sender, EventArgs e)
+        {
+            int index = ListBox.SelectedIndex;
+            if (index != -1)
+            {
+                ListEntry selectedItem = GetListEntry(ListBox.Items[index].ToString());
+
+                if (selectedItem != null)
+                {
+                    ItemName.Text = selectedItem.Name;
+                    PictureName.Text = selectedItem.PictureName;
+                    Picture.Image = HelpMethods.getImageFromLocalDirectory(selectedItem.PictureName, false);
                 }
                 SetState(Enums.ManageFormState.ItemSelected);
             }

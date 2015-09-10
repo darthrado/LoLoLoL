@@ -40,7 +40,7 @@ namespace LoL_Champions_and_Positions
         {
             foreach (string position in listPositions)
             {
-                if (GetListReference(name, position) == null)
+                if (GetListReference(name, position) == Guid.Empty)
                 {
                     ChampionCollection newList = new ChampionCollection(name, position);
                     championListCollection.Add(newList.UniqueID, newList);

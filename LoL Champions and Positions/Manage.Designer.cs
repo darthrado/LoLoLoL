@@ -49,20 +49,18 @@
             // ListBox
             // 
             this.ListBox.FormattingEnabled = true;
-            this.ListBox.ItemHeight = 16;
-            this.ListBox.Location = new System.Drawing.Point(16, 53);
-            this.ListBox.Margin = new System.Windows.Forms.Padding(4);
+            this.ListBox.Location = new System.Drawing.Point(12, 43);
             this.ListBox.Name = "ListBox";
-            this.ListBox.Size = new System.Drawing.Size(163, 436);
+            this.ListBox.Size = new System.Drawing.Size(123, 355);
             this.ListBox.TabIndex = 0;
+            this.ListBox.Click += new System.EventHandler(this.ListBox_Click);
             this.ListBox.SelectedIndexChanged += new System.EventHandler(this.ListBox_SelectedIndexChanged);
             // 
             // Ok
             // 
-            this.Ok.Location = new System.Drawing.Point(188, 462);
-            this.Ok.Margin = new System.Windows.Forms.Padding(4);
+            this.Ok.Location = new System.Drawing.Point(141, 375);
             this.Ok.Name = "Ok";
-            this.Ok.Size = new System.Drawing.Size(160, 28);
+            this.Ok.Size = new System.Drawing.Size(120, 23);
             this.Ok.TabIndex = 2;
             this.Ok.Text = "Ok";
             this.Ok.UseVisualStyleBackColor = true;
@@ -70,20 +68,18 @@
             // 
             // SearchBar
             // 
-            this.SearchBar.Location = new System.Drawing.Point(16, 15);
-            this.SearchBar.Margin = new System.Windows.Forms.Padding(4);
+            this.SearchBar.Location = new System.Drawing.Point(12, 12);
             this.SearchBar.Name = "SearchBar";
-            this.SearchBar.Size = new System.Drawing.Size(163, 22);
+            this.SearchBar.Size = new System.Drawing.Size(123, 20);
             this.SearchBar.TabIndex = 4;
             this.SearchBar.Text = "Search...";
             this.SearchBar.TextChanged += new System.EventHandler(this.SearchBar_TextChanged);
             // 
             // AddNew
             // 
-            this.AddNew.Location = new System.Drawing.Point(187, 9);
-            this.AddNew.Margin = new System.Windows.Forms.Padding(4);
+            this.AddNew.Location = new System.Drawing.Point(140, 7);
             this.AddNew.Name = "AddNew";
-            this.AddNew.Size = new System.Drawing.Size(160, 28);
+            this.AddNew.Size = new System.Drawing.Size(120, 23);
             this.AddNew.TabIndex = 5;
             this.AddNew.Text = "Add New";
             this.AddNew.UseVisualStyleBackColor = true;
@@ -91,10 +87,9 @@
             // 
             // DeleteItem
             // 
-            this.DeleteItem.Location = new System.Drawing.Point(187, 46);
-            this.DeleteItem.Margin = new System.Windows.Forms.Padding(4);
+            this.DeleteItem.Location = new System.Drawing.Point(140, 37);
             this.DeleteItem.Name = "DeleteItem";
-            this.DeleteItem.Size = new System.Drawing.Size(161, 28);
+            this.DeleteItem.Size = new System.Drawing.Size(121, 23);
             this.DeleteItem.TabIndex = 6;
             this.DeleteItem.Text = "Delete";
             this.DeleteItem.UseVisualStyleBackColor = true;
@@ -103,27 +98,24 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(184, 171);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(138, 139);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 17);
+            this.label2.Size = new System.Drawing.Size(38, 13);
             this.label2.TabIndex = 7;
             this.label2.Text = "Name:";
             // 
             // ItemName
             // 
-            this.ItemName.Location = new System.Drawing.Point(187, 192);
-            this.ItemName.Margin = new System.Windows.Forms.Padding(4);
+            this.ItemName.Location = new System.Drawing.Point(140, 156);
             this.ItemName.Name = "ItemName";
-            this.ItemName.Size = new System.Drawing.Size(161, 22);
+            this.ItemName.Size = new System.Drawing.Size(122, 20);
             this.ItemName.TabIndex = 8;
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(188, 139);
-            this.SaveButton.Margin = new System.Windows.Forms.Padding(4);
+            this.SaveButton.Location = new System.Drawing.Point(141, 113);
             this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(79, 28);
+            this.SaveButton.Size = new System.Drawing.Size(59, 23);
             this.SaveButton.TabIndex = 9;
             this.SaveButton.Text = "Save";
             this.SaveButton.UseVisualStyleBackColor = true;
@@ -131,10 +123,9 @@
             // 
             // BackButton
             // 
-            this.BackButton.Location = new System.Drawing.Point(269, 139);
-            this.BackButton.Margin = new System.Windows.Forms.Padding(4);
+            this.BackButton.Location = new System.Drawing.Point(202, 113);
             this.BackButton.Name = "BackButton";
-            this.BackButton.Size = new System.Drawing.Size(79, 28);
+            this.BackButton.Size = new System.Drawing.Size(59, 23);
             this.BackButton.TabIndex = 10;
             this.BackButton.Text = "Back";
             this.BackButton.UseVisualStyleBackColor = true;
@@ -143,38 +134,34 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(184, 218);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(138, 177);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(97, 17);
+            this.label3.Size = new System.Drawing.Size(74, 13);
             this.label3.TabIndex = 11;
             this.label3.Text = "Picture Name:";
             // 
             // PictureName
             // 
-            this.PictureName.Location = new System.Drawing.Point(187, 239);
-            this.PictureName.Margin = new System.Windows.Forms.Padding(4);
+            this.PictureName.Location = new System.Drawing.Point(140, 194);
             this.PictureName.Name = "PictureName";
-            this.PictureName.Size = new System.Drawing.Size(160, 22);
+            this.PictureName.Size = new System.Drawing.Size(121, 20);
             this.PictureName.TabIndex = 12;
             // 
             // Picture
             // 
             this.Picture.Image = ((System.Drawing.Image)(resources.GetObject("Picture.Image")));
-            this.Picture.Location = new System.Drawing.Point(188, 270);
-            this.Picture.Margin = new System.Windows.Forms.Padding(4);
+            this.Picture.Location = new System.Drawing.Point(141, 219);
             this.Picture.Name = "Picture";
-            this.Picture.Size = new System.Drawing.Size(160, 148);
+            this.Picture.Size = new System.Drawing.Size(120, 120);
             this.Picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.Picture.TabIndex = 13;
             this.Picture.TabStop = false;
             // 
             // ReloadImage
             // 
-            this.ReloadImage.Location = new System.Drawing.Point(187, 425);
-            this.ReloadImage.Margin = new System.Windows.Forms.Padding(4);
+            this.ReloadImage.Location = new System.Drawing.Point(140, 345);
             this.ReloadImage.Name = "ReloadImage";
-            this.ReloadImage.Size = new System.Drawing.Size(161, 28);
+            this.ReloadImage.Size = new System.Drawing.Size(121, 23);
             this.ReloadImage.TabIndex = 14;
             this.ReloadImage.Text = "Reload Image";
             this.ReloadImage.UseVisualStyleBackColor = true;
@@ -182,10 +169,10 @@
             // 
             // EditItem
             // 
-            this.EditItem.Location = new System.Drawing.Point(188, 80);
-            this.EditItem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.EditItem.Location = new System.Drawing.Point(141, 65);
+            this.EditItem.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.EditItem.Name = "EditItem";
-            this.EditItem.Size = new System.Drawing.Size(159, 27);
+            this.EditItem.Size = new System.Drawing.Size(119, 22);
             this.EditItem.TabIndex = 15;
             this.EditItem.Text = "Edit";
             this.EditItem.UseVisualStyleBackColor = true;
@@ -193,9 +180,9 @@
             // 
             // Manage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(377, 508);
+            this.ClientSize = new System.Drawing.Size(283, 413);
             this.Controls.Add(this.EditItem);
             this.Controls.Add(this.ReloadImage);
             this.Controls.Add(this.Picture);
@@ -210,7 +197,6 @@
             this.Controls.Add(this.SearchBar);
             this.Controls.Add(this.Ok);
             this.Controls.Add(this.ListBox);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Manage";

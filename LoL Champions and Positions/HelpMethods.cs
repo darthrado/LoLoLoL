@@ -188,10 +188,15 @@ namespace LoL_Champions_and_Positions
         public static System.Drawing.Image getImageFromLocalDirectory(string filename,bool thumbnail)
         {
             System.Drawing.Image result;
+            if (filename == null)
+            {
+                return null;
+            }
+
 
             if (imageDictionary.ContainsKey(filename))
             {
-                return imageDictionary[filename];
+                result = imageDictionary[filename];
             }
             else
             {
