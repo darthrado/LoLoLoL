@@ -18,12 +18,15 @@ namespace LoL_Champions_and_Positions
             _intputList = new List<ListEntry>();
             _launchMode = launchMode;
             _formResponseList = new List<ManageFormResponse>();
-            
+
+            //Initialize it separately from _formResponseList. That way it will still be initialized
+            //And changes will only be remembered on OK button click
+            FormResponse = new List<ManageFormResponse>();
 
             FillList(launchMode);
             SetListBox(SearchBar.Text);
 
-            if (_launchMode == Enums.ManageDialogue.List)
+            if (_launchMode == Enums.ManageDialogue.List || _launchMode == Enums.ManageDialogue.Position)
             {
                 Picture.Visible = false;
                 PictureName.Visible = false;
@@ -109,7 +112,13 @@ namespace LoL_Champions_and_Positions
                     _intputList.Add(new ListEntry(key,Engine.ChampionListCollection[key].Name, notEmptyWarning));
                 }
             }
-                // TODO: ADD Positions Fill Form
+            else if (launchMode == Enums.ManageDialogue.Position)
+            {
+                foreach (string position in Engine.ListPositions)
+                {
+                    _intputList.Add(new ListEntry(Guid.Empty, position, true));
+                }
+            }
             else
             {
                 //mandatory something happaned something happaned dialogue
@@ -247,6 +256,10 @@ namespace LoL_Champions_and_Positions
                 {
                     warningMessage = "List is not empty! Continue anyway?";
                 }
+                else if (_launchMode == Enums.ManageDialogue.Position)
+                {
+                    warningMessage = "All Lists will clear their entries for this position, along with any Champions that belong in it. Continue?";
+                }
 
                 DialogResult dialogResult = MessageBox.Show(warningMessage, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
@@ -344,8 +357,12 @@ namespace LoL_Champions_and_Positions
                 else
                 {
                     ListEntry editedItem = GetListEntry(oldItem);
+                    string oldItemName = editedItem.Name;
                     editedItem.EditEntry(ItemName.Text,PictureName.Text);
-                    _formResponseList.Add(new ManageFormResponse(_formState, editedItem.UniqueID,editedItem.Name,editedItem.PictureName));
+
+                    ManageFormResponse editItemFormResponse = new ManageFormResponse(_formState, editedItem.UniqueID, editedItem.Name, editedItem.PictureName);
+                    editItemFormResponse.OldName = oldItemName;
+                    _formResponseList.Add(editItemFormResponse);
                     
                 }
             }

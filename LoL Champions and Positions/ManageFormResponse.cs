@@ -19,5 +19,6 @@ namespace LoL_Champions_and_Positions
         public Guid UniqueID { get; private set; }
         public string Name { get; private set; }
         public string Picture { get; private set; }
+        public string OldName { get; set; }
     }
 }

@@ -10,7 +10,8 @@ namespace LoL_Champions_and_Positions
         public enum ManageDialogue
         {
             Champion,
-            List
+            List,
+            Position
         };
 
         public enum ManageFormState

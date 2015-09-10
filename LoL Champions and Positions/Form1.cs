@@ -16,18 +16,20 @@ namespace LoL_Champions_and_Positions
         {
             InitializeComponent();
 
-            playablePositions.Items.Clear();
+            //playablePositions.Items.Clear();
 
             championImages = new Dictionary<Guid, PictureBox>();
             championTooltips = new Dictionary<Guid, ToolTip>();
             /*First time till I fix data*/
 
             saveFile = new ChampionToFile();
-            saveFile.getFromFile("rekt.gg");
-            this.controlPanel.Controls.Clear();
-            Engine.fillListCollection(saveFile.ExportLines());
-            PictureListFill();
+            Dictionary<Guid, ChampionCollection> loadedListCollection = saveFile.ExportLines();
+            //saveFile.getFromFile("rekt.gg"); temp disabled
 
+            this.controlPanel.Controls.Clear();
+            Engine.fillListCollection(loadedListCollection);
+            PictureListFill();
+            /*
             foreach (Enums.ListPositions position in Enum.GetValues(typeof(Enums.ListPositions)))
             {
                 if (position != Enums.ListPositions.All)
@@ -38,7 +40,7 @@ namespace LoL_Champions_and_Positions
             }
             playablePositions.Items.Add(Constants.CUSTOM_LIST_ALL);
             Engine.AddPosition(Constants.CUSTOM_LIST_ALL);
-
+            */
             initListCollection(); //Initializes the champion collection List
 
             PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
@@ -52,6 +54,7 @@ namespace LoL_Champions_and_Positions
         //ChampionCollection allChampionsCollection;
         //ChampionContainer selectedChampion;
         Guid rightClickedPicture;
+        Guid visibleListID;
         bool displayChampionMatchupsList;
 
         Dictionary<Guid, PictureBox> championImages;
@@ -146,10 +149,10 @@ namespace LoL_Champions_and_Positions
             }
 
             HideList();
+            visibleListID = listUID;
 
             int X = controlPanel.DisplayRectangle.Left + Constants.CHAMPION_HORIZONTAL_OFFSET;
             int Y = controlPanel.DisplayRectangle.Top + Constants.CHAMPION_VERTICAL_OFFSET;
-            int i = 0;
 
             if (searchText == Constants.SEARCH_TEXT)
             {
@@ -182,8 +185,8 @@ namespace LoL_Champions_and_Positions
                 {
                     X += (Constants.CHAMPION_FRAME_WIDTH + Constants.CHAMPION_HORIZONTAL_OFFSET);
                 }
-                i++;
             }
+            AttachPictureBoxAttributes(listUID);
         }
         #endregion
 
@@ -500,6 +503,51 @@ namespace LoL_Champions_and_Positions
 
         }
 
+        private void ManagePositionsButton_Click(object sender, EventArgs e)
+        {
+            Manage manageList = new Manage(Enums.ManageDialogue.Position);
+
+            manageList.ShowDialog();
+
+            if (manageList.FormResponse.Count > 0)
+            {
+                foreach (ManageFormResponse response in manageList.FormResponse)
+                {
+                    if (response.RespondCommand == Enums.ManageFormState.New)
+                    {
+                        Engine.AddPosition(response.Name);
+                    }
+                    else if (response.RespondCommand == Enums.ManageFormState.Edit)
+                    {
+                        //Engine.RenameList(Engine.GetAllListsWithName(Engine.ChampionListCollection[response.UniqueID].Name), response.Name);
+                        Engine.EditPosition(response.OldName, response.Name);
+
+                    }
+                    else if (response.RespondCommand == Enums.ManageFormState.Delete)
+                    {
+                        //Engine.RemoveList(Engine.GetAllListsWithName(response.Name));
+                        Engine.RemovePosition(response.Name);
+                    }
+                    else
+                    {
+                        throw new Exception("Incorrect Form Response Command");
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("No changes were made");
+            }
+
+            //Update the dropdown with the newly added/edited lists and rebuild the context menu
+            updateListCollectionDropdown();
+            BuildContextMenu();
+
+            //Save changes to file
+            saveFile.ImportLines(Engine.ChampionListCollection);
+            saveFile.saveToFile("rekt.gg");
+        }
+
         private void manageLists_Click(object sender, EventArgs e)
         {
             Manage manageList = new Manage(Enums.ManageDialogue.List);
@@ -672,6 +720,7 @@ namespace LoL_Champions_and_Positions
         private void textSeaarchBox_TextChanged(object sender, EventArgs e)
         {
             //selectedCollection.Print(textSeaarchBox.Text);
+            PrintList(visibleListID, textSeaarchBox.Text);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -735,5 +784,6 @@ namespace LoL_Champions_and_Positions
 
             return;
         }
+
     }
 }
