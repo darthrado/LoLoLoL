@@ -12,40 +12,37 @@ namespace LoL_Champions_and_Positions
         private static ChampionCollection allChampionsList;
         private static Champion selectedChampion;
         private static ChampionCollection selectedChampionList;
+        private static ChampionToFile saveData = new ChampionToFile();
 
-        public static void fillListCollection(Dictionary<Guid, ChampionCollection> sourceCollection)
+        public static void BasicInitialize()
         {
-            if (championListCollection.Count != 0)
-            {
-                championListCollection.Clear();
-            }
-            if (listPositions.Count != 0)
-            {
-                listPositions.Clear();
-            }
-            allChampionsList = null;
+            championListCollection = new Dictionary<Guid, ChampionCollection>(); 
+            listPositions = new HashSet<string>();
+            listPositions.Add(Constants.CUSTOM_LIST_ALL);
+            allChampionsList = new ChampionCollection(Constants.ALL_CHAMPIONS, Constants.CUSTOM_LIST_ALL);
+            selectedChampionList = allChampionsList;
+            championListCollection.Add(allChampionsList.UniqueID, allChampionsList);
+
+        }
+        public static void ClearAllData()
+        {
+            championListCollection = null;
+            listPositions = null;
             selectedChampion = null;
             selectedChampionList = null;
+        }
+        public static void LoadFromFile(string filename)
+        {
+            ClearAllData();
+            BasicInitialize();
+            saveData.getFromFile(filename);
+            saveData.ExportLines();
+        }
 
-            if (sourceCollection == null || sourceCollection.Count == 0)
-            {
-                ChampionCollection allChampions = new ChampionCollection(Constants.ALL_CHAMPIONS, Constants.CUSTOM_LIST_ALL);
-                listPositions.Add(Constants.CUSTOM_LIST_ALL);
-                allChampionsList = allChampions;
-                selectedChampionList = allChampions;
-                championListCollection.Add(allChampions.UniqueID, allChampions);
-                
-            }
-            else
-            {
-
-                championListCollection = sourceCollection;
-                Guid allChampsUID = GetListReference(Constants.ALL_CHAMPIONS, Constants.CUSTOM_LIST_ALL);
-                allChampionsList = championListCollection[allChampsUID];
-                selectedChampionList = allChampionsList;
-            }
-
-
+        public static void SaveToFile(string filename)
+        {
+            saveData.ImportLines(null);
+            saveData.saveToFile(filename);
         }
 
         //List manipulation Methods
@@ -304,6 +301,176 @@ namespace LoL_Champions_and_Positions
         public static HashSet<string> ListPositions { get { return listPositions; } }
         public static Champion SelectedChampion { get { return selectedChampion; } }
 
+        class ChampionToFile : FileManagerLibrary.FileManager<Dictionary<Guid, ChampionCollection>>  //FileManager<ChampionCollection>
+        {
+            public ChampionToFile()
+            {
+            }
 
+            /// <summary>
+            /// Parses the containes String Lines to an ChampionCollectionString
+            /// </summary>
+            /// <returns></returns>
+            public override Dictionary<Guid, ChampionCollection> ExportLines()
+            {
+                if (saveLines.Count <= 0)
+                {
+                    return null;
+                }
+
+                while (saveLines.Count > 0)
+                {
+                    string parseLine = saveLines.Dequeue();
+                    string[] separator = { Constants.SLASH_SEPARATOR };
+                    string[] lineComponents = parseLine.Split(separator, StringSplitOptions.None);
+
+                    // List parse format: List///Position///Champion@@@Champion@@@Champion...
+                    if (lineComponents[0] == LineType.List.ToString())
+                    {
+                        Guid ListID = Engine.GetListReference(lineComponents[1], lineComponents[2]);
+                        if (ListID == Guid.Empty)
+                        {
+                            Engine.AddList(lineComponents[1]);
+                            ListID = Engine.GetListReference(lineComponents[1], lineComponents[2]);
+                            if (ListID == Guid.Empty)
+                            {
+                                throw new Exception("This SHouldnt happen");
+                            }
+                        }
+
+                        separator[0] = Constants.AT_SEPARATOR;
+                        string[] listOfChampions = null;
+                        listOfChampions = lineComponents[3].Split(separator, StringSplitOptions.None);
+
+                        foreach (string champion in listOfChampions)
+                        {
+                            Guid uniqueID = Engine.AllChampionsList.GetChampionID(champion);
+                            if (uniqueID != Guid.Empty)
+                            {
+                                Engine.AddChampionToList(ListID, uniqueID);
+                            }
+                        }
+
+                    }
+                    //Champion parse format: Champion///Name///Image///searchTags///Description
+                    else if (lineComponents[0] == LineType.Champion.ToString())
+                    {
+                        Champion newChampion = new Champion(lineComponents[1], lineComponents[2], lineComponents[3], lineComponents[4]);
+                        Engine.CreateChampion(newChampion);
+                    }
+                    //Matchup parse format: Champion///EnemyChampion///MatchupDetails
+                    else if (lineComponents[0] == LineType.Matchup.ToString())
+                    {
+                        Guid matchupChampionID = Engine.AllChampionsList.GetChampionID(lineComponents[1]);
+                        if (matchupChampionID == Guid.Empty)
+                        {
+                            throw new Exception("Champion Missing: Can't add matchup");
+                            //Technically if my program works correctly, i should never get here since all champions are Exported before the matchups
+                        }
+                        Engine.AllChampionsList.ListOfChampions[matchupChampionID].AddMatchup(lineComponents[2], lineComponents[3]);
+
+                    }
+                    //Not Developed Yet - ToDo
+                    else if (lineComponents[0] == LineType.Item.ToString())
+                    {
+                    }
+                    else if (lineComponents[0] == LineType.Position.ToString())
+                    {
+                        for (int i = 1; i < lineComponents.Length; i++)
+                        {
+                            if (lineComponents[i] != Constants.CUSTOM_LIST_ALL)
+                            {
+                                Engine.AddPosition(lineComponents[i]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Parsing error: Unknown Line Type");
+                    }
+
+                    //distribute the references of the main collection to the other lists
+                }
+
+                return null;
+            }
+            /// <summary>
+            /// Parses a Champion Collection List to a String[] format ready for filesave
+            /// </summary>
+            /// <param name="List"></param>
+            /// <returns></returns>
+            public override bool ImportLines(Dictionary<Guid, ChampionCollection> inputLine)
+            {
+                if (Engine.ChampionListCollection.Count == 0)
+                {
+                    throw new Exception("Can't save empty data");
+                }
+
+                string separator = Constants.SLASH_SEPARATOR;
+                string initialParseLine = LineType.Position.ToString();
+                foreach (string key in Engine.ListPositions)
+                {
+                    if (key != Constants.CUSTOM_LIST_ALL)
+                    {
+                        initialParseLine += separator + key;
+                    }
+                }
+                this.saveLines.Enqueue(initialParseLine);
+                // enqueue all champions
+                foreach (Guid key in Engine.AllChampionsList.ListOfChampions.Keys)
+                {
+                    separator = Constants.SLASH_SEPARATOR;
+                    Champion champToParse = Engine.AllChampionsList.ListOfChampions[key];
+                    string lineToParse = LineType.Champion.ToString() + separator +
+                         champToParse.Name + separator +
+                         champToParse.Image + separator +
+                          champToParse.SearchTag + separator +
+                         champToParse.Description;
+                    this.saveLines.Enqueue(lineToParse);
+
+                }
+
+                foreach (Guid key in Engine.ChampionListCollection.Keys)
+                {
+                    if (key == Engine.AllChampionsList.UniqueID)
+                    {
+                        continue;
+                    }
+                    separator = Constants.SLASH_SEPARATOR;
+
+                    string lineToParse = LineType.List.ToString() + separator +
+                                         Engine.ChampionListCollection[key].Name + separator +
+                                         Engine.ChampionListCollection[key].Role + separator;
+                    bool firstPass = true;
+                    separator = Constants.AT_SEPARATOR;
+                    foreach (Guid championKey in Engine.ChampionListCollection[key].ListOfChampions.Keys)
+                    {
+                        if (firstPass)
+                        {
+                            lineToParse += Engine.ChampionListCollection[key].ListOfChampions[championKey].Name;
+                            firstPass = false;
+                        }
+                        else
+                        {
+                            lineToParse += separator + Engine.ChampionListCollection[key].ListOfChampions[championKey].Name;
+                        }
+                    }
+
+                }
+
+                // To Do: Items
+                return true;
+            }
+
+            enum LineType
+            {
+                Champion,
+                List,
+                Item,
+                Matchup,
+                Position
+            };
+
+        }
     }
 }

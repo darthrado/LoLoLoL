@@ -22,12 +22,8 @@ namespace LoL_Champions_and_Positions
             championTooltips = new Dictionary<Guid, ToolTip>();
             /*First time till I fix data*/
 
-            saveFile = new ChampionToFile();
-            Dictionary<Guid, ChampionCollection> loadedListCollection = saveFile.ExportLines();
-            //saveFile.getFromFile("rekt.gg"); temp disabled
-
             this.controlPanel.Controls.Clear();
-            Engine.fillListCollection(loadedListCollection);
+            Engine.LoadFromFile("rekt.gg");
             PictureListFill();
             initListCollection(); //Initializes the champion collection List
 
@@ -47,8 +43,6 @@ namespace LoL_Champions_and_Positions
 
         Dictionary<Guid, PictureBox> championImages;
         Dictionary<Guid, ToolTip> championTooltips;
-
-        ChampionToFile saveFile;
         #endregion
 
 
@@ -354,8 +348,7 @@ namespace LoL_Champions_and_Positions
                     if (championDialog.ChangesMade)
                     {
                         //HelpMethods.UpdateChampionAcrossAllCollections(ref collectionList,championDialog.Result);
-                        saveFile.ImportLines(Engine.ChampionListCollection);
-                        saveFile.saveToFile("rekt.gg");
+                        Engine.SaveToFile("rekt.gg");
                     }
                 }
             }
@@ -508,8 +501,7 @@ namespace LoL_Champions_and_Positions
             PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
 
             //Save changes to file
-            saveFile.ImportLines(Engine.ChampionListCollection);
-            saveFile.saveToFile("rekt.gg");
+            Engine.SaveToFile("rekt.gg");
 
         }
 
@@ -553,8 +545,7 @@ namespace LoL_Champions_and_Positions
             RebuildElements();
 
             //Save changes to file
-            saveFile.ImportLines(Engine.ChampionListCollection);
-            saveFile.saveToFile("rekt.gg");
+            Engine.SaveToFile("rekt.gg");
         }
 
         private void manageLists_Click(object sender, EventArgs e)
@@ -596,8 +587,7 @@ namespace LoL_Champions_and_Positions
             RebuildElements();
 
             //Save changes to file
-            saveFile.ImportLines(Engine.ChampionListCollection);
-            saveFile.saveToFile("rekt.gg");
+            Engine.SaveToFile("rekt.gg");
         }
 
         private void ListCollection_SelectionChangeCommitted(object sender, EventArgs e)
@@ -652,8 +642,7 @@ namespace LoL_Champions_and_Positions
             }
             
             //Save changes to file
-            saveFile.ImportLines(Engine.ChampionListCollection);
-            saveFile.saveToFile("rekt.gg");
+            Engine.SaveToFile("rekt.gg");
              
         }
 
@@ -687,8 +676,7 @@ namespace LoL_Champions_and_Positions
             PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
 
             //Save changes to file
-            saveFile.ImportLines(Engine.ChampionListCollection);
-            saveFile.saveToFile("rekt.gg");
+            Engine.SaveToFile("rekt.gg");
 
         }
 
@@ -738,16 +726,14 @@ namespace LoL_Champions_and_Positions
 
         private void button1_Click(object sender, EventArgs e)
         {
-            saveFile.ImportLines(Engine.ChampionListCollection);
-            saveFile.saveToFile("rekt.gg");
+            Engine.SaveToFile("rekt.gg");
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            saveFile.getFromFile("rekt.gg");
             this.controlPanel.Controls.Clear();
             //collectionList.Clear();
-            Engine.fillListCollection(saveFile.ExportLines());
+            Engine.LoadFromFile("rekt.gg");
 
             PictureListFill();
             initListCollection(); //Initializes the champion collection List
@@ -768,8 +754,7 @@ namespace LoL_Champions_and_Positions
                 if (championDialog.ChangesMade)
                 {
                     //HelpMethods.UpdateChampionAcrossAllCollections(ref collectionList, championDialog.Result);
-                    saveFile.ImportLines(Engine.ChampionListCollection);
-                    saveFile.saveToFile("rekt.gg");
+                    Engine.SaveToFile("rekt.gg");
                 }
             }
         }
