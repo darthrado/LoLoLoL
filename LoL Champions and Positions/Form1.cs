@@ -29,18 +29,6 @@ namespace LoL_Champions_and_Positions
             this.controlPanel.Controls.Clear();
             Engine.fillListCollection(loadedListCollection);
             PictureListFill();
-            /*
-            foreach (Enums.ListPositions position in Enum.GetValues(typeof(Enums.ListPositions)))
-            {
-                if (position != Enums.ListPositions.All)
-                {
-                    playablePositions.Items.Add(position.ToString());
-                    Engine.AddPosition(position.ToString());
-                }
-            }
-            playablePositions.Items.Add(Constants.CUSTOM_LIST_ALL);
-            Engine.AddPosition(Constants.CUSTOM_LIST_ALL);
-            */
             initListCollection(); //Initializes the champion collection List
 
             PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
@@ -416,7 +404,9 @@ namespace LoL_Champions_and_Positions
                 if (displayChampionMatchupsList)
                 {
                     displayChampionMatchupsList = false;
-
+                    ManagePositionsButton.Enabled = true;
+                    buttonManageLists.Enabled = true;
+                    buttonManageChamp.Enabled = true;
                     //TODO once matchup collection is implemented: matchupCollection hide
                     PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
                 }
@@ -424,6 +414,10 @@ namespace LoL_Champions_and_Positions
             if (formState == Form1State.InitialView)
             {
                 displayChampionMatchupsList = false;
+
+                ManagePositionsButton.Enabled = true;
+                buttonManageLists.Enabled = true;
+                buttonManageChamp.Enabled = true;
 
                 championListCollection.Enabled = true;
                 playablePositions.Enabled = true;
@@ -690,6 +684,8 @@ namespace LoL_Champions_and_Positions
 
             Engine.RemoveChampionFromList(Engine.SelectedChampionList.UniqueID, forRemoveID);
 
+            PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
+
             //Save changes to file
             saveFile.ImportLines(Engine.ChampionListCollection);
             saveFile.saveToFile("rekt.gg");
@@ -722,6 +718,9 @@ namespace LoL_Champions_and_Positions
         {
             displayChampionMatchupsList = true;
             groupBox1.Text = Engine.SelectedChampion.Name + " Matchups Info";
+            ManagePositionsButton.Enabled = false;
+            buttonManageLists.Enabled = false;
+            buttonManageChamp.Enabled = false;
             //allChampionsCollection.AddContextMenu(null);
             //selectedCollection.Hide();
             //allChampionsCollection.Print(textSeaarchBox.Text);
@@ -750,7 +749,10 @@ namespace LoL_Champions_and_Positions
             //collectionList.Clear();
             Engine.fillListCollection(saveFile.ExportLines());
 
-            initListCollection();
+            PictureListFill();
+            initListCollection(); //Initializes the champion collection List
+
+            PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
             //Warning: When Loading a List, you must reset all variables connected with that list
             //When Using the Add% functions on a list, Print of the currently selected list should be called so that posible data changes are updated
         }

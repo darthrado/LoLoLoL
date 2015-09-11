@@ -122,17 +122,20 @@ namespace LoL_Champions_and_Positions
                 throw new Exception("List Already Exists");
             }
 
-            List<string> listOfNames = new List<string>();
+            List<string> listOfNames = new List<string>(); // Fill the names of lists that don't have this position
             foreach (Guid key in championListCollection.Keys)
             {
+                //if List is not: ALL_CHAMPIONS, and LlistOfNames doesn't contain this name
                 if (championListCollection[key].Name != Constants.ALL_CHAMPIONS && !listOfNames.Contains(championListCollection[key].Name))
                 {
+                    //Add the list to the list of names
                     listOfNames.Add(championListCollection[key].Name);
                 }
             }
             foreach (string name in listOfNames)
             {
                 ChampionCollection newCollection = new ChampionCollection(name, roleName);
+                championListCollection.Add(newCollection.UniqueID, newCollection);
             }
 
             listPositions.Add(roleName);
@@ -233,6 +236,47 @@ namespace LoL_Champions_and_Positions
                 throw new Exception("Incorrect Champion ID");
             }
             
+            if (listUniqueID == allChampionsList.UniqueID)
+            {
+                throw new Exception("List id cannot be the All Champions List");
+            }
+
+            List<Guid> sameListsKeys = GetAllListsWithName(championListCollection[listUniqueID].Name);
+
+            if (championListCollection[listUniqueID].Role == Constants.CUSTOM_LIST_ALL)
+            {
+                foreach(Guid key in   sameListsKeys)
+                {
+                    championListCollection[key].Remove(championUniqueID);
+                }
+            }
+            else
+            {
+                Guid listAllID = Guid.Empty;
+                int counter=0;
+                foreach (Guid key in sameListsKeys)
+                {
+                    if (key == listUniqueID)
+                    {
+                        championListCollection[key].Remove(championUniqueID);
+                        counter++;
+                        continue;
+                    }
+                    if (championListCollection[key].Role == Constants.CUSTOM_LIST_ALL)
+                    {
+                        listAllID = key;
+                        continue;
+                    }
+                    if (championListCollection[key].ListOfChampions.ContainsKey(championUniqueID))
+                    {
+                        counter++;
+                    }
+                }
+                if (counter == 1)
+                {
+                    championListCollection[listAllID].ListOfChampions.Remove(championUniqueID);
+                }
+            }
 
 
         }
