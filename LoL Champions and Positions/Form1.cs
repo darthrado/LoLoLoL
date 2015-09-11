@@ -16,7 +16,7 @@ namespace LoL_Champions_and_Positions
         {
             InitializeComponent();
 
-            //playablePositions.Items.Clear();
+            playablePositions.Items.Clear();
 
             championImages = new Dictionary<Guid, PictureBox>();
             championTooltips = new Dictionary<Guid, ToolTip>();
@@ -242,11 +242,17 @@ namespace LoL_Champions_and_Positions
             }
 
             selectedChampion = null;*/
-            updateListCollectionDropdown();
-            BuildContextMenu();
+            RebuildElements();
             SetFormState(Form1State.InitialView);
 
             PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
+        }
+
+        private void RebuildElements()
+        {
+            updateListCollectionDropdown();
+            updatePositionsDropdown();
+            BuildContextMenu();
         }
 
         private void updateListCollectionDropdown()
@@ -260,6 +266,61 @@ namespace LoL_Champions_and_Positions
                 }
             }
         }
+        private void updatePositionsDropdown()
+        {
+            playablePositions.Items.Clear();
+            foreach (string position in Engine.ListPositions)
+            {
+                playablePositions.Items.Add(position);
+            }
+        }
+        private void BuildContextMenu()
+        {
+
+
+            toolStripMenuItem3.DropDownItems.Clear();
+
+            foreach (Guid key in Engine.ChampionListCollection.Keys)
+            {
+                if (Engine.ChampionListCollection[key].Name == Constants.ALL_CHAMPIONS || Engine.ChampionListCollection[key].Role == Constants.CUSTOM_LIST_ALL)
+                {
+                    continue;
+                }
+
+                ToolStripMenuItem roleItem = new ToolStripMenuItem();
+                roleItem.Name = Engine.ChampionListCollection[key].Role;
+                roleItem.Text = Engine.ChampionListCollection[key].Role;
+                roleItem.Click += new EventHandler(newItem_Click);
+
+                ToolStripMenuItem newItem = null;
+                foreach (ToolStripMenuItem menuItems in toolStripMenuItem3.DropDownItems)
+                {
+                    if (menuItems.Text == Engine.ChampionListCollection[key].Name)
+                    {
+                        newItem = menuItems;
+                    }
+                }
+
+                if (newItem == null)
+                {
+                    newItem = new ToolStripMenuItem();
+
+                    newItem.Name = Engine.ChampionListCollection[key].Name;
+                    newItem.Text = Engine.ChampionListCollection[key].Name;
+                    //newItem.OwnerItem = toolStripMenuItem3;
+                    //roleItem.Owner = newItem;
+
+                    newItem.DropDownItems.Add(roleItem);
+                    toolStripMenuItem3.DropDownItems.Add(newItem);
+
+                }
+                else
+                {
+                    newItem.DropDownItems.Add(roleItem);
+                }
+            }
+        }
+
 
         /// <summary>
         /// Depending on the selected values in ComboBox List and Position - gets the corresponding ChampionCollection from the list of Collections
@@ -313,52 +374,7 @@ namespace LoL_Champions_and_Positions
 
         }
 
-        private void BuildContextMenu()
-        {
-
-
-            toolStripMenuItem3.DropDownItems.Clear();
-
-            foreach (Guid key in Engine.ChampionListCollection.Keys)
-            {
-                if (Engine.ChampionListCollection[key].Name == Constants.ALL_CHAMPIONS || Engine.ChampionListCollection[key].Role == Constants.CUSTOM_LIST_ALL)
-                {
-                    continue;
-                }
-
-                ToolStripMenuItem roleItem = new ToolStripMenuItem();
-                roleItem.Name = Engine.ChampionListCollection[key].Role;
-                roleItem.Text = Engine.ChampionListCollection[key].Role;
-                roleItem.Click += new EventHandler(newItem_Click);
-
-                ToolStripMenuItem newItem = null;
-                foreach (ToolStripMenuItem menuItems in toolStripMenuItem3.DropDownItems)
-                {
-                    if (menuItems.Text == Engine.ChampionListCollection[key].Name)
-                    {
-                        newItem = menuItems;
-                    }
-                }
-
-                if (newItem == null)
-                {
-                    newItem = new ToolStripMenuItem();
-
-                    newItem.Name = Engine.ChampionListCollection[key].Name;
-                    newItem.Text = Engine.ChampionListCollection[key].Name;
-                    //newItem.OwnerItem = toolStripMenuItem3;
-                    //roleItem.Owner = newItem;
-
-                    newItem.DropDownItems.Add(roleItem);
-                    toolStripMenuItem3.DropDownItems.Add(newItem);
-
-                }
-                else
-                {
-                    newItem.DropDownItems.Add(roleItem);
-                }
-            }
-        }
+        
 
         void SetFormState(Form1State formState)
         {
@@ -419,8 +435,8 @@ namespace LoL_Champions_and_Positions
                 BackButton.Enabled = false;
 
                 groupBox1.Text = Constants.ALL_CHAMPIONS + "/" + Constants.CUSTOM_LIST_ALL;
-                championListCollection.SelectedIndex = 0;
-                playablePositions.SelectedIndex = 0;
+                //championListCollection.SelectedIndex = 0;
+               // playablePositions.SelectedIndex = 0;
 
             }
         }
@@ -540,8 +556,7 @@ namespace LoL_Champions_and_Positions
             }
 
             //Update the dropdown with the newly added/edited lists and rebuild the context menu
-            updateListCollectionDropdown();
-            BuildContextMenu();
+            RebuildElements();
 
             //Save changes to file
             saveFile.ImportLines(Engine.ChampionListCollection);
@@ -584,8 +599,7 @@ namespace LoL_Champions_and_Positions
             }
 
             //Update the dropdown with the newly added/edited lists and rebuild the context menu
-            updateListCollectionDropdown();
-            BuildContextMenu();
+            RebuildElements();
 
             //Save changes to file
             saveFile.ImportLines(Engine.ChampionListCollection);
@@ -672,7 +686,7 @@ namespace LoL_Champions_and_Positions
                     clickedChampion = champion;
                 }
             }*/
-            Guid forRemoveID = Guid.Empty; // TO DO get rightclicked champion picture UID
+            Guid forRemoveID = rightClickedPicture;
 
             Engine.RemoveChampionFromList(Engine.SelectedChampionList.UniqueID, forRemoveID);
 

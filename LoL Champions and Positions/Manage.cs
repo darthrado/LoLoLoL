@@ -116,6 +116,10 @@ namespace LoL_Champions_and_Positions
             {
                 foreach (string position in Engine.ListPositions)
                 {
+                    if (position == Constants.CUSTOM_LIST_ALL)
+                    {
+                        continue;
+                    }
                     _intputList.Add(new ListEntry(Guid.Empty, position, true));
                 }
             }
