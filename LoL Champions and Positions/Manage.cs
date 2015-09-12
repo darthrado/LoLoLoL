@@ -186,8 +186,8 @@ namespace LoL_Champions_and_Positions
                 BackButton.Enabled = false;
                 SaveButton.Enabled = false;
 
-                ItemName.Text = "";
-                PictureName.Text = "";
+                ItemName.Text = Constants.STRING_EMPTY;
+                PictureName.Text = Constants.STRING_EMPTY;
                 Picture.Image = Properties.Resources.DefaultImage;
 
                 ItemName.ReadOnly = true;
@@ -215,7 +215,7 @@ namespace LoL_Champions_and_Positions
             ListBox.Items.Clear();
             foreach (ListEntry item in _intputList)
             {
-                if (item.Name.ToUpper().Contains(searchPhrase.ToUpper()) || searchPhrase == "" || searchPhrase == Constants.SEARCH_TEXT)
+                if (item.Name.ToUpper().Contains(searchPhrase.ToUpper()) || searchPhrase == Constants.STRING_EMPTY || searchPhrase == Constants.SEARCH_TEXT)
                 {
                     ListBox.Items.Add(item.Name);
                 }
@@ -227,8 +227,8 @@ namespace LoL_Champions_and_Positions
         {
             SetState(Enums.ManageFormState.New);
 
-            ItemName.Text = "";
-            PictureName.Text = "";
+            ItemName.Text = Constants.STRING_EMPTY;
+            PictureName.Text = Constants.STRING_EMPTY;
             Picture.Image = Properties.Resources.DefaultImage;
 
             ListBox.ClearSelected();
@@ -251,7 +251,7 @@ namespace LoL_Champions_and_Positions
 
             if (itemToDelete.Warning != false)
             {
-                string warningMessage = "";
+                string warningMessage = Constants.STRING_EMPTY;
                 if (_launchMode == Enums.ManageDialogue.Champion)
                 {
                     warningMessage = "If you delete this champion, it will be deleted across all lists along with any Hints on him. Continue?";
@@ -277,7 +277,7 @@ namespace LoL_Champions_and_Positions
             {
                 _formResponseList.Add(new ManageFormResponse(_formState, itemToDelete.UniqueID, itemToDelete.Name, itemToDelete.PictureName));
                 _intputList.Remove(itemToDelete);
-                SetListBox("");
+                SetListBox(Constants.STRING_EMPTY);
             }
             else
             {

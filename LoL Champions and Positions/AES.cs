@@ -12,7 +12,7 @@ namespace LoL_Champions_and_Positions
         public static byte[] EncryptStringToByte(string sourceText,ref byte[] key,ref byte[] IV)
         {
 
-            if (sourceText == null || sourceText == "")
+            if (sourceText == null || sourceText == Constants.STRING_EMPTY)
             {
                 return null;
             }

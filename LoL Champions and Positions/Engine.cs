@@ -211,7 +211,7 @@ namespace LoL_Champions_and_Positions
             {
                 throw new Exception("This Function shouldnt be called for the All Champions List");
             }
-            if (allChampionsList.ListOfChampions.ContainsKey(championUniqueID))
+            if (allChampionsList.ListOfChampions.ContainsKey(championUniqueID)== false)
             {
                 throw new Exception("Incorrect Champion ID");
             }
@@ -374,6 +374,7 @@ namespace LoL_Champions_and_Positions
                     else if (lineComponents[0] == LineType.Item.ToString())
                     {
                     }
+                    //Parse positions line
                     else if (lineComponents[0] == LineType.Position.ToString())
                     {
                         for (int i = 1; i < lineComponents.Length; i++)
@@ -406,6 +407,7 @@ namespace LoL_Champions_and_Positions
                     throw new Exception("Can't save empty data");
                 }
 
+                //Enqueue Positions
                 string separator = Constants.SLASH_SEPARATOR;
                 string initialParseLine = LineType.Position.ToString();
                 foreach (string key in Engine.ListPositions)
@@ -430,6 +432,7 @@ namespace LoL_Champions_and_Positions
 
                 }
 
+                //Enqueue Lists
                 foreach (Guid key in Engine.ChampionListCollection.Keys)
                 {
                     if (key == Engine.AllChampionsList.UniqueID)
@@ -455,7 +458,21 @@ namespace LoL_Champions_and_Positions
                             lineToParse += separator + Engine.ChampionListCollection[key].ListOfChampions[championKey].Name;
                         }
                     }
+                    this.saveLines.Enqueue(lineToParse);
+                }
 
+                // Enqueue Matchupss
+                separator = Constants.SLASH_SEPARATOR;
+                foreach (Guid key in Engine.AllChampionsList.ListOfChampions.Keys)
+                {
+                    foreach (string matchup in AllChampionsList.ListOfChampions[key].MatchupList.Keys)
+                    {
+                        string lineToParse = LineType.Matchup.ToString() + separator +
+                                             AllChampionsList.ListOfChampions[key].Name + separator +
+                                             matchup + separator +
+                                             AllChampionsList.ListOfChampions[key].MatchupList[matchup].MatchInformation;
+                        this.saveLines.Enqueue(lineToParse);
+                    }
                 }
 
                 // To Do: Items

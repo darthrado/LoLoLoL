@@ -14,7 +14,15 @@ namespace LoL_Champions_and_Positions
         public MatchupDetails(Champion champion,Champion enemyChampion)
         {
             InitializeComponent();
-            matchupDetails = champion.MatchupList[enemyChampion.Name].MatchInformation;
+
+            if (champion.MatchupList.ContainsKey(enemyChampion.Name))
+            {
+                matchupDetails = champion.MatchupList[enemyChampion.Name].MatchInformation;
+            }
+            else
+            {
+                matchupDetails = null;
+            }
             enemyChampionName = enemyChampion.Name;
             resultChampion = champion;
             ChangesMade = false;
@@ -69,7 +77,7 @@ namespace LoL_Champions_and_Positions
             }
             else
             {
-                matchupDetailsText.Text = "";
+                matchupDetailsText.Text = Constants.STRING_EMPTY;
             }
 
             editButton.Enabled = true;

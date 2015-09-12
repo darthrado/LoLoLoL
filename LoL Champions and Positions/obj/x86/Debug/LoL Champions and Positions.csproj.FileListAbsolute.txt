@@ -14,17 +14,6 @@ C:\Users\DarthRado\Documents\visual studio 2010\Projects\LoL Champions and Posit
 C:\Users\DarthRado\Documents\visual studio 2010\Projects\LoL Champions and Positions\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.csproj.GenerateResource.Cache
 C:\Users\DarthRado\Documents\visual studio 2010\Projects\LoL Champions and Positions\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.Manage.resources
 C:\Users\ryanev\documents\visual studio 2010\Projects\LoL Champions and Positions\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.Manage.resources
-C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.exe
-C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.pdb
-C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\bin\Debug\LoL Champions and Positions.exe
-C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\bin\Debug\LoL Champions and Positions.pdb
-C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.Form1.resources
-C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.Manage.resources
-C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.Properties.Resources.resources
-C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.csproj.GenerateResource.Cache
-C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.csprojResolveAssemblyReference.cache
-C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.ChampionDetails.resources
-C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.MatchupDetails.resources
 C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\bin\Debug\LoL Champions and Positions.exe
 C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\bin\Debug\LoL Champions and Positions.pdb
 C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.csprojResolveAssemblyReference.cache
@@ -36,3 +25,14 @@ C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions a
 C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.csproj.GenerateResource.Cache
 C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.exe
 C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.pdb
+C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\bin\Debug\LoL Champions and Positions.exe
+C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\bin\Debug\LoL Champions and Positions.pdb
+C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.csprojResolveAssemblyReference.cache
+C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.ChampionDetails.resources
+C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.Form1.resources
+C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.Manage.resources
+C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.MatchupDetails.resources
+C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL_Champions_and_Positions.Properties.Resources.resources
+C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.csproj.GenerateResource.Cache
+C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.exe
+C:\Users\ryanev\Documents\GitHub\LoLoLoL\LoL Champions and Positions\obj\x86\Debug\LoL Champions and Positions.pdb

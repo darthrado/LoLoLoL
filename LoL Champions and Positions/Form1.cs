@@ -39,7 +39,7 @@ namespace LoL_Champions_and_Positions
         //ChampionContainer selectedChampion;
         Guid rightClickedPicture;
         Guid visibleListID;
-        bool displayChampionMatchupsList;
+        Form1State currentFormState;
 
         Dictionary<Guid, PictureBox> championImages;
         Dictionary<Guid, ToolTip> championTooltips;
@@ -51,6 +51,7 @@ namespace LoL_Champions_and_Positions
         {
             ListsView,
             ChampionSelected,
+            MatchupDetails,
             InitialView
         };
         #endregion
@@ -138,14 +139,14 @@ namespace LoL_Champions_and_Positions
 
             if (searchText == Constants.SEARCH_TEXT)
             {
-                searchText = "";
+                searchText = Constants.STRING_EMPTY;
             }
 
             foreach(Guid key in Engine.ChampionListCollection[listUID].ListOfChampions.Keys)
             {
 
                 // If Name or Search tag contains Search Value or Search Value is Empty
-                if (Engine.ChampionListCollection[listUID].ListOfChampions[key].Name.ToUpper().Contains(searchText.ToUpper()) || Engine.ChampionListCollection[listUID].ListOfChampions[key].SearchTag.ToUpper() == searchText.ToUpper() || searchText == "")
+                if (Engine.ChampionListCollection[listUID].ListOfChampions[key].Name.ToUpper().Contains(searchText.ToUpper()) || Engine.ChampionListCollection[listUID].ListOfChampions[key].SearchTag.ToUpper() == searchText.ToUpper() || searchText == Constants.STRING_EMPTY)
                 {
                     //Set Location + make visible
                     championImages[key].Location = new Point(X, Y);
@@ -179,7 +180,14 @@ namespace LoL_Champions_and_Positions
             {
                 if (listUID == Engine.AllChampionsList.UniqueID)
                 {
-                    championImages[key].ContextMenuStrip = this.AllChampsContextMenu;
+                    if (currentFormState == Form1State.MatchupDetails)
+                    {
+                        championImages[key].ContextMenuStrip = null;
+                    }
+                    else
+                    {
+                        championImages[key].ContextMenuStrip = this.AllChampsContextMenu;
+                    }
                 }
                 else
                 {
@@ -194,39 +202,10 @@ namespace LoL_Champions_and_Positions
         /// </summary>
         private void initListCollection()
         {
-            /*
-            if (collectionList == null)
-            {
-                MessageBox.Show("Awww shit nigga");
-            }
-            else
-            {
-                foreach (ChampionCollection List in collectionList)
-                {
-
-                    List.AddControlPanel(ref this.controlPanel);
-                    List.AddFormReference(this);
-
-                    if (List.Name == Constants.ALL_CHAMPIONS)
-                    {
-                        List.AddContextMenu(this.AllChampsContextMenu);
-                        selectedCollection = List;
-                        allChampionsCollection = List;
-                        allChampionsCollection.Sort();
-
-                    }
-                    else
-                    {
-                        List.AddContextMenu(this.CustomListsStrip);
-                    }
-                }
-
-            }
-
-            selectedChampion = null;*/
             RebuildElements();
             SetFormState(Form1State.InitialView);
-
+            championListCollection.SelectedIndex = 0;
+            playablePositions.SelectedIndex = 0;
             PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
         }
 
@@ -251,10 +230,19 @@ namespace LoL_Champions_and_Positions
         private void updatePositionsDropdown()
         {
             playablePositions.Items.Clear();
-            foreach (string position in Engine.ListPositions)
+            if (championListCollection.SelectedIndex!=-1 && championListCollection.Items[championListCollection.SelectedIndex].ToString() == Constants.ALL_CHAMPIONS)
             {
-                playablePositions.Items.Add(position);
+                playablePositions.Items.Add(Constants.CUSTOM_LIST_ALL);
             }
+            else
+            {
+                foreach (string position in Engine.ListPositions)
+                {
+                    playablePositions.Items.Add(position);
+                }
+            }
+            playablePositions.SelectedIndex = 0;
+
         }
         private void BuildContextMenu()
         {
@@ -313,28 +301,28 @@ namespace LoL_Champions_and_Positions
             if (championListCollection.SelectedIndex == -1 || playablePositions.SelectedIndex == -1)
                 return Guid.Empty;
 
-            return Engine.GetListReference(championListCollection.Items[championListCollection.SelectedIndex].ToString(),playablePositions.Items[playablePositions.SelectedIndex].ToString());
+            string selectedListName = championListCollection.Items[championListCollection.SelectedIndex].ToString();
+            string selectedPositionName = playablePositions.Items[playablePositions.SelectedIndex].ToString();
+
+            return Engine.GetListReference(selectedListName, selectedPositionName);
         }
         
 
         public void ProcessChampionPictureClick(Guid clickedChampionUID)
         {
-            if (displayChampionMatchupsList == false)
+            if (currentFormState != Form1State.MatchupDetails)
             {
                 Engine.SetSelectedChampion(clickedChampionUID);
                 if (clickedChampionUID != Guid.Empty)
                 {
                     pictureSelectedChamp.Image = HelpMethods.getImageFromLocalDirectory(Engine.SelectedChampion.Image,false);
                     selectedChampTextBox.Text = Engine.SelectedChampion.Name;
-
                     SetFormState(Form1State.ChampionSelected);
                 }
                 else
                 {
                     pictureSelectedChamp.Image = Properties.Resources.DefaultImage;
-                    selectedChampTextBox.Text = "";
-
-                    SetFormState(Form1State.ListsView);
+                    selectedChampTextBox.Text = Constants.STRING_EMPTY;
                 }
             }
             else
@@ -355,77 +343,59 @@ namespace LoL_Champions_and_Positions
 
         }
 
-        
-
         void SetFormState(Form1State formState)
         {
-            if (formState == Form1State.ChampionSelected)
+            currentFormState = formState;
+
+            bool listsAndManageFlag;
+            bool championSelectedControlsFlag;
+
+            if (formState == Form1State.ListsView || formState == Form1State.ChampionSelected || formState == Form1State.InitialView)
+            {
+                if (Engine.SelectedChampionList != null)
+                {
+                    groupBox1.Text = Engine.SelectedChampionList.Name + "/" + Engine.SelectedChampionList.Role;
+                }
+                else
+                {
+                    groupBox1.Text = Constants.ALL_CHAMPIONS + "/" + Constants.CUSTOM_LIST_ALL;
+                }
+
+                listsAndManageFlag = true;
+            }
+            else
             {
                 if (Engine.SelectedChampion == null)
                 {
                     throw new Exception("No Selected Champion");
                 }
 
-                championListCollection.Enabled = false;
-                playablePositions.Enabled = false;
+                groupBox1.Text = Engine.SelectedChampion.Name + " Matchups Info";
 
-                pictureSelectedChamp.Enabled = true;
-                selectedChampTextBox.Visible = true;
-                ChampionDetailsButton.Enabled = true;
-                ButtonMatchupDetails.Enabled = true;
-                BackButton.Enabled = true;
-
+                listsAndManageFlag = false;
             }
-            if (formState == Form1State.ListsView)
+
+            if (formState == Form1State.ListsView || formState == Form1State.InitialView)
             {
-                if (Engine.SelectedChampionList == null)
-                {
-                    throw new Exception("No selected List");
-                }
-
-                championListCollection.Enabled = true;
-                playablePositions.Enabled = true;
-
-                pictureSelectedChamp.Enabled = false;
-                selectedChampTextBox.Visible = false;
-                ChampionDetailsButton.Enabled = false;
-                ButtonMatchupDetails.Enabled = false;
-                BackButton.Enabled = false;
-
-                groupBox1.Text = Engine.SelectedChampionList.Name + "/" + Engine.SelectedChampionList.Role;
-
-                if (displayChampionMatchupsList)
-                {
-                    displayChampionMatchupsList = false;
-                    ManagePositionsButton.Enabled = true;
-                    buttonManageLists.Enabled = true;
-                    buttonManageChamp.Enabled = true;
-                    //TODO once matchup collection is implemented: matchupCollection hide
-                    PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
-                }
+                championSelectedControlsFlag = false;
             }
-            if (formState == Form1State.InitialView)
+            else
             {
-                displayChampionMatchupsList = false;
-
-                ManagePositionsButton.Enabled = true;
-                buttonManageLists.Enabled = true;
-                buttonManageChamp.Enabled = true;
-
-                championListCollection.Enabled = true;
-                playablePositions.Enabled = true;
-
-                pictureSelectedChamp.Enabled = false;
-                selectedChampTextBox.Visible = false;
-                ChampionDetailsButton.Enabled = false;
-                ButtonMatchupDetails.Enabled = false;
-                BackButton.Enabled = false;
-
-                groupBox1.Text = Constants.ALL_CHAMPIONS + "/" + Constants.CUSTOM_LIST_ALL;
-                //championListCollection.SelectedIndex = 0;
-               // playablePositions.SelectedIndex = 0;
-
+                championSelectedControlsFlag = true;
             }
+
+            ManagePositionsButton.Enabled = listsAndManageFlag;
+            buttonManageLists.Enabled = listsAndManageFlag;
+            buttonManageChamp.Enabled = listsAndManageFlag;
+
+            championListCollection.Enabled = listsAndManageFlag;
+            playablePositions.Enabled = listsAndManageFlag;
+
+            pictureSelectedChamp.Visible = championSelectedControlsFlag;
+            selectedChampTextBox.Visible = championSelectedControlsFlag;
+            ChampionDetailsButton.Enabled = championSelectedControlsFlag;
+            ButtonMatchupDetails.Enabled = championSelectedControlsFlag;
+            BackButton.Enabled = championSelectedControlsFlag;
         }
 
         #endregion
@@ -467,7 +437,7 @@ namespace LoL_Champions_and_Positions
                 {
                     if (response.RespondCommand == Enums.ManageFormState.New)
                     {
-                        Engine.CreateChampion(new Champion(response.Name,response.Picture,"",""));
+                        Engine.CreateChampion(new Champion(response.Name, response.Picture, Constants.STRING_EMPTY, Constants.STRING_EMPTY));
 
                         AddNewPictureBox(Engine.AllChampionsList.GetChampionID(response.Name));
                     }
@@ -592,6 +562,8 @@ namespace LoL_Champions_and_Positions
 
         private void ListCollection_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            updatePositionsDropdown();
+
             Guid selectionUID = getSelectedList();
 
             if (selectionUID != Guid.Empty)
@@ -615,7 +587,6 @@ namespace LoL_Champions_and_Positions
 
                     PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
                 }
-                SetFormState(Form1State.ListsView);
             }
             SetFormState(Form1State.ListsView);
         }
@@ -694,26 +665,14 @@ namespace LoL_Champions_and_Positions
 
         private void BackButton_Click(object sender, EventArgs e)
         {
-            /*
-            allChampionsCollection.AddContextMenu(AllChampsContextMenu);
-            allChampionsCollection.Hide();
-            */
-            SetFormState(Form1State.ListsView);
-
+            SetFormState(Form1State.ChampionSelected);
+            PrintList(Engine.SelectedChampionList.UniqueID, textSeaarchBox.Text);
         }
 
         private void ButtonMatchupDetails_Click(object sender, EventArgs e)
         {
-            displayChampionMatchupsList = true;
-            groupBox1.Text = Engine.SelectedChampion.Name + " Matchups Info";
-            ManagePositionsButton.Enabled = false;
-            buttonManageLists.Enabled = false;
-            buttonManageChamp.Enabled = false;
-            //allChampionsCollection.AddContextMenu(null);
-            //selectedCollection.Hide();
-            //allChampionsCollection.Print(textSeaarchBox.Text);
-            //allChampionsCollection.AddControlPanel(ref controlPanel); // TOTOTO
-
+            SetFormState(Form1State.MatchupDetails);
+            PrintList(Engine.AllChampionsList.UniqueID, textSeaarchBox.Text);
 
         }
         #endregion

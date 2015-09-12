@@ -17,6 +17,7 @@ namespace LoL_Champions_and_Positions
         public const string CUSTOM_LIST_ALL = "All Positions";
         public const string SLASH_SEPARATOR = "///";
         public const string AT_SEPARATOR = "@@@";
+        public const string STRING_EMPTY = "";
         public static bool IsReservedWord(string word)
         {
             if (word == ALL_CHAMPIONS || word == SEARCH_TEXT ||word == CUSTOM_LIST_ALL)

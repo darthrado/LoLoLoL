@@ -14,7 +14,7 @@ namespace LoL_Champions_and_Positions
         {
 
             string result = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
-            result = result.Replace("file:\\", "");
+            result = result.Replace("file:\\", Constants.STRING_EMPTY);
             return result;
         }
 
