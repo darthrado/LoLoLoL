@@ -19,11 +19,14 @@ namespace LoL_Champions_and_Positions
             }
 
             InitializeComponent();
+
             pictureBox1.Image = HelpMethods.getImageFromLocalDirectory(Engine.SelectedChampion.Image, false);
             championName.Text = Engine.SelectedChampion.Name;
             championDetailsText.Text = Engine.SelectedChampion.Description;
             searchTag.Text = Engine.SelectedChampion.SearchTag;
             ChangesMade = false;
+
+            this.Text = championName.Text;
         }
         public bool ChangesMade { get; private set;}
 

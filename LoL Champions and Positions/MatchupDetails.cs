@@ -35,6 +35,8 @@ namespace LoL_Champions_and_Positions
                 matchupDetailsText.Text = matchupDetails;
             }
 
+            this.Text = championName.Text + " vs " + enemyName.Text;
+
         }
         string enemyChampionName;
         string matchupDetails;

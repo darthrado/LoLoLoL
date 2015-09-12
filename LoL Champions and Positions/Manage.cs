@@ -26,6 +26,8 @@ namespace LoL_Champions_and_Positions
             FillList(launchMode);
             SetListBox(SearchBar.Text);
 
+            this.Text = "Manage " + _launchMode + "s";
+
             if (_launchMode == Enums.ManageDialogue.List || _launchMode == Enums.ManageDialogue.Position)
             {
                 Picture.Visible = false;

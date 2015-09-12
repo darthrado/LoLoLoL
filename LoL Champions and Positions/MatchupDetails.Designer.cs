@@ -126,6 +126,7 @@
             this.Controls.Add(this.editButton);
             this.Controls.Add(this.enemyImage);
             this.Controls.Add(this.championImage);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "MatchupDetails";
             this.Text = "MatchupDetails";
             ((System.ComponentModel.ISupportInitialize)(this.championImage)).EndInit();

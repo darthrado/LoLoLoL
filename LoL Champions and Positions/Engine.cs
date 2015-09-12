@@ -173,6 +173,7 @@ namespace LoL_Champions_and_Positions
         public static void CreateChampion(Champion newChampion)
         {
             allChampionsList.Add(newChampion);
+            allChampionsList.Sort();
         }
         public static void DeleteChampion(Guid uniqueID)
         {
@@ -215,7 +216,20 @@ namespace LoL_Champions_and_Positions
             {
                 throw new Exception("Incorrect Champion ID");
             }
-            championListCollection[listUniqueID].Add(allChampionsList.ListOfChampions[championUniqueID]);
+            Champion championToAdd = allChampionsList.ListOfChampions[championUniqueID];
+
+            Guid listAllUID = Engine.GetListReference(championListCollection[listUniqueID].Name, Constants.CUSTOM_LIST_ALL);
+            if (championListCollection[listUniqueID].ListOfChampions.ContainsKey(championUniqueID) == false)
+            {
+                championListCollection[listUniqueID].Add(championToAdd);
+                championListCollection[listUniqueID].Sort();
+            }
+            if (championListCollection[listAllUID].ListOfChampions.ContainsKey(championUniqueID) == false)
+            {
+                championListCollection[listAllUID].Add(championToAdd);
+                championListCollection[listAllUID].Sort();
+            }
+
 
         }
         public static void RemoveChampionFromList(Guid listUniqueID, Guid championUniqueID)

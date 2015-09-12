@@ -32,37 +32,34 @@
             this.label1 = new System.Windows.Forms.Label();
             this.playablePositions = new System.Windows.Forms.ComboBox();
             this.championListCollection = new System.Windows.Forms.ComboBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.controlPanel = new System.Windows.Forms.Panel();
+            this.groupBoxChampions = new System.Windows.Forms.GroupBox();
+            this.ControlPanel = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.AllChampsContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.AddChampionToListMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textSeaarchBox = new System.Windows.Forms.TextBox();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonManageChamp = new System.Windows.Forms.Button();
-            this.buttonManageLists = new System.Windows.Forms.Button();
+            this.ChampionNameTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.ButtonManageChamp = new System.Windows.Forms.Button();
+            this.ButtonManageLists = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.pictureSelectedChamp = new System.Windows.Forms.PictureBox();
+            this.PictureSelectedChamp = new System.Windows.Forms.PictureBox();
             this.ChampionDetailsButton = new System.Windows.Forms.Button();
-            this.selectedChampTextBox = new System.Windows.Forms.TextBox();
+            this.SelectedChampTextBox = new System.Windows.Forms.TextBox();
             this.BackButton = new System.Windows.Forms.Button();
             this.CustomListsStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.removeFromListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RemoveFromListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ButtonMatchupDetails = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.ManagePositionsButton = new System.Windows.Forms.Button();
-            this.groupBox1.SuspendLayout();
+            this.groupBoxChampions.SuspendLayout();
             this.AllChampsContextMenu.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureSelectedChamp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureSelectedChamp)).BeginInit();
             this.CustomListsStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 190);
+            this.label1.Location = new System.Drawing.Point(6, 163);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(62, 17);
             this.label1.TabIndex = 0;
@@ -78,7 +75,7 @@
             "Mid",
             "AD Carry",
             "Support"});
-            this.playablePositions.Location = new System.Drawing.Point(11, 218);
+            this.playablePositions.Location = new System.Drawing.Point(4, 182);
             this.playablePositions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.playablePositions.Name = "playablePositions";
             this.playablePositions.Size = new System.Drawing.Size(161, 24);
@@ -92,7 +89,7 @@
             this.championListCollection.Items.AddRange(new object[] {
             "I play",
             "I train"});
-            this.championListCollection.Location = new System.Drawing.Point(9, 155);
+            this.championListCollection.Location = new System.Drawing.Point(9, 137);
             this.championListCollection.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.championListCollection.Name = "championListCollection";
             this.championListCollection.Size = new System.Drawing.Size(159, 24);
@@ -101,25 +98,25 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.controlPanel);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Location = new System.Drawing.Point(181, 14);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Size = new System.Drawing.Size(939, 585);
-            this.groupBox1.TabIndex = 3;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Text";
+            this.groupBoxChampions.Controls.Add(this.ControlPanel);
+            this.groupBoxChampions.Controls.Add(this.label2);
+            this.groupBoxChampions.Location = new System.Drawing.Point(181, 14);
+            this.groupBoxChampions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBoxChampions.Name = "groupBox1";
+            this.groupBoxChampions.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBoxChampions.Size = new System.Drawing.Size(939, 543);
+            this.groupBoxChampions.TabIndex = 3;
+            this.groupBoxChampions.TabStop = false;
+            this.groupBoxChampions.Text = "Text";
             // 
             // controlPanel
             // 
-            this.controlPanel.AutoScroll = true;
-            this.controlPanel.Location = new System.Drawing.Point(7, 16);
-            this.controlPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.controlPanel.Name = "controlPanel";
-            this.controlPanel.Size = new System.Drawing.Size(925, 563);
-            this.controlPanel.TabIndex = 2;
+            this.ControlPanel.AutoScroll = true;
+            this.ControlPanel.Location = new System.Drawing.Point(7, 16);
+            this.ControlPanel.Margin = new System.Windows.Forms.Padding(4);
+            this.ControlPanel.Name = "controlPanel";
+            this.ControlPanel.Size = new System.Drawing.Size(925, 516);
+            this.ControlPanel.TabIndex = 2;
             // 
             // label2
             // 
@@ -132,20 +129,20 @@
             // AllChampsContextMenu
             // 
             this.AllChampsContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem3});
+            this.AddChampionToListMenuItem});
             this.AllChampsContextMenu.Name = "contextMenuStrip1";
             this.AllChampsContextMenu.Size = new System.Drawing.Size(205, 28);
             this.AllChampsContextMenu.Opened += new System.EventHandler(this.contextMenuStrip1_Opened);
             // 
             // toolStripMenuItem3
             // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(204, 24);
-            this.toolStripMenuItem3.Text = "Add to Custom List";
+            this.AddChampionToListMenuItem.Name = "toolStripMenuItem3";
+            this.AddChampionToListMenuItem.Size = new System.Drawing.Size(204, 24);
+            this.AddChampionToListMenuItem.Text = "Add to Custom List";
             // 
             // textSeaarchBox
             // 
-            this.textSeaarchBox.Location = new System.Drawing.Point(13, 257);
+            this.textSeaarchBox.Location = new System.Drawing.Point(6, 219);
             this.textSeaarchBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textSeaarchBox.Name = "textSeaarchBox";
             this.textSeaarchBox.Size = new System.Drawing.Size(159, 22);
@@ -155,34 +152,34 @@
             // 
             // toolTip1
             // 
-            this.toolTip1.AutomaticDelay = 50;
+            this.ChampionNameTooltip.AutomaticDelay = 50;
             // 
             // buttonManageChamp
             // 
-            this.buttonManageChamp.Location = new System.Drawing.Point(9, 14);
-            this.buttonManageChamp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.buttonManageChamp.Name = "buttonManageChamp";
-            this.buttonManageChamp.Size = new System.Drawing.Size(160, 28);
-            this.buttonManageChamp.TabIndex = 5;
-            this.buttonManageChamp.Text = "Manage Champions";
-            this.buttonManageChamp.UseVisualStyleBackColor = true;
-            this.buttonManageChamp.Click += new System.EventHandler(this.manageChamp_Click);
+            this.ButtonManageChamp.Location = new System.Drawing.Point(4, 13);
+            this.ButtonManageChamp.Margin = new System.Windows.Forms.Padding(4);
+            this.ButtonManageChamp.Name = "buttonManageChamp";
+            this.ButtonManageChamp.Size = new System.Drawing.Size(160, 28);
+            this.ButtonManageChamp.TabIndex = 5;
+            this.ButtonManageChamp.Text = "Manage Champions";
+            this.ButtonManageChamp.UseVisualStyleBackColor = true;
+            this.ButtonManageChamp.Click += new System.EventHandler(this.manageChamp_Click);
             // 
             // buttonManageLists
             // 
-            this.buttonManageLists.Location = new System.Drawing.Point(9, 54);
-            this.buttonManageLists.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.buttonManageLists.Name = "buttonManageLists";
-            this.buttonManageLists.Size = new System.Drawing.Size(160, 28);
-            this.buttonManageLists.TabIndex = 6;
-            this.buttonManageLists.Text = "Manage Lists";
-            this.buttonManageLists.UseVisualStyleBackColor = true;
-            this.buttonManageLists.Click += new System.EventHandler(this.manageLists_Click);
+            this.ButtonManageLists.Location = new System.Drawing.Point(4, 50);
+            this.ButtonManageLists.Margin = new System.Windows.Forms.Padding(4);
+            this.ButtonManageLists.Name = "buttonManageLists";
+            this.ButtonManageLists.Size = new System.Drawing.Size(160, 28);
+            this.ButtonManageLists.TabIndex = 6;
+            this.ButtonManageLists.Text = "Manage Lists";
+            this.ButtonManageLists.UseVisualStyleBackColor = true;
+            this.ButtonManageLists.Click += new System.EventHandler(this.manageLists_Click);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 127);
+            this.label3.Location = new System.Drawing.Point(6, 118);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 17);
@@ -191,17 +188,17 @@
             // 
             // pictureSelectedChamp
             // 
-            this.pictureSelectedChamp.Location = new System.Drawing.Point(12, 307);
-            this.pictureSelectedChamp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.pictureSelectedChamp.Name = "pictureSelectedChamp";
-            this.pictureSelectedChamp.Size = new System.Drawing.Size(160, 148);
-            this.pictureSelectedChamp.TabIndex = 8;
-            this.pictureSelectedChamp.TabStop = false;
+            this.PictureSelectedChamp.Location = new System.Drawing.Point(9, 247);
+            this.PictureSelectedChamp.Margin = new System.Windows.Forms.Padding(4);
+            this.PictureSelectedChamp.Name = "pictureSelectedChamp";
+            this.PictureSelectedChamp.Size = new System.Drawing.Size(160, 148);
+            this.PictureSelectedChamp.TabIndex = 8;
+            this.PictureSelectedChamp.TabStop = false;
             // 
             // ChampionDetailsButton
             // 
-            this.ChampionDetailsButton.Location = new System.Drawing.Point(9, 529);
-            this.ChampionDetailsButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ChampionDetailsButton.Location = new System.Drawing.Point(9, 482);
+            this.ChampionDetailsButton.Margin = new System.Windows.Forms.Padding(4);
             this.ChampionDetailsButton.Name = "ChampionDetailsButton";
             this.ChampionDetailsButton.Size = new System.Drawing.Size(163, 28);
             this.ChampionDetailsButton.TabIndex = 9;
@@ -211,18 +208,18 @@
             // 
             // selectedChampTextBox
             // 
-            this.selectedChampTextBox.Location = new System.Drawing.Point(13, 463);
-            this.selectedChampTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.selectedChampTextBox.Name = "selectedChampTextBox";
-            this.selectedChampTextBox.ReadOnly = true;
-            this.selectedChampTextBox.Size = new System.Drawing.Size(159, 22);
-            this.selectedChampTextBox.TabIndex = 10;
-            this.selectedChampTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.SelectedChampTextBox.Location = new System.Drawing.Point(10, 403);
+            this.SelectedChampTextBox.Margin = new System.Windows.Forms.Padding(4);
+            this.SelectedChampTextBox.Name = "selectedChampTextBox";
+            this.SelectedChampTextBox.ReadOnly = true;
+            this.SelectedChampTextBox.Size = new System.Drawing.Size(159, 22);
+            this.SelectedChampTextBox.TabIndex = 10;
+            this.SelectedChampTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // BackButton
             // 
-            this.BackButton.Location = new System.Drawing.Point(7, 565);
-            this.BackButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.BackButton.Location = new System.Drawing.Point(6, 518);
+            this.BackButton.Margin = new System.Windows.Forms.Padding(4);
             this.BackButton.Name = "BackButton";
             this.BackButton.Size = new System.Drawing.Size(165, 28);
             this.BackButton.TabIndex = 11;
@@ -233,22 +230,22 @@
             // CustomListsStrip
             // 
             this.CustomListsStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.removeFromListToolStripMenuItem});
+            this.RemoveFromListToolStripMenuItem});
             this.CustomListsStrip.Name = "CustomListsStrip";
             this.CustomListsStrip.Size = new System.Drawing.Size(197, 28);
             this.CustomListsStrip.Opened += new System.EventHandler(this.CustomListsStrip_Opened);
             // 
             // removeFromListToolStripMenuItem
             // 
-            this.removeFromListToolStripMenuItem.Name = "removeFromListToolStripMenuItem";
-            this.removeFromListToolStripMenuItem.Size = new System.Drawing.Size(196, 24);
-            this.removeFromListToolStripMenuItem.Text = "Remove From List";
-            this.removeFromListToolStripMenuItem.Click += new System.EventHandler(this.removeFromListToolStripMenuItem_Click);
+            this.RemoveFromListToolStripMenuItem.Name = "removeFromListToolStripMenuItem";
+            this.RemoveFromListToolStripMenuItem.Size = new System.Drawing.Size(196, 24);
+            this.RemoveFromListToolStripMenuItem.Text = "Remove From List";
+            this.RemoveFromListToolStripMenuItem.Click += new System.EventHandler(this.removeFromListToolStripMenuItem_Click);
             // 
             // ButtonMatchupDetails
             // 
-            this.ButtonMatchupDetails.Location = new System.Drawing.Point(11, 493);
-            this.ButtonMatchupDetails.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ButtonMatchupDetails.Location = new System.Drawing.Point(9, 446);
+            this.ButtonMatchupDetails.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonMatchupDetails.Name = "ButtonMatchupDetails";
             this.ButtonMatchupDetails.Size = new System.Drawing.Size(163, 28);
             this.ButtonMatchupDetails.TabIndex = 12;
@@ -256,44 +253,11 @@
             this.ButtonMatchupDetails.UseVisualStyleBackColor = true;
             this.ButtonMatchupDetails.Click += new System.EventHandler(this.ButtonMatchupDetails_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(1163, 52);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 28);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(1167, 105);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 28);
-            this.button2.TabIndex = 14;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(1163, 151);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(100, 28);
-            this.button3.TabIndex = 15;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
             // ManagePositionsButton
             // 
-            this.ManagePositionsButton.Location = new System.Drawing.Point(12, 92);
+            this.ManagePositionsButton.Location = new System.Drawing.Point(4, 85);
             this.ManagePositionsButton.Name = "ManagePositionsButton";
-            this.ManagePositionsButton.Size = new System.Drawing.Size(157, 23);
+            this.ManagePositionsButton.Size = new System.Drawing.Size(157, 30);
             this.ManagePositionsButton.TabIndex = 16;
             this.ManagePositionsButton.Text = "Manage Positions";
             this.ManagePositionsButton.UseVisualStyleBackColor = true;
@@ -303,32 +267,29 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1416, 682);
+            this.ClientSize = new System.Drawing.Size(1144, 567);
             this.Controls.Add(this.ManagePositionsButton);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.ButtonMatchupDetails);
             this.Controls.Add(this.BackButton);
-            this.Controls.Add(this.selectedChampTextBox);
+            this.Controls.Add(this.SelectedChampTextBox);
             this.Controls.Add(this.ChampionDetailsButton);
-            this.Controls.Add(this.pictureSelectedChamp);
+            this.Controls.Add(this.PictureSelectedChamp);
             this.Controls.Add(this.playablePositions);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.buttonManageLists);
-            this.Controls.Add(this.buttonManageChamp);
+            this.Controls.Add(this.ButtonManageLists);
+            this.Controls.Add(this.ButtonManageChamp);
             this.Controls.Add(this.textSeaarchBox);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.groupBoxChampions);
             this.Controls.Add(this.championListCollection);
             this.Controls.Add(this.label1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Resize += new System.EventHandler(this.Form1_Resize);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupBoxChampions.ResumeLayout(false);
+            this.groupBoxChampions.PerformLayout();
             this.AllChampsContextMenu.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureSelectedChamp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureSelectedChamp)).EndInit();
             this.CustomListsStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -340,32 +301,23 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox playablePositions;
         private System.Windows.Forms.ComboBox championListCollection;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBoxChampions;
         private System.Windows.Forms.TextBox textSeaarchBox;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip ChampionNameTooltip;
         private System.Windows.Forms.ContextMenuStrip AllChampsContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem AddChampionToListMenuItem;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button buttonManageChamp;
-        private System.Windows.Forms.Button buttonManageLists;
-        private System.Windows.Forms.Label label3;/*
-        private System.Windows.Forms.ToolStripMenuItem list1ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem topToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem jungleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem midToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aDCToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem supportToolStripMenuItem;*/
-        private System.Windows.Forms.PictureBox pictureSelectedChamp;
+        private System.Windows.Forms.Button ButtonManageChamp;
+        private System.Windows.Forms.Button ButtonManageLists;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.PictureBox PictureSelectedChamp;
         private System.Windows.Forms.Button ChampionDetailsButton;
-        private System.Windows.Forms.TextBox selectedChampTextBox;
+        private System.Windows.Forms.TextBox SelectedChampTextBox;
         private System.Windows.Forms.Button BackButton;
         private System.Windows.Forms.ContextMenuStrip CustomListsStrip;
-        private System.Windows.Forms.ToolStripMenuItem removeFromListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem RemoveFromListToolStripMenuItem;
         private System.Windows.Forms.Button ButtonMatchupDetails;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Panel controlPanel;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Panel ControlPanel;
         private System.Windows.Forms.Button ManagePositionsButton;
     }
 }

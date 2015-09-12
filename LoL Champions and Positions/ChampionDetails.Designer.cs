@@ -41,30 +41,30 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(9, 10);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(120, 120);
+            this.pictureBox1.Size = new System.Drawing.Size(160, 148);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
             // championDetailsText
             // 
-            this.championDetailsText.Location = new System.Drawing.Point(133, 11);
-            this.championDetailsText.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.championDetailsText.Location = new System.Drawing.Point(177, 14);
+            this.championDetailsText.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.championDetailsText.Name = "championDetailsText";
             this.championDetailsText.ReadOnly = true;
-            this.championDetailsText.Size = new System.Drawing.Size(170, 283);
+            this.championDetailsText.Size = new System.Drawing.Size(225, 347);
             this.championDetailsText.TabIndex = 2;
             this.championDetailsText.Text = "";
             // 
             // saveButton
             // 
             this.saveButton.Enabled = false;
-            this.saveButton.Location = new System.Drawing.Point(24, 227);
-            this.saveButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.saveButton.Location = new System.Drawing.Point(32, 279);
+            this.saveButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(90, 19);
+            this.saveButton.Size = new System.Drawing.Size(120, 23);
             this.saveButton.TabIndex = 3;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
@@ -72,10 +72,10 @@
             // 
             // editButton
             // 
-            this.editButton.Location = new System.Drawing.Point(24, 204);
-            this.editButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.editButton.Location = new System.Drawing.Point(32, 251);
+            this.editButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.editButton.Name = "editButton";
-            this.editButton.Size = new System.Drawing.Size(90, 19);
+            this.editButton.Size = new System.Drawing.Size(120, 23);
             this.editButton.TabIndex = 4;
             this.editButton.Text = "Edit";
             this.editButton.UseVisualStyleBackColor = true;
@@ -83,30 +83,29 @@
             // 
             // championName
             // 
-            this.championName.Location = new System.Drawing.Point(24, 134);
-            this.championName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.championName.Location = new System.Drawing.Point(32, 165);
+            this.championName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.championName.Name = "championName";
             this.championName.ReadOnly = true;
-            this.championName.Size = new System.Drawing.Size(92, 20);
+            this.championName.Size = new System.Drawing.Size(121, 22);
             this.championName.TabIndex = 5;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 165);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(15, 203);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 13);
+            this.label1.Size = new System.Drawing.Size(86, 17);
             this.label1.TabIndex = 6;
             this.label1.Text = "Search Tag:";
             // 
             // backButton
             // 
             this.backButton.Enabled = false;
-            this.backButton.Location = new System.Drawing.Point(24, 250);
-            this.backButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.backButton.Location = new System.Drawing.Point(32, 308);
+            this.backButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.backButton.Name = "backButton";
-            this.backButton.Size = new System.Drawing.Size(90, 19);
+            this.backButton.Size = new System.Drawing.Size(120, 23);
             this.backButton.TabIndex = 7;
             this.backButton.Text = "Back";
             this.backButton.UseVisualStyleBackColor = true;
@@ -114,18 +113,18 @@
             // 
             // searchTag
             // 
-            this.searchTag.Location = new System.Drawing.Point(24, 180);
-            this.searchTag.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.searchTag.Location = new System.Drawing.Point(32, 222);
+            this.searchTag.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.searchTag.Name = "searchTag";
             this.searchTag.ReadOnly = true;
-            this.searchTag.Size = new System.Drawing.Size(92, 20);
+            this.searchTag.Size = new System.Drawing.Size(121, 22);
             this.searchTag.TabIndex = 8;
             // 
             // ChampionDetails
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(331, 308);
+            this.ClientSize = new System.Drawing.Size(441, 379);
             this.Controls.Add(this.searchTag);
             this.Controls.Add(this.backButton);
             this.Controls.Add(this.label1);
@@ -134,7 +133,8 @@
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.championDetailsText);
             this.Controls.Add(this.pictureBox1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "ChampionDetails";
             this.Text = "Champion Details";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
