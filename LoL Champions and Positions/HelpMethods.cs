@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BanKaiEngine;
 
 namespace LoL_Champions_and_Positions
 {
@@ -65,35 +66,8 @@ namespace LoL_Champions_and_Positions
 
             
         }
-        /*public static void UpdateChampionAcrossAllCollections(ref List<ChampionCollection> collectionList, ChampionContainer modifiedChampion)
-        {
-            foreach (ChampionCollection collection in collectionList)
-            {
-                collection.ReplaceExistingChampion(modifiedChampion);
-            }
-        }*/
-        /*public static int ChampionContainerComparer(ChampionContainer value1, ChampionContainer value2)
-        {
-            return value1.Name.CompareTo(value2.Name);
-        }*/
     }
 
-    public class Matchup
-    {
-        public Matchup(string enemyChampion, string matchInformation)
-        {
-            _uniqueID = Guid.NewGuid();
-            _enemyChampion = enemyChampion;
-            _matchInformation = matchInformation;
-        }
-        Guid _uniqueID;
-        string _enemyChampion;
-        string _matchInformation;
-        public string EnemyChampion { get { return _enemyChampion; } set { _enemyChampion = value; } }
-        public string MatchInformation { get { return _matchInformation; } set { _matchInformation = value; } }
-        Guid UniqueID { get { return _uniqueID; } }
-
-    }
 
 
 

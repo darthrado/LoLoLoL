@@ -11,7 +11,7 @@ namespace LoL_Champions_and_Positions
 {
     public partial class MatchupDetails : Form
     {
-        public MatchupDetails(Champion champion,Champion enemyChampion)
+        public MatchupDetails(BanKaiEngine.Champion champion, BanKaiEngine.Champion enemyChampion)
         {
             InitializeComponent();
 
@@ -40,9 +40,9 @@ namespace LoL_Champions_and_Positions
         }
         string enemyChampionName;
         string matchupDetails;
-        Champion resultChampion;
+        BanKaiEngine.Champion resultChampion;
         public bool ChangesMade { get; private set; }
-        public Champion Result { get { return resultChampion; } }
+        public BanKaiEngine.Champion Result { get { return resultChampion; } }
 
         private void editButton_Click(object sender, EventArgs e)
         {
@@ -79,7 +79,7 @@ namespace LoL_Champions_and_Positions
             }
             else
             {
-                matchupDetailsText.Text = Constants.STRING_EMPTY;
+                matchupDetailsText.Text = "";
             }
 
             editButton.Enabled = true;

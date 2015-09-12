@@ -1,0 +1,14 @@
+C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\bin\Release\LoL Champions and Positions.exe
+C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\bin\Release\LoL Champions and Positions.pdb
+C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\bin\Release\BanKaiEngine.dll
+C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\bin\Release\FileManagerLibrary.dll
+C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\bin\Release\BanKaiEngine.pdb
+C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\obj\x86\Release\LoL Champions and Positions.csprojResolveAssemblyReference.cache
+C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\obj\x86\Release\LoL_Champions_and_Positions.ChampionDetails.resources
+C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\obj\x86\Release\LoL_Champions_and_Positions.Form1.resources
+C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\obj\x86\Release\LoL_Champions_and_Positions.Manage.resources
+C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\obj\x86\Release\LoL_Champions_and_Positions.MatchupDetails.resources
+C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\obj\x86\Release\LoL_Champions_and_Positions.Properties.Resources.resources
+C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\obj\x86\Release\LoL Champions and Positions.csproj.GenerateResource.Cache
+C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\obj\x86\Release\LoL Champions and Positions.exe
+C:\Users\DarthRado\Documents\Visual Studio 2010\Projects\LoLoLoL\LoL Champions and Positions\obj\x86\Release\LoL Champions and Positions.pdb
